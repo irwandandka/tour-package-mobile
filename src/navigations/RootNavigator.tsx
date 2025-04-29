@@ -4,6 +4,7 @@ import BottomTabNavigator from "./BottomTabNavigator";
 import AuthStack from "./AuthStack";
 import LandingScreen from "../screens/Landing/LandingScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
+import ProductScreen from "../screens/Product/ProductScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ export default function RootNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Landing" component={LandingScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Product" component={ProductScreen} />
         {/* Jika user belum login, arahkan ke stack auth (Login/Register) */}
         <Stack.Screen name="Auth" component={AuthStack} />
         {/* Jika user sudah login, arahkan ke tab utama */}

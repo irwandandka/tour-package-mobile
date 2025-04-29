@@ -201,7 +201,7 @@ export default function HomeScreen({ navigation }: any) {
               <TouchableOpacity
                 key={index}
                 style={styles.recommendedCard}
-                onPress={() => navigation.navigate("Detail")}
+                onPress={() => navigation.navigate("Product")}
               >
                 <Image
                   source={{ uri: product.image }}
