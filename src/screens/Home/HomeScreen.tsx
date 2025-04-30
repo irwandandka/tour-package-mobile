@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,23 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Animated,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Feather"; // Import your icon library here
+import FeatherIcon from "react-native-vector-icons/Feather";
+import IonIcon from "react-native-vector-icons/Ionicons";
+
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 export default function HomeScreen({ navigation }: any) {
   const [activeButton, setActiveButton] = useState<number | null>(null);
+
+  const [menuVisible, setMenuVisible] = useState(false);
+  const slideAnim = useRef(new Animated.Value(screenWidth)).current;
+
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const buttons = [
     "All",
@@ -77,7 +88,20 @@ export default function HomeScreen({ navigation }: any) {
   ];
 
   const handleMenuPress = () => {
-    console.log("Menu button pressed");
+    setMenuVisible(true);
+    Animated.timing(slideAnim, {
+      toValue: screenWidth * 0.2,
+      duration: 300,
+      useNativeDriver: false,
+    });
+  };
+
+  const handleMenuClose = () => {
+    Animated.timing(slideAnim, {
+      toValue: screenWidth,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => setMenuVisible(false));
   };
 
   const handleProfilePress = () => {
@@ -86,6 +110,69 @@ export default function HomeScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Menu Popup */}
+      {menuVisible && (
+        <View style={styles.menuContainer}>
+          <FeatherIcon
+            name="x"
+            style={styles.menuBarClose}
+            size={30}
+            color={"black"}
+            onPress={handleMenuClose}
+          />
+          <View style={styles.menuProfileParent}>
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1467010234262-77bada75a47d?q=80&w=3373&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              }}
+              style={styles.menuBarAvatar}
+            />
+            <Text style={styles.menuUserName}>Irwanda Andika Putra</Text>
+            <Text style={styles.menuUserEmail}>irwndandka@gmail.com</Text>
+          </View>
+
+          <View style={styles.menuDivider} />
+
+          <View style={styles.menuParent}>
+            <View style={styles.menuItemParent}>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="home" size={24} color={"black"} />
+                <Text style={styles.menuText}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="bookmark" size={24} color={"black"} />
+                <Text style={styles.menuText}>Bookmarks</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="settings" size={24} color={"black"} />
+                <Text style={styles.menuText}>Settings</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="shopping-cart" size={24} color={"black"} />
+                <Text style={styles.menuText}>Order History</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="user" size={24} color={"black"} />
+                <Text style={styles.menuText}>Profile</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.menuItemParent}>
+              <TouchableOpacity style={styles.menuItem}>
+                <FeatherIcon name="log-out" size={24} color={"black"} />
+                <Text style={styles.menuText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
+      {/* {(
+        <View
+          style={styles.popup}>
+            
+        </View>
+      )} */}
+
       <ScrollView
         horizontal={false} // Membuat scroll vertikal
         contentContainerStyle={{ paddingBottom: 0 }}
@@ -95,27 +182,34 @@ export default function HomeScreen({ navigation }: any) {
         <View style={styles.topBarSection}>
           {/* Menu Bar */}
           <TouchableOpacity onPress={handleMenuPress}>
-            <Icon name="menu" size={27} color="#000" />
+            <FeatherIcon name="menu" size={27} color="#000" />
           </TouchableOpacity>
 
           {/* Location */}
           <View style={styles.locationSection}>
-            <Icon name="map-pin" size={23} color="#FF8000" />
+            <FeatherIcon name="map-pin" size={23} color="#FF8000" />
             <Text>Batam, Indonesia</Text>
           </View>
 
           {/* Profile */}
-          <View style={styles.avatarSectionWrapper}>
+          {isAuthorized ? (
+            <View style={styles.avatarSectionWrapper}>
+              <TouchableOpacity
+                onPress={handleProfilePress}
+                style={styles.avatarSection}
+              >
+                <Image
+                  source={{ uri: "https://i.pravatar.cc/150?img=3" }} // contoh avatar
+                  style={styles.avatar}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : (
             <TouchableOpacity
-              onPress={handleProfilePress}
-              style={styles.avatarSection}
-            >
-              <Image
-                source={{ uri: "https://i.pravatar.cc/150?img=3" }} // contoh avatar
-                style={styles.avatar}
-              />
+                onPress={() => navigation.navigate("Auth")}>
+              <Text style={styles.loginButtonText}>Sign In</Text>
             </TouchableOpacity>
-          </View>
+          )}
         </View>
 
         {/* Welcome Section */}
@@ -127,10 +221,10 @@ export default function HomeScreen({ navigation }: any) {
         {/* Search Section */}
         <View style={styles.searchSection}>
           <View style={styles.searchInput}>
-            <Icon name="search" size={23} color="#7B7575" />
+            <FeatherIcon name="search" size={23} color="#7B7575" />
             <Text style={styles.searchText}>Search destination...</Text>
           </View>
-          <Icon name="filter" size={23} color="#7B7575" />
+          <FeatherIcon name="filter" size={23} color="#7B7575" />
         </View>
 
         {/* Top Destination Section */}
@@ -212,7 +306,7 @@ export default function HomeScreen({ navigation }: any) {
                     {product.title}
                   </Text>
                   <View style={styles.recommendedCardLocationParent}>
-                    <Icon name="map-pin" size={17} color="#FF8000" />
+                    <FeatherIcon name="map-pin" size={17} color="#FF8000" />
                     <Text style={styles.recommendedCardLocation}>
                       {product.location}
                     </Text>
@@ -226,7 +320,7 @@ export default function HomeScreen({ navigation }: any) {
                       <Text style={styles.recommendedCardRating}>
                         {product.rating}
                       </Text>
-                      <Icon name="star" size={19} color="#FF8000" />
+                      <FeatherIcon name="star" size={19} color="#FF8000" />
                     </View>
                   </View>
                 </View>
@@ -242,6 +336,74 @@ export default function HomeScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  menuContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: screenWidth * 0.8,
+    backgroundColor: "#fff",
+    padding: 20,
+    elevation: 5,
+    zIndex: 999,
+    height: screenHeight,
+  },
+  menuBarClose: {
+    left: 280,
+    top: 40,
+  },
+  menuProfileParent: {
+    flexDirection: "column",
+    gap: 5,
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  menuBarAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    marginBottom: 3,
+  },
+  menuUserName: {
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  menuUserEmail: {
+    fontSize: 15,
+    color: "#636060",
+    fontWeight: "semibold",
+  },
+  menuDivider: {
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+    marginVertical: 10,
+  },
+  menuParent: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: screenHeight * 0.7,
+  },
+  menuItemParent: {
+    flexDirection: "column",
+    gap: 33,
+    marginTop: 23,
+  },
+  menuItem: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 19,
+  },
+  menuText: {
+    fontSize: 20,
+    fontWeight: "semibold",
+  },
+  loginButtonText: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#FF8000",
   },
   topBarSection: {
     flexDirection: "row",
