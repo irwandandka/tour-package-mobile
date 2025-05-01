@@ -52,6 +52,7 @@ export default StyleSheet.create({
     panelTextActive: {
         color: "#F29D38", // contoh saat aktif
     },
+    // General Style
     generalSection: {
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -130,5 +131,74 @@ export default StyleSheet.create({
         color: "#FFFFFF",
         fontWeight: "bold",
         textAlign: "center",
+    },
+    // End General Style
+
+    // Review Style
+    reviewSection: {
+        flexDirection: 'column',
+        marginTop: 20,
+        gap: 21,
+    },
+    reviewCard: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        gap: 11,
+        paddingVertical: 15,
+        paddingHorizontal: 13,
+        backgroundColor: "#F5F5F5",
+        borderRadius: 13,
+        shadowColor: 'black',
+        shadowOffset: { width: 3, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+    },
+    reviewRatingAndDateContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    reviewCardRatingGroup: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 5,
+    },
+    reviewCardDate: {
+        fontSize: 15,
+        color: "#666",
+        fontWeight: "700",
+    },
+    reviewCardDescription: {
+        fontSize: 15,
+        color: "black",
+        textAlign: 'justify',
+    },
+    reviewCardAvatarAndNameContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        gap: 13,
+    },
+    reviewCardAvatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+    },
+    reviewCardNameEmailContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        gap: 2,
+    },
+    reviewCardName: {
+        fontSize: 19,
+        fontWeight: "700",
+        color: "black",
+    },
+    reviewCardEmail: {
+        fontSize: 15,
+        color: "#666",
+        fontWeight: "600",
     }
+    // End Review Style
 });

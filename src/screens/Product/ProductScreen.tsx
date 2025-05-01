@@ -138,6 +138,72 @@ export default function ProductScreen({ navigation }: any) {
           {/* Section Itineraries */}
 
           {/* Section Reviews */}
+          {activePanel === "reviews" && (
+            <View style={styles.reviewSection}>
+              {/* Review 1 */}
+              <View style={styles.reviewCard}>
+                  <View style={styles.reviewRatingAndDateContainer}>
+                      <View style={styles.reviewCardRatingGroup}>
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star-half" size={21} color={"#F29D38"} />
+                      </View>
+                      <Text style={styles.reviewCardDate}>
+                        2 Days Ago
+                      </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.reviewCardDescription}>
+                      "I had an amazing time in Bangkok! The tour was well-organized and the guide was very knowledgeable. Highly recommend!"
+                    </Text>
+                  </View>
+                  <View style={styles.reviewCardAvatarAndNameContainer}>
+                    <Image style={styles.reviewCardAvatar} source={{ uri: 'https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/sarah-connor.png' }} />
+                    <View style={styles.reviewCardNameEmailContainer}>
+                      <Text style={styles.reviewCardName}>
+                        Sarah Connor
+                      </Text>
+                      <Text style={styles.reviewCardEmail}>
+                        sarah.connor@gmail.com
+                      </Text>
+                    </View>
+                  </View>
+              </View>
+
+              {/* Review 2 */}
+              <View style={styles.reviewCard}>
+                  <View style={styles.reviewRatingAndDateContainer}>
+                      <View style={styles.reviewCardRatingGroup}>
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                        <IonIcon name="star" size={21} color={"#F29D38"} />
+                      </View>
+                      <Text style={styles.reviewCardDate}>
+                        5 Days Ago
+                      </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.reviewCardDescription}>
+                      "The itinerary was perfect for a short trip. I loved the temples and the food was delicious. The guide was very friendly and helpful."
+                    </Text>
+                  </View>
+                  <View style={styles.reviewCardAvatarAndNameContainer}>
+                    <Image style={styles.reviewCardAvatar} source={{ uri: 'https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/john-doe.png' }} />
+                    <View style={styles.reviewCardNameEmailContainer}>
+                      <Text style={styles.reviewCardName}>
+                        John Smith
+                      </Text>
+                      <Text style={styles.reviewCardEmail}>
+                        john.smith@gmail.com
+                      </Text>
+                    </View>
+                  </View>
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
