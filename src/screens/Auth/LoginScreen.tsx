@@ -11,10 +11,31 @@ import {
 } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { useTranslation } from "react-i18next";
+import { validateInput } from "../../utils/validation";
 
 export default function LoginScreen({ navigation }: any) {
+  const { t } = useTranslation();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const handleEmailChange = (email: string) => {
+    setEmail(email);
+    const result = validateInput("email", email, t);
+    setErrorEmail(result.error);
+  };
+
+  const handlePasswordChange = (password: string) => {
+    setPassword(password);
+    const result = validateInput("password", password, t);
+    setErrorPassword(result.error);
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -33,32 +54,59 @@ export default function LoginScreen({ navigation }: any) {
           <Image source={require("../../../assets/images/pana.png")} />
 
           {/* Title and Subtitle */}
-          <Text style={styles.title}>Let's get started!</Text>
-          <Text style={styles.subtitle}>
-            Log in to continue planning your unforgettable journeys and discover
-            new destinations with us.
-          </Text>
+          <Text style={styles.title}>{t("loginScreen.title")}</Text>
+          <Text style={styles.subtitle}>{t("loginScreen.subtitle")}</Text>
 
           {/* Input Fields */}
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Email</Text>
-            <View style={styles.inputField}>
-              <FeatherIcon name="mail" size={23} color={"#B3B3B3"} />
+            <View
+              style={[
+                styles.inputField,
+                { borderWidth: 1, borderColor: errorEmail ? "red" : "#F5F6FA" },
+              ]}
+            >
+              <FeatherIcon
+                name="mail"
+                size={23}
+                color={errorEmail ? "red" : "#B3B3B3"}
+              />
               <TextInput
                 placeholder="Enter email"
                 placeholderTextColor={"#B3B3B3"}
+                onChangeText={handleEmailChange}
+                value={email}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
             </View>
+            {errorEmail ? (
+              <Text style={{ color: "red" }}>{errorEmail}</Text>
+            ) : null}
           </View>
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Password</Text>
-            <View style={styles.inputFieldPassword}>
+            <View
+              style={[
+                styles.inputFieldPassword,
+                {
+                  borderWidth: 1,
+                  borderColor: errorPassword ? "red" : "#F5F6FA",
+                },
+              ]}
+            >
               <View
                 style={{ flexDirection: "row", alignItems: "center", gap: 11 }}
               >
-                <FeatherIcon name="lock" size={23} color={"#B3B3B3"} />
+                <FeatherIcon
+                  name="lock"
+                  size={23}
+                  color={errorPassword ? "red" : "#B3B3B3"}
+                />
                 <TextInput
                   placeholder="Enter password"
+                  value={password}
+                  onChangeText={handlePasswordChange}
                   placeholderTextColor={"#B3B3B3"}
                   secureTextEntry={!passwordVisible}
                 />
@@ -71,6 +119,9 @@ export default function LoginScreen({ navigation }: any) {
                 />
               </TouchableOpacity>
             </View>
+            {errorPassword ? (
+              <Text style={{ color: "red" }}>{errorPassword}</Text>
+            ) : null}
           </View>
 
           {/* Remember Me & Forgot Password */}
@@ -83,21 +134,41 @@ export default function LoginScreen({ navigation }: any) {
                   color={rememberMe ? "#3A5694" : "#aaa"}
                 />
               </TouchableOpacity>
-              <Text>Remember me</Text>
+              <Text>{t("loginScreen.rememberMe")}</Text>
             </View>
 
             <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forgot Password?</Text>
+              <Text style={styles.forgotPassword}>
+                {t("loginScreen.forgotPassword")}
+              </Text>
             </TouchableOpacity>
           </View>
 
           {/* Sign in Button */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Sign In</Text>
+          <TouchableOpacity
+            style={
+              !errorEmail && !errorPassword
+                ? styles.loginButtonActive
+                : styles.loginButton
+            }
+            onPress={handleLogin}
+            disabled={!!errorEmail || !!errorPassword}
+          >
+            <Text
+              style={
+                !errorEmail && !errorPassword
+                  ? styles.loginButtonTextActive
+                  : styles.loginButtonText
+              }
+            >
+              {t("loginScreen.loginButton")}
+            </Text>
           </TouchableOpacity>
 
           {/* Sign In with Google & Facebook */}
-          <Text style={styles.orSignInWith}>Or sign in with</Text>
+          <Text style={styles.orSignInWith}>
+            {t("loginScreen.orSignInWith")}
+          </Text>
 
           <TouchableOpacity style={styles.loginWithGoogle}>
             <Image
@@ -105,7 +176,7 @@ export default function LoginScreen({ navigation }: any) {
               source={require("../../../assets/logo/Icon-Google.png")}
             />
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              Continue with Google
+              {t("loginScreen.loginWithGoogle")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.loginWithFacebook}>
@@ -116,14 +187,16 @@ export default function LoginScreen({ navigation }: any) {
             <Text
               style={{ fontSize: 16, fontWeight: "bold", color: "#FFFFFF" }}
             >
-              Continue with Facebook
+              {t("loginScreen.loginWithFacebook")}
             </Text>
           </TouchableOpacity>
 
           {/* Sign Up Link */}
           <View style={styles.signUpWrapper}>
-            <Text style={styles.signUpText}>Don’t have an account?</Text>
-            <Text style={styles.signUpLink}>Sign Up</Text>
+            <Text style={styles.signUpText}>{t("loginScreen.register")}</Text>
+            <Text style={styles.signUpLink}>
+              {t("loginScreen.registerButton")}
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -212,6 +285,19 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingVertical: 15,
     marginTop: 30,
+  },
+  loginButtonActive: {
+    backgroundColor: "#3A5694",
+    width: "100%",
+    borderRadius: 15,
+    paddingVertical: 15,
+    marginTop: 30,
+  },
+  loginButtonTextActive: {
+    fontSize: 21,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   orSignInWith: {
     fontSize: 16,

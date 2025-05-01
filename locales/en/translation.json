@@ -1,0 +1,22 @@
+{
+  "email_required": "Email is required",
+  "invalid_email": "Invalid email format",
+  "loginScreen": {
+    "title": "Let's get started!",
+    "subtitle": "Log in to continue planning your unforgettable journeys and discover new destinations with us.",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Sign In",
+    "orSignInWith": "Or sign in with",
+    "loginWithGoogle": "Continue with Google",
+    "loginWithFacebook": "Continue with Facebook",
+    "register": "Don't have an account?",
+    "registerButton": "Sign up"
+  },
+  "validation": {
+    "email_required": "Email is required",
+    "email_invalid": "Invalid email format",
+    "password_required": "Password is required",
+    "password_length": "Password must be at least 6 characters long"
+  }
+}
