@@ -13,6 +13,18 @@
     "register": "Don't have an account?",
     "registerButton": "Sign up"
   },
+  "registerScreen": {
+    "title": "Ready to Discover the World?",
+    "subtitle": "Create your account and start exploring our exclusive tour packages designed to turn your travel dreams into reality.",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "registerButton": "Sign Up",
+    "orSignUpWith": "Or sign up with",
+    "loginWithGoogle": "Continue with Google",
+    "loginWithFacebook": "Continue with Facebook",
+    "login": "Already have an account?",
+    "loginButton": "Sign In"
+  },
   "validation": {
     "email_required": "Email is required",
     "email_invalid": "Invalid email format",
