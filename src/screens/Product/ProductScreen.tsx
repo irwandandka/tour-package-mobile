@@ -1,65 +1,145 @@
 import React from "react";
-
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Feather";
+import FeatherIcon from "react-native-vector-icons/Feather";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import styles from "./ProductScreen.styles";
 
 export default function ProductScreen({ navigation }: any) {
+  const [activePanel, setActivePanel] = useState("general");
+  const [isReadMore, setIsReadMore] = useState(false);
+
+  const maxLength = 200;
+
+  const fullDescription = "Experience the charm of Bangkok in a short yet memorable trip. This 2-day, 1-night package is perfect for travelers who want to explore the highlights of Thailand’s vibrant capital in a compact itinerary full of culture, history, and fun!";
+  const shortDescription = fullDescription.length > maxLength
+    ? fullDescription.substring(0, maxLength).trim() + "..."
+    : fullDescription;
+
+  const descriptionReadMore = () => {
+    setIsReadMore((prev) => !prev);
+  }
+
   return (
     <SafeAreaView>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
         {/* Image Section */}
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?q=80&w=3450&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-          style={styles.image}
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            source={{
+              uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/bangkok-tour-1.png",
+            }}
+            style={styles.image}
+          />
+
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+          </TouchableOpacity>
+        </View>
 
         {/* Title & Location */}
         <View style={styles.container}>
-          <Text style={styles.title}>2D1N Bangkok Tour</Text>
+          <Text style={styles.title}>2D1N Bangkok Tours</Text>
           <View style={styles.locationParent}>
             <View style={styles.locationParent}>
-              <Icon name="map-pin" size={17} color="#FF8000" />
+              <FeatherIcon name="map-pin" size={17} color="#FF8000" />
               <Text style={styles.locationTitle}>Bangkok, Thailand</Text>
             </View>
           </View>
-        </View>
 
           {/* Panel Section */}
-          <View
-           >
-
+          <View style={styles.panelSection}>
+            <TouchableOpacity onPress={() => setActivePanel("general")}>
+              <Text
+                style={[
+                  styles.panelText,
+                  activePanel === "general" && styles.panelTextActive,
+                ]}
+              >
+                General
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActivePanel("itineraries")}>
+              <Text
+                style={[
+                  styles.panelText,
+                  activePanel === "itineraries" && styles.panelTextActive,
+                ]}
+              >
+                Itineraries
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActivePanel("reviews")}>
+              <Text
+                style={[
+                  styles.panelText,
+                  activePanel === "reviews" && styles.panelTextActive,
+                ]}
+              >
+                Reviews
+              </Text>
+            </TouchableOpacity>
           </View>
+
+          {/* Section General */}
+          {activePanel === "general" && (
+            <View style={styles.generalSection}>
+              <View style={styles.ratingDurationContainer}>
+                {/* Rating */}
+                <View style={styles.generalSubSection}>
+                  <View style={styles.generalSubSectionIcon}>
+                    <IonIcon name="star" color={"#FBBC04"} size={27} />
+                    <Text style={styles.generalSubSectionText}>4.8</Text>
+                  </View>
+                  <Text style={styles.generalSectionText}>Rating</Text>
+                </View>
+
+                {/* Duration */}
+                <View style={styles.generalSubSectionDuration}>
+                  <View style={styles.generalSubSectionIcon}>
+                    <IonIcon name="time" color={"#FBBC04"} size={27} />
+                    <Text style={styles.generalDurationText}>
+                      2 Days 1 Night
+                    </Text>
+                  </View>
+                  <Text style={styles.generalSectionText}>Duration</Text>
+                </View>
+              </View>
+
+              {/* Description */}
+              <View style={styles.generalDescriptionSection}>
+                <Text style={styles.generalDescriptionTitle}>Description</Text>
+                <Text style={styles.generalDescriptionText}>
+                  { isReadMore ? fullDescription : shortDescription }
+                </Text>
+                {fullDescription.length > maxLength && (
+                  <TouchableOpacity
+                    onPress={descriptionReadMore}>
+                    <Text style={styles.generalDescriptionReadMore}>
+                      { isReadMore ? "Read Less" : "Read More" }
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {/* Button Book Now */}
+              <TouchableOpacity style={styles.buttonBookNow}>
+                <Text style={styles.buttonBookNowText}>
+                  Book Now
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Section Itineraries */}
+
+          {/* Section Reviews */}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: 350,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-  },
-  container: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  locationParent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 5,
-  },
-  locationTitle: {
-    fontSize: 16,
-    color: "#666",
-  },
-});
