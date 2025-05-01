@@ -51,7 +51,11 @@ export default function LoginScreen({ navigation }: any) {
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           {/* Banner Image */}
-          <Image source={require("../../../assets/images/pana.png")} />
+          <Image
+            source={{
+              uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/pana.png",
+            }}
+          />
 
           {/* Title and Subtitle */}
           <Text style={styles.title}>{t("loginScreen.title")}</Text>
@@ -173,7 +177,9 @@ export default function LoginScreen({ navigation }: any) {
           <TouchableOpacity style={styles.loginWithGoogle}>
             <Image
               style={{ width: 19 }}
-              source={require("../../../assets/logo/Icon-Google.png")}
+              source={{
+                uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/Icon-Google.png",
+              }}
             />
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
               {t("loginScreen.loginWithGoogle")}
@@ -182,7 +188,9 @@ export default function LoginScreen({ navigation }: any) {
           <TouchableOpacity style={styles.loginWithFacebook}>
             <Image
               style={{ width: 19 }}
-              source={require("../../../assets/logo/Icon-Facebook.png")}
+              source={{
+                uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/Icon-Facebook.png",
+              }}
             />
             <Text
               style={{ fontSize: 16, fontWeight: "bold", color: "#FFFFFF" }}
@@ -194,9 +202,11 @@ export default function LoginScreen({ navigation }: any) {
           {/* Sign Up Link */}
           <View style={styles.signUpWrapper}>
             <Text style={styles.signUpText}>{t("loginScreen.register")}</Text>
-            <Text style={styles.signUpLink}>
-              {t("loginScreen.registerButton")}
-            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text style={styles.signUpLink}>
+                {t("loginScreen.registerButton")}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
