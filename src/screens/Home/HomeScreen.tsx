@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import IonIcon from "react-native-vector-icons/Ionicons";
+import apiService from "../../services/apiService";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -24,68 +24,82 @@ export default function HomeScreen({ navigation }: any) {
 
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const buttons = [
-    "All",
-    "South East Asia",
-    "Asia",
-    "Middle East",
-    "Europe",
-    "North America",
-  ];
+  type Region = {
+    id: string;
+    name: string;
+  }
+  const [regions, setRegion] = useState<Region[]>([]);
 
-  const handleSelected = (index: number) => {
-    setActiveButton(index);
+  type TopDestination = {
+    id: string;
+    name: string;
+    image: string;
   };
+  const [topDestinations, setTopDestination] = useState<TopDestination[]>([]);
 
-  const topDestinations = [
-    {
-      id: 1,
-      title: "Hokkaido",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661882926003-91a51e3dfe64?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      title: "Busan",
-      image:
-        "https://images.unsplash.com/photo-1591520284162-8e64eceebacf?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      title: "Beijing",
-      image:
-        "https://images.unsplash.com/photo-1516545595035-b494dd0161e4?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 4,
-      title: "Tokyo",
-      image:
-        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=3588&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  type Destination = {
+    id: string;
+    name: string;
+    image: string;
+    location: string;
+    price: number;
+    slug: string;
+    rating: number;
+  }
+  const [destinations, setDestination] = useState<Destination[]>([]);
 
-  const products = [
-    {
-      id: 1,
-      title: "2D1N Bangkok Tour",
-      image:
-        "https://images.unsplash.com/photo-1508009603885-50cf7c579365?q=80&w=3450&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      location: "Bangkok, Thailand",
-      price: 285,
-      rating: 4.5,
-      currencySymbol: "$",
-    },
-    {
-      id: 2,
-      title: "4D3N Chill in Bali",
-      image:
-        "https://plus.unsplash.com/premium_photo-1677829177642-30def98b0963?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      location: "Bali, Indonesia",
-      price: 350,
-      rating: 4.2,
-      currencySymbol: "$",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [regionsData, topDest, destinationsData] = await Promise.all([
+          apiService.get("v1/region/list"),
+          apiService.get("v1/product/explore-now", {
+            params: {
+              lang: "EN",//
+            }
+          }),
+          apiService.get("v1/product/popular-destination", {
+            params: {
+              lang: 'EN',
+              currency: 'SGD'
+            },
+          }),
+        ]);
+
+        setTopDestination(topDest.data);
+        setRegion(regionsData.data);
+        setDestination(destinationsData.data);
+      } catch (err) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSelected = async (index: number) => {
+    setActiveButton(index);
+
+    const selectedRegion = regions[index];
+
+    try {
+      const response = await apiService.get("v1/product/explore-now", {
+        params: {
+          lang: "EN",
+          region: selectedRegion.id,
+        },
+      });
+
+      setTopDestination(response.data);
+    } catch (error) {
+      console.error("Failed to fetch destinations:", error);
+    }
+  };
 
   const handleMenuPress = () => {
     setMenuVisible(true);
@@ -205,8 +219,7 @@ export default function HomeScreen({ navigation }: any) {
               </TouchableOpacity>
             </View>
           ) : (
-            <TouchableOpacity
-                onPress={() => navigation.navigate("Auth")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Auth")}>
               <Text style={styles.loginButtonText}>Sign In</Text>
             </TouchableOpacity>
           )}
@@ -235,7 +248,7 @@ export default function HomeScreen({ navigation }: any) {
             showsHorizontalScrollIndicator={false} // Menyembunyikan scrollbar horizontal
             contentContainerStyle={styles.topDestinationButtonGroup}
           >
-            {buttons.map((button, index) => (
+            {regions.map((region, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
@@ -251,7 +264,7 @@ export default function HomeScreen({ navigation }: any) {
                       styles.topDestinationButtonTextSelected,
                   ]}
                 >
-                  {button}
+                  {region.name}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -275,7 +288,7 @@ export default function HomeScreen({ navigation }: any) {
                 {/* Dark Overlay */}
                 <View style={styles.topDestinationCardOverlay}></View>
                 <Text style={styles.topDestinationCardTitle}>
-                  {destination.title}
+                  {destination.name}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -291,34 +304,33 @@ export default function HomeScreen({ navigation }: any) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.recommendedCardGroup}
           >
-            {products.map((product, index) => (
+            {destinations.map((destination, index) => (
               <TouchableOpacity
                 key={index}
                 style={styles.recommendedCard}
                 onPress={() => navigation.navigate("Product")}
               >
                 <Image
-                  source={{ uri: product.image }}
+                  source={{ uri: destination.image }}
                   style={styles.recommendedCardImage}
                 />
                 <View style={styles.recommendedCardParent}>
                   <Text style={styles.recommendedCardTitle}>
-                    {product.title}
+                    {destination.name}
                   </Text>
                   <View style={styles.recommendedCardLocationParent}>
                     <FeatherIcon name="map-pin" size={17} color="#FF8000" />
                     <Text style={styles.recommendedCardLocation}>
-                      {product.location}
+                      {destination.location}
                     </Text>
                   </View>
                   <View style={styles.recommendedCardBottomParent}>
                     <Text style={styles.recommendedCardPrice}>
-                      {product.currencySymbol}
-                      {product.price}
+                      {destination.price}
                     </Text>
                     <View style={styles.recommendedCardRatingParent}>
                       <Text style={styles.recommendedCardRating}>
-                        {product.rating}
+                        {destination.rating}
                       </Text>
                       <FeatherIcon name="star" size={19} color="#FF8000" />
                     </View>
@@ -616,4 +628,10 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "regular",
   },
+  skeletonItem: {
+    width: 100,
+    height: 40,
+    borderRadius: 10,
+    marginRight: 10,
+  }
 });
