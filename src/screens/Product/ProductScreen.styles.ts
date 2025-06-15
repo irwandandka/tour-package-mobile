@@ -134,6 +134,106 @@ export default StyleSheet.create({
     },
     // End General Style
 
+    // Itinerary Style
+    itinerarySection: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        gap: 13,
+        marginTop: 15,
+    },
+    itineraryCardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#E3E4EB',
+        borderRadius: 13,
+        paddingVertical: 11,
+        paddingHorizontal: 13,
+    },
+    itineraryCardTitle: {
+        fontSize: 21,
+        fontWeight: "600",
+        color: "#000000",
+    },
+    itineraryContentWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 13,
+        width: '100%',
+        height: 180,
+        paddingVertical: 19,
+        paddingHorizontal: 13,
+    },
+    itineraryContentPathSymbol: {
+        width: "8%",
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    itineraryContentPathLine: {
+        width: 2,
+        height: "100%",
+        backgroundColor: "black",
+        borderRadius: 13,
+    },
+    itineraryContentPathWrapper: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        gap: 13,
+        width: '92%',
+    },
+    itineraryContentPathTitle: {
+        fontSize: 21,
+        fontWeight: "600",
+        color: "#000000",
+    },
+    itineraryContentPathDescription: {
+        fontSize: 15,
+        color: "#666",
+        textAlign: 'justify',
+        fontWeight: "500",
+    },
+    itineraryContentPathTimeAndMap: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    itineraryContentPathTime: {
+        fontSize: 15,
+        color: "#666",
+        textAlign: 'justify',
+        fontWeight: "500",
+    },
+    itineraryContentPathTextShowMap: {
+        fontSize: 15,
+        color: "#EF4444",
+        textAlign: 'justify',
+        fontWeight: "700",
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    mapContainer: {
+        width: '90%',
+        height: 300,
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+    },
+    closeButton: {
+        position: 'absolute',
+        bottom: 10,
+        alignSelf: 'center',
+        backgroundColor: 'black',
+        padding: 8,
+        borderRadius: 5,
+    },
+    // End Itinerary Style
+
     // Review Style
     reviewSection: {
         flexDirection: 'column',
