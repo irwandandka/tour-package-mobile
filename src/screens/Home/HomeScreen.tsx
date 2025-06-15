@@ -75,7 +75,9 @@ export default function HomeScreen({ navigation }: any) {
       } catch (err) {
         setError("Failed to fetch data");
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500); // delay 1.5 detik
       }
     };
 
@@ -100,7 +102,9 @@ export default function HomeScreen({ navigation }: any) {
     } catch (error) {
       console.error("Failed to fetch destinations:", error);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500); // delay 1.5 detik
     }
   };
 
@@ -279,7 +283,13 @@ export default function HomeScreen({ navigation }: any) {
               contentContainerStyle={styles.topDestinationCardGroup}
             >
               {[...Array(3)].map((_, index) => (
-                <SkeletonBox key={index} />
+                <SkeletonBox 
+                  key={index} 
+                  width={180}
+                  height={220}
+                  borderRadius={15}
+                  marginRight={5}
+                  />
               ))}
             </ScrollView>
           ) : (
