@@ -5,14 +5,13 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
 } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { validateInput } from "../../utils/validation";
+import styles from "./RegisterScreen.styles";
 
 export default function RegisterScreen({ navigation }: any) {
   const { t } = useTranslation();
@@ -196,148 +195,3 @@ export default function RegisterScreen({ navigation }: any) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  content: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 30,
-    color: "#3A5694",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666666",
-    textAlign: "center",
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333333",
-  },
-  inputFieldWrapper: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    width: "100%",
-    marginTop: 20,
-    gap: 9,
-  },
-  inputField: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 11,
-    backgroundColor: "#F5F6FA",
-    paddingVertical: 19,
-    paddingHorizontal: 22,
-    borderRadius: 15,
-  },
-  inputFieldPassword: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 11,
-    backgroundColor: "#F5F6FA",
-    paddingVertical: 19,
-    paddingHorizontal: 22,
-    borderRadius: 15,
-  },
-  rememberMeParent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 12,
-  },
-  rememberMeWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "30%",
-    gap: 10,
-  },
-  forgotPassword: {
-    fontSize: 14,
-    color: "#F29D38",
-    fontWeight: "bold",
-  },
-  loginButton: {
-    backgroundColor: "#F5F6FA",
-    width: "100%",
-    borderRadius: 15,
-    paddingVertical: 15,
-    marginTop: 30,
-  },
-  loginButtonActive: {
-    backgroundColor: "#3A5694",
-    width: "100%",
-    borderRadius: 15,
-    paddingVertical: 15,
-    marginTop: 30,
-  },
-  loginButtonTextActive: {
-    fontSize: 21,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#FFFFFF",
-  },
-  orSignInWith: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#666666",
-    textAlign: "center",
-    marginVertical: 30,
-  },
-  loginButtonText: {
-    fontSize: 21,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#B3B3B3",
-  },
-  loginWithGoogle: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    backgroundColor: "#F2F2F2",
-    width: "100%",
-    paddingVertical: 15,
-    borderRadius: 15,
-  },
-  loginWithFacebook: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    backgroundColor: "#3A5694",
-    width: "100%",
-    paddingVertical: 15,
-    borderRadius: 15,
-    marginTop: 10,
-  },
-  signUpWrapper: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    gap: 9,
-  },
-  signUpText: {
-    fontSize: 16,
-    color: "#666666",
-  },
-  signUpLink: {
-    fontSize: 16,
-    color: "#F29D38",
-    fontWeight: "bold",
-  },
-});
