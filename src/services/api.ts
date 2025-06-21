@@ -1,20 +1,22 @@
 import axios from "axios";
-import { API_BASE_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+
+const config = Constants.expoConfig?.extra ?? {};
 
 const api = axios.create({
-    baseURL: "http://192.168.100.125:8000/api",
+    baseURL: config.API_URL,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'x-api-key': config.API_KEY
     }
 });
 
 api.interceptors.request.use(
     async (config) => {
-        // Contoh: ambil token dari storage
-        const token = await AsyncStorage.getItem("token");
+        const token = await AsyncStorage.getItem("authToken");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
