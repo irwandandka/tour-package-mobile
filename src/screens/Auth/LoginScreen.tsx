@@ -5,17 +5,25 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { validateInput } from "../../utils/validation";
+import styles from "./LoginScreen.styles";
+import apiService from "../../services/apiService";
+import Constants from "expo-constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../../../contexts/AuthContext";
+import { makeRedirectUri } from "expo-auth-session";
 
 export default function LoginScreen({ navigation }: any) {
   const { t } = useTranslation();
+
+  const { login } = useAuth();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -24,6 +32,8 @@ export default function LoginScreen({ navigation }: any) {
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+
+  const config = Constants.expoConfig?.extra ?? {};
 
   const handleEmailChange = (email: string) => {
     setEmail(email);
@@ -41,9 +51,79 @@ export default function LoginScreen({ navigation }: any) {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log("Login button pressed");
+  const handleLogin = async () => {
+    try {
+      // Handle login logic here
+      console.log("Login button pressed");
+
+      console.log('Trying to login with:', { email, password });
+
+      const response = await apiService.post("v1/auth/login", {
+        email: email,
+        password: password,
+      });
+
+      const { access_token, user } = response.data;
+
+      // Store token and user data
+      await AsyncStorage.setItem('token', access_token);
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+
+      return { success: true, user };
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
+
+  const handleLoginWithGoogle = async () => {
+    try {
+      console.log("Starting Google login process...");
+
+      // 1. Buat redirect URI untuk kembali ke React Native app
+      const redirectUri = "tour-package://redirect";
+
+      console.log("Redirect URI:", redirectUri);
+
+      // 2. Ambil URL login Google dari backend dengan redirectUri
+      const response = await apiService.get("v1/auth/google", {
+        params: {
+          redirect_uri: redirectUri,
+        },
+      });
+
+      const authUrl = response.url;
+
+      // 3. Buka browser untuk login ke Google
+      const result = await WebBrowser.openAuthSessionAsync(
+        authUrl,
+        redirectUri
+      );
+
+      console.log("WebBrowser result:", result);
+
+      if (result.type === "success" && result.url) {
+        // 4. Ambil ?token & ?user (hasil redirect dari backend Laravel)
+        const urlObj = new URL(result.url);
+        const token = urlObj.searchParams.get("token");
+        const userJson = urlObj.searchParams.get("user");
+
+        if (token && userJson) {
+          const user = JSON.parse(decodeURIComponent(userJson));
+          await login(token, user);
+          await AsyncStorage.setItem("authToken", token);
+          await AsyncStorage.setItem("userInfo", JSON.stringify(user));
+
+          console.log("Token saved!");
+          navigation.navigate("Home");
+        } else {
+          console.warn("Token or user not found in redirect URL");
+        }
+      } else {
+        console.warn("Google login cancelled or failed");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
   };
 
   return (
@@ -174,7 +254,10 @@ export default function LoginScreen({ navigation }: any) {
             {t("loginScreen.orSignInWith")}
           </Text>
 
-          <TouchableOpacity style={styles.loginWithGoogle}>
+          <TouchableOpacity
+            style={styles.loginWithGoogle}
+            onPress={() => handleLoginWithGoogle()}
+          >
             <Image
               style={{ width: 19 }}
               source={{
@@ -213,148 +296,3 @@ export default function LoginScreen({ navigation }: any) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  content: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 30,
-    color: "#3A5694",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666666",
-    textAlign: "center",
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333333",
-  },
-  inputFieldWrapper: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    width: "100%",
-    marginTop: 20,
-    gap: 9,
-  },
-  inputField: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 11,
-    backgroundColor: "#F5F6FA",
-    paddingVertical: 19,
-    paddingHorizontal: 22,
-    borderRadius: 15,
-  },
-  inputFieldPassword: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 11,
-    backgroundColor: "#F5F6FA",
-    paddingVertical: 19,
-    paddingHorizontal: 22,
-    borderRadius: 15,
-  },
-  rememberMeParent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 12,
-  },
-  rememberMeWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "30%",
-    gap: 10,
-  },
-  forgotPassword: {
-    fontSize: 14,
-    color: "#F29D38",
-    fontWeight: "bold",
-  },
-  loginButton: {
-    backgroundColor: "#F5F6FA",
-    width: "100%",
-    borderRadius: 15,
-    paddingVertical: 15,
-    marginTop: 30,
-  },
-  loginButtonActive: {
-    backgroundColor: "#3A5694",
-    width: "100%",
-    borderRadius: 15,
-    paddingVertical: 15,
-    marginTop: 30,
-  },
-  loginButtonTextActive: {
-    fontSize: 21,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#FFFFFF",
-  },
-  orSignInWith: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#666666",
-    textAlign: "center",
-    marginVertical: 30,
-  },
-  loginButtonText: {
-    fontSize: 21,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#B3B3B3",
-  },
-  loginWithGoogle: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    backgroundColor: "#F2F2F2",
-    width: "100%",
-    paddingVertical: 15,
-    borderRadius: 15,
-  },
-  loginWithFacebook: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-    backgroundColor: "#3A5694",
-    width: "100%",
-    paddingVertical: 15,
-    borderRadius: 15,
-    marginTop: 10,
-  },
-  signUpWrapper: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    gap: 9,
-  },
-  signUpText: {
-    fontSize: 16,
-    color: "#666666",
-  },
-  signUpLink: {
-    fontSize: 16,
-    color: "#F29D38",
-    fontWeight: "bold",
-  },
-});
