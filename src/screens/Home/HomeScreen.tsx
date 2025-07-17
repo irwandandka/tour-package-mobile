@@ -13,16 +13,27 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import apiService from "../../services/apiService";
 import SkeletonBox from "../../components/SkeletonBox";
 import styles from "./HomeScreen.styles";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types/param";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function HomeScreen({ navigation }: any) {
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
+
+export default function HomeScreen() {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const [activeButton, setActiveButton] = useState<number | null>(null);
 
   const [menuVisible, setMenuVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(-screenWidth * 0.8)).current;
 
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const { isAuthorized, user, logout } = useAuth();
 
   type Region = {
     id: string;
@@ -50,6 +61,10 @@ export default function HomeScreen({ navigation }: any) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleOpenDestination = (slug: string) => {
+    navigation.navigate("Product", { slug });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -302,7 +317,7 @@ export default function HomeScreen({ navigation }: any) {
                 <TouchableOpacity
                   key={index}
                   style={styles.topDestinationCard}
-                  onPress={() => navigation.navigate("Detail")}
+                  onPress={() => {}}
                 >
                   <Image
                     source={{ uri: destination.image }}
@@ -331,7 +346,7 @@ export default function HomeScreen({ navigation }: any) {
               <TouchableOpacity
                 key={index}
                 style={styles.recommendedCard}
-                onPress={() => navigation.navigate("Product")}
+                onPress={() => handleOpenDestination(destination.slug)}
               >
                 <Image
                   source={{ uri: destination.image }}
