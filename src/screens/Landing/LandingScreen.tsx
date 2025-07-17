@@ -17,7 +17,7 @@ export default function LandingScreen({ navigation }: any) {
       {/* Image Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../../assets/images/landing-screen-image.png")} // ubah dari .avif ke .jpg
+          source={{ uri: 'https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/landing-screen-image.png' }} // ubah dari .avif ke .jpg
           style={styles.image}
           resizeMode="cover"
         />
