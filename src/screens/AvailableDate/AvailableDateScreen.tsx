@@ -191,7 +191,8 @@ export default function AvailableDateScreen({ navigation }: any) {
                                                         </Text>
                                                     </TouchableOpacity>
                                                     <TouchableOpacity
-                                                        style={styles.buttonBookNow}>
+                                                        style={styles.buttonBookNow}
+                                                        onPress={() => navigation.navigate('TripOverview')}>
                                                         <Text style={styles.bookNowText}>
                                                             Book Now
                                                         </Text>
