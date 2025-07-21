@@ -17,6 +17,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
+import * as Location from 'expo-location';
+import type { LocationObject } from 'expo-location';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -67,6 +69,27 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setLocationName("Permission Denied");
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation(loc);
+
+      let reverseGeocode = await Location.reverseGeocodeAsync({
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      });
+
+      if (reverseGeocode.length > 0) {
+        const { city, region, country } = reverseGeocode[0];
+        setLocationName(`${city ?? region}, ${country}`);
+      }
+    })();
+
     const fetchData = async () => {
       try {
         const [regionsData, topDest, destinationsData] = await Promise.all([
@@ -143,6 +166,10 @@ export default function HomeScreen() {
   const handleProfilePress = () => {
     console.log("Profile button pressed");
   };
+
+  // Location State
+  const [location, setLocation] = useState<LocationObject | null>(null);
+  const [locationName, setLocationName] = useState("Loading...");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -223,7 +250,7 @@ export default function HomeScreen() {
           {/* Location */}
           <View style={styles.locationSection}>
             <FeatherIcon name="map-pin" size={23} color="#FF8000" />
-            <Text>Batam, Indonesia</Text>
+            <Text>{locationName}</Text>
           </View>
 
           {/* Profile */}
