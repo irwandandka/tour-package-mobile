@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
 import * as Location from 'expo-location';
 import type { LocationObject } from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -28,6 +29,7 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function HomeScreen() {
+  const [token, setToken] = useState<string | null>(null);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [activeButton, setActiveButton] = useState<number | null>(null);
@@ -89,6 +91,19 @@ export default function HomeScreen() {
         setLocationName(`${city ?? region}, ${country}`);
       }
     })();
+
+    const getToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('token');
+        if (storedToken) {
+          setToken(storedToken);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil token:", error);
+      }
+    };
+
+    getToken();
 
     const fetchData = async () => {
       try {
