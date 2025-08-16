@@ -3,7 +3,7 @@ export type ValidationResult = {
     isValid: boolean;
 }
 
-export function validateInput(type: "email" | "password", value: string, t: any): ValidationResult {
+export function validateInput(type: "email" | "password" | "name", value: string, t: any): ValidationResult {
     if (value.trim() === "") {
         return {
             isValid: false,
@@ -17,6 +17,15 @@ export function validateInput(type: "email" | "password", value: string, t: any)
             return {
                 isValid: false,
                 error: t("validation.email_invalid"),
+            };
+        }
+    }
+
+    if (type === "name") {
+        if (value.length < 2) {
+            return {
+                isValid: false,
+                error: t("validation.name_length"), // pastikan ada key ini di translations
             };
         }
     }

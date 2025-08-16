@@ -19,8 +19,18 @@ import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../../contexts/AuthContext";
 import { makeRedirectUri } from "expo-auth-session";
+import Toast from "react-native-toast-message";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types/param";
+import { useNavigation } from "@react-navigation/native";
 
-export default function LoginScreen({ navigation }: any) {
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Login"
+>;
+
+export default function LoginScreen() {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   const { t } = useTranslation();
 
   const { login } = useAuth();
@@ -54,24 +64,29 @@ export default function LoginScreen({ navigation }: any) {
   const handleLogin = async () => {
     try {
       // Handle login logic here
-      console.log("Login button pressed");
-
-      console.log('Trying to login with:', { email, password });
-
       const response = await apiService.post("v1/auth/login", {
         email: email,
         password: password,
       });
 
-      const { access_token, user } = response.data;
+      const { access_token, user } = response;
 
       // Store token and user data
       await AsyncStorage.setItem('token', access_token);
       await AsyncStorage.setItem('user', JSON.stringify(user));
 
-      return { success: true, user };
-    } catch (error) {
+      Toast.show({
+        type: "success",
+        text1: "Login Successful",
+        text2: "Welcome back!",
+      });
+      
+      setTimeout(() => {
+        navigation.navigate("Home");
+      }, 2000);
+    } catch (error: any) {
       console.error("Login error:", error);
+      console.error("Error message:", error.response?.data?.message || error.message);
     }
   };
 
@@ -129,9 +144,16 @@ export default function LoginScreen({ navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+        </TouchableOpacity>
         <View style={styles.content}>
           {/* Banner Image */}
           <Image
+            style={{ width: 200, height: 200 }}
             source={{
               uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/pana.png",
             }}
