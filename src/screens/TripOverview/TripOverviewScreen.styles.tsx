@@ -229,6 +229,7 @@ export default StyleSheet.create({
         borderColor: '#e0e0e0',
         padding: 15,
         marginBottom: 20,
+        gap: 15,
     },
     travelSummaryTitle: {
         fontSize: 20,
@@ -238,8 +239,9 @@ export default StyleSheet.create({
     },
     dateSummaryGroup: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        gap: 10,
+        justifyContent: 'flex-start',
+        gap: 15,
+        marginLeft: 10,
     },
     dateSummaryIcon: {
         // width: 24,
@@ -257,11 +259,56 @@ export default StyleSheet.create({
     dateSummaryString: {
         fontSize: 16,
         color: '#000',
-        fontWeight: 'semibold',
+        fontWeight: 'bold',
     },
     dateSummaryDayName: {
         fontSize: 12,
         fontWeight: 'semibold',
         color: '#777',
     },
+    groupTotalPrice: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    totalPriceText: {
+        fontSize: 19,
+        color: '#000',
+        fontWeight: 'bold',
+    },
+    totalPriceValue: {
+        fontSize: 21,
+        color: '#000000',
+        fontWeight: 'bold',
+    },
+    continueButton: {
+        backgroundColor: '#f29d38',
+        borderRadius: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+    },
+    continueButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    disabledButton: {
+        backgroundColor: '#f5c487ff',
+        borderRadius: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+    },
+    disabledButtonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    travelSummaryDisclaimer: {
+        fontSize: 15,
+        color: '#666',
+        textAlign: 'center',
+        fontWeight: '400',
+    }
 });

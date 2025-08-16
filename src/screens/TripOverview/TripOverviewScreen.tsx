@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import apiService from "../../services/apiService";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import FeatherIcon from "react-native-vector-icons/Feather";
+import uuid from 'react-native-uuid';
 
 type TripOverviewNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,7 +24,7 @@ type TripOverviewNavigationProp = NativeStackNavigationProp<
 >;
 
 type Room = {
-  id: number;
+  id: string;
   adult: number;
   roomType: RoomType;
   child: number;
@@ -85,19 +86,7 @@ export default function TripOverviewScreen() {
     senior: 0,
   });
 
-  const incrementField = (field: RoomFieldKey) => {
-    setRoomOccupancy((prev) => ({
-      ...prev,
-      [field]: prev[field] + 1,
-    }));
-  };
-
-  const decrementField = (field: RoomFieldKey) => {
-    setRoomOccupancy((prev) => ({
-      ...prev,
-      [field]: Math.max(0, prev[field] - 1),
-    }));
-  };
+  const totalPrice = 0;
 
   // Load data saat mount screen
   useEffect(() => {
@@ -121,9 +110,63 @@ export default function TripOverviewScreen() {
     fetchRoomTypes();
   }, []);
 
-  const onDeleteRoom = (index: number) => {
-    setRooms((prev) => prev.filter((_, i) => i !== index));
+  // Increment dan decrement jumlah orang di setiap kamar
+  const incrementField = (roomId: string, field: RoomFieldKey) => {
+    setRooms(prev =>
+      prev.map(r =>
+        r.id === roomId
+          ? { ...r, [field]: r[field] + 1 }
+          : r
+      )
+    );
   };
+
+  // Decrement jumlah orang di setiap kamar
+  const decrementField = (roomId: string, field: RoomFieldKey) => {
+    setRooms(prev =>
+      prev.map(r =>
+        r.id === roomId
+          ? { ...r, [field]: Math.max(0, r[field] - 1) }
+          : r
+      )
+    );
+  };
+
+  const onDeleteRoom = (index: number) => {
+    setRooms((prev) => {
+      const updated = prev.filter((_, i) => i !== index);
+      return updated;
+    });
+  };
+
+  const calculateTotalPrice = useMemo(() => {
+    if (rooms.length === 0 || roomTypes.length === 0) return 0;
+    let total = 0;
+
+    rooms.forEach((room) => {
+      const roomType = roomTypes.find((rt) => rt.id === room.id);
+      if (!roomType) return;
+
+      // contoh: pricing ambil harga adult pertama
+      // const basePrice = roomType.pricing[0]?.price ?? 0;
+
+      // total per room (misalnya kali jumlah adult)
+      // const roomTotal = basePrice * room.occupancy.adult;
+
+      // total += roomTotal;
+    });
+    
+  }, [roomOccupancy]);
+
+  const onContinueToPassengerDetails = () =>{
+    try {
+      console.log("Navigating to Passenger Details with rooms:", rooms);
+    } catch (error: any) {
+      console.error("Error continuing to passenger details:", error);
+    }
+  }
+
+  let roomIndex = 0;
 
   return (
     <SafeAreaView>
@@ -199,7 +242,7 @@ export default function TripOverviewScreen() {
             <Text style={styles.titleRoomSection}>Room</Text>
 
             {roomTypes.map((roomType, index) => (
-              <View style={styles.roomCard}>
+              <View style={styles.roomCard} key={roomType.id}>
                 <View style={styles.roomCardHeader}>
                   {/* Button Add Room */}
                   <TouchableOpacity
@@ -207,8 +250,10 @@ export default function TripOverviewScreen() {
                     onPress={() => {
                       if (roomTypes.length === 0) return;
 
+                      const selectedType = roomTypes[index];
+
                       const newRoom: Room = {
-                        id: rooms.length + 1,
+                        id: uuid.v4(),
                         roomType: roomTypes[index], // ambil room type pertama
                         adult: roomTypes[index].min_adult,
                         child: 0,
@@ -216,7 +261,26 @@ export default function TripOverviewScreen() {
                         senior: 0,
                       };
 
-                      setRooms((prev) => [...prev, newRoom]);
+                      // setRooms((prev) => [...prev, newRoom]);
+
+                      setRooms((prev) => {
+                        // cari posisi terakhir dari roomType yang sama
+                        const lastIndex = [...prev]
+                          .map((r) => r.roomType.id) // misalnya roomType ada id
+                          .lastIndexOf(selectedType.id);
+
+                        const newRooms = [...prev];
+
+                        if (lastIndex === -1) {
+                          // kalau belum ada tipe ini, taruh di akhir
+                          newRooms.push(newRoom);
+                        } else {
+                          // insert setelah index terakhir tipe ini
+                          newRooms.splice(lastIndex + 1, 0, newRoom);
+                        }
+
+                        return newRooms;
+                      });
                     }}
                   >
                     <Text style={styles.roomCardButtonAddTitle}>Add Room</Text>
@@ -239,85 +303,97 @@ export default function TripOverviewScreen() {
                   <View>
                     {rooms
                       .filter((room) => room.roomType.id === roomType.id)
-                      .map((room, index) => (
-                        <View key={index} style={styles.roomCardBody}>
-                          <View style={styles.roomTitleWrapper}>
-                            <Image
-                              style={styles.roomCardBodyImage}
-                              source={{ uri: room.roomType.image }}
-                            />
+                      .map((room, index) => {
+                        const currentIndex = roomIndex++;
 
-                            <View style={styles.roomTitleWithDelete}>
-                              <Text style={styles.roomCardBodyTitle}>
-                                {room.roomType.name} #{index + 1}
-                              </Text>
+                        return (
+                          <View key={index} style={styles.roomCardBody}>
+                            <View style={styles.roomTitleWrapper}>
+                              <Image
+                                style={styles.roomCardBodyImage}
+                                source={{ uri: room.roomType.image }}
+                              />
 
-                              <TouchableOpacity
-                                onPress={() => onDeleteRoom(index)}
-                              >
-                                <FeatherIcon name="trash-2" size={20} color="red" />
-                              </TouchableOpacity>
+                              <View style={styles.roomTitleWithDelete}>
+                                <Text style={styles.roomCardBodyTitle}>
+                                  {room.roomType.name} #{index + 1}
+                                </Text>
+
+                                <TouchableOpacity
+                                  onPress={() => onDeleteRoom(currentIndex)}
+                                >
+                                  <FeatherIcon
+                                    name="trash-2"
+                                    size={20}
+                                    color="red"
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+
+                            <View style={styles.roomCardInputGrouping}>
+                              {roomFields.map((field) => {
+                                return (
+                                  <View
+                                    key={field.key}
+                                    style={styles.roomCardBodyInputWrapper}
+                                  >
+                                    <Text style={styles.roomCardBodyInputTitle}>
+                                      {field.label}
+                                    </Text>
+                                    <View style={styles.roomInputGroup}>
+                                      <TouchableOpacity
+                                        disabled={room[field.key] <= 0}
+                                        onPress={() =>
+                                          decrementField(room.id, field.key)
+                                        }
+                                        style={styles.roomInputButtonDecrement}
+                                      >
+                                        <Text
+                                          style={styles.roomInputTextDecrement}
+                                        >
+                                          −
+                                        </Text>
+                                      </TouchableOpacity>
+
+                                      <TextInput
+                                        style={styles.inputValue}
+                                        value={room[field.key].toString()}
+                                        onChangeText={(text) => {
+                                          const num = parseInt(text);
+                                          if (!isNaN(num)) {
+                                            setRooms((prev) =>
+                                              prev.map((r) =>
+                                                r.id === room.id
+                                                  ? { ...r, [field.key]: num }
+                                                  : r
+                                              )
+                                            );
+                                          }
+                                        }}
+                                        keyboardType="numeric"
+                                      />
+
+                                      <TouchableOpacity
+                                        onPress={() =>
+                                          incrementField(room.id, field.key)
+                                         }
+                                        style={styles.roomInputButtonIncrement}
+                                      >
+                                        <Text
+                                          style={styles.roomInputTextIncrement}
+                                        >
+                                          +
+                                        </Text>
+                                      </TouchableOpacity>
+                                    </View>
+                                  </View>
+                                );
+                              })}
                             </View>
                           </View>
-
-                          <View style={styles.roomCardInputGrouping}>
-                            {roomFields.map((field) => {
-                              console.log("Render field:", field.label);
-                              return (
-                                <View
-                                  key={field.key}
-                                  style={styles.roomCardBodyInputWrapper}
-                                >
-                                  <Text style={styles.roomCardBodyInputTitle}>
-                                    {field.label}
-                                  </Text>
-                                  <View style={styles.roomInputGroup}>
-                                    <TouchableOpacity
-                                      onPress={() => decrementField(field.key)}
-                                      style={styles.roomInputButtonDecrement}
-                                    >
-                                      <Text
-                                        style={styles.roomInputTextDecrement}
-                                      >
-                                        −
-                                      </Text>
-                                    </TouchableOpacity>
-
-                                    <TextInput
-                                      style={styles.inputValue}
-                                      value={room[field.key].toString()}
-                                      onChangeText={(text) => {
-                                        const num = parseInt(text);
-                                        if (!isNaN(num)) {
-                                          setRooms((prev) =>
-                                            prev.map((r) =>
-                                              r.id === room.id
-                                                ? { ...r, [field.key]: num }
-                                                : r
-                                            )
-                                          );
-                                        }
-                                      }}
-                                      keyboardType="numeric"
-                                    />
-
-                                    <TouchableOpacity
-                                      onPress={() => incrementField(field.key)}
-                                      style={styles.roomInputButtonIncrement}
-                                    >
-                                      <Text
-                                        style={styles.roomInputTextIncrement}
-                                      >
-                                        +
-                                      </Text>
-                                    </TouchableOpacity>
-                                  </View>
-                                </View>
-                              );
-                            })}
-                          </View>
-                        </View>
-                      ))}
+                        );
+                      })}
                   </View>
                 </ScrollView>
               </View>
@@ -333,11 +409,48 @@ export default function TripOverviewScreen() {
               <IonIcon name="calendar-outline" size={17} />
 
               <View style={styles.dateSummaryTextGroup}>
-                <Text style={styles.dateSummaryText}>Start Date</Text>
+                <Text style={styles.dateSummaryText}>From Date</Text>
                 <Text style={styles.dateSummaryString}>August 1, 2023</Text>
                 <Text style={styles.dateSummaryDayName}>Monday</Text>
               </View>
             </View>
+
+            <View style={styles.dateSummaryGroup}>
+              <IonIcon name="calendar-outline" size={17} />
+
+              <View style={styles.dateSummaryTextGroup}>
+                <Text style={styles.dateSummaryText}>To Date</Text>
+                <Text style={styles.dateSummaryString}>August 1, 2023</Text>
+                <Text style={styles.dateSummaryDayName}>Monday</Text>
+              </View>
+            </View>
+
+            {/* Divider */}
+            <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 10 }} />
+
+            {/* Total Price */}
+            <View style={styles.groupTotalPrice}>
+              <Text style={styles.totalPriceText}>
+                Total
+              </Text>
+
+              <Text style={styles.totalPriceValue}>
+                SGD {totalPrice.toFixed(2)}
+              </Text>
+            </View>
+
+            {/* Button Continue Passenger Detail */}
+            <TouchableOpacity 
+              disabled={rooms.length == 0} 
+              style={rooms.length > 0 ? styles.continueButton : styles.disabledButton}
+              onPress={onContinueToPassengerDetails}
+            >
+              <Text style={rooms.length > 0 ? styles.continueButtonText : styles.disabledButtonText}>Continue to Passenger Details</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.travelSummaryDisclaimer}>
+              No hidden fees, no surprises. The price you see is the price you pay.
+            </Text>
           </View>
           {/* End Travel Summary */}
         </View>
