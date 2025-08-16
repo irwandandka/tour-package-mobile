@@ -143,4 +143,13 @@ export default StyleSheet.create({
         color: "#F29D38",
         fontWeight: "bold",
     },
+    backButton: {
+        position: "absolute",
+        top: 19,
+        left: 15,
+        backgroundColor: "#999999",
+        opacity: 0.8,
+        padding: 5,
+        borderRadius: 21,
+    },
 });

@@ -12,22 +12,41 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";
 import { validateInput } from "../../utils/validation";
 import styles from "./RegisterScreen.styles";
+import apiService from "../../services/apiService";
+import Toast from "react-native-toast-message";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types/param";
+import { useNavigation } from "@react-navigation/native";
 
-export default function RegisterScreen({ navigation }: any) {
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Register"
+>;
+
+export default function RegisterScreen() {
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
   const { t } = useTranslation();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
+  const [errorName, setErrorName] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
   const handleEmailChange = (email: string) => {
     setEmail(email);
     const result = validateInput("email", email, t);
     setErrorEmail(result.error);
+  };
+
+  const handleNameChange = (name: string) => {
+    setName(name);
+    const result = validateInput("name", name, t);
+    setErrorName(result.error);
   };
 
   const handlePasswordChange = (password: string) => {
@@ -40,17 +59,42 @@ export default function RegisterScreen({ navigation }: any) {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log("Register button pressed");
+  const handleRegister = async () => {
+    try {
+      console.log("Register button pressed");
+      const response = await apiService.post("v1/auth/register", {
+        email: email,
+        password: password,
+        name: name,
+      });
+
+      Toast.show({
+        type: "success",
+        text1: "Registration Successful",
+        text2: "Please login to continue",
+      });
+
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 2000);
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+        </TouchableOpacity>
         <View style={styles.content}>
           {/* Banner Image */}
           <Image
+            style={{ width: 200, height: 200 }}
             source={{
               uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/pana.png",
             }}
@@ -61,6 +105,32 @@ export default function RegisterScreen({ navigation }: any) {
           <Text style={styles.subtitle}>{t("registerScreen.subtitle")}</Text>
 
           {/* Input Fields */}
+          <View style={styles.inputFieldWrapper}>
+            <Text style={styles.inputLabel}>Name</Text>
+            <View
+              style={[
+                styles.inputField,
+                { borderWidth: 1, borderColor: errorName ? "red" : "#F5F6FA" },
+              ]}
+            >
+              <FeatherIcon
+                name="user"
+                size={23}
+                color={errorName ? "red" : "#B3B3B3"}
+              />
+              <TextInput
+                placeholder="John Doe"
+                placeholderTextColor={"#B3B3B3"}
+                onChangeText={handleNameChange}
+                value={name}
+                keyboardType="default"
+                autoCapitalize="none"
+              />
+            </View>
+            {errorName ? (
+              <Text style={{ color: "red" }}>{errorName}</Text>
+            ) : null}
+          </View>
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Email</Text>
             <View
@@ -75,7 +145,7 @@ export default function RegisterScreen({ navigation }: any) {
                 color={errorEmail ? "red" : "#B3B3B3"}
               />
               <TextInput
-                placeholder="Enter email"
+                placeholder="example@gmail.com"
                 placeholderTextColor={"#B3B3B3"}
                 onChangeText={handleEmailChange}
                 value={email}
@@ -130,16 +200,16 @@ export default function RegisterScreen({ navigation }: any) {
           {/* Sign in Button */}
           <TouchableOpacity
             style={
-              !errorEmail && !errorPassword
+              !errorEmail && !errorName && !errorPassword
                 ? styles.loginButtonActive
                 : styles.loginButton
             }
-            onPress={handleLogin}
-            disabled={!!errorEmail || !!errorPassword}
+            onPress={handleRegister}
+            disabled={!!errorEmail || !!errorName || !!errorPassword}
           >
             <Text
               style={
-                !errorEmail && !errorPassword
+                !errorEmail && !errorName && !errorPassword
                   ? styles.loginButtonTextActive
                   : styles.loginButtonText
               }
@@ -148,8 +218,8 @@ export default function RegisterScreen({ navigation }: any) {
             </Text>
           </TouchableOpacity>
 
-          {/* Sign In with Google & Facebook */}
-          <Text style={styles.orSignInWith}>
+          {/* Sign Up with Google & Facebook */}
+          {/* <Text style={styles.orSignInWith}>
             {t("registerScreen.orSignUpWith")}
           </Text>
 
@@ -176,15 +246,12 @@ export default function RegisterScreen({ navigation }: any) {
             >
               {t("registerScreen.loginWithFacebook")}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* Sign Up Link */}
           <View style={styles.signUpWrapper}>
-            <Text style={styles.signUpText}>
-              {t("registerScreen.login")}
-            </Text>
-            <TouchableOpacity
-                onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.signUpText}>{t("registerScreen.login")}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.signUpLink}>
                 {t("registerScreen.loginButton")}
               </Text>
