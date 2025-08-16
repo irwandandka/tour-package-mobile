@@ -4,6 +4,15 @@ export default StyleSheet.create({
     container: {
         padding: 21,
     },
+    backButton: {
+        position: "absolute",
+        top: 19,
+        left: 15,
+        backgroundColor: "#999999",
+        opacity: 0.8,
+        padding: 5,
+        borderRadius: 21,
+    },
     headerSection: {
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -138,6 +147,20 @@ export default StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
+    },
+    roomTitleWithDelete: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10, // atau gunakan margin jika gap tidak support
+    },
+
+    deleteIcon: {
+        fontSize: 20,
+        color: 'red',
+        marginLeft: 10,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 5,
     },
     roomCardInputGrouping: {
         flexDirection: 'row',
