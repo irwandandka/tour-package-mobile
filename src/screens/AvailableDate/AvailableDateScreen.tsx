@@ -1,49 +1,94 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
 import styles from "./AvailableDateScreen.styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import DropDownPicker from 'react-native-dropdown-picker';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types/param";
+import { useNavigation } from "@react-navigation/native";
+import apiService from "../../services/apiService";
+import { RouteProp, useRoute } from '@react-navigation/native';
 
-export default function AvailableDateScreen({ navigation }: any) {
-    const [selectedValue, setSelectedValue] = useState('');
+type AvailableDateNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "AvailableDate"
+>;
+
+type AvailableDateRouteProp = RouteProp<RootStackParamList, "AvailableDate">;
+
+export default function AvailableDateScreen() {
+    const navigation = useNavigation<AvailableDateNavigationProp>();
+    const route = useRoute<AvailableDateRouteProp>();
+
+    const { slug } = route.params;
 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState<string | null>(null); // selected period ID
 
-    const [periods, setPeriods] = useState([
-        { label: '2025 May', value: '202505' },
-        { label: '2025 June', value: '202506' },
-        { label: '2025 July', value: '202507' },
-        { label: '2025 August', value: '202508' },
-    ]);
+    type AvailablePeriod = {
+        label: string;
+        value: string;
+    }
+    const [availablePeriods, setAvailablePeriods] = useState<AvailablePeriod[]>([]);
 
-    const [availableDates, setAvailableDates] = useState([
-        { 
-            id: 1,
-            dateFrom: 'May 20, 2025',
-            dayFrom: 'Tuesday',
-            dateTo: 'May 22, 2025',
-            dayTo: 'Thursday',
-            price: 'S$ 290 SGD',
-        },
-        { 
-            id: 2,
-            dateFrom: 'May 21, 2025',
-            dayFrom: 'Wednesday',
-            dateTo: 'May 23, 2025',
-            dayTo: 'Friday',
-            price: 'S$ 290 SGD',
-        },
-        { 
-            id: 3,
-            dateFrom: 'May 22, 2025',
-            dayFrom: 'Thursday',
-            dateTo: 'May 24, 2025',
-            dayTo: 'Saturday',
-            price: 'S$ 290 SGD',
-        },
-    ]);
+    type AvailableDate = {
+        id: number;
+        date_start: string;
+        date_end: string;
+        date_start_iso: string;
+        date_end_iso: string;
+        price: string;
+        allotment?: number;
+    }
+
+    const [availableDates, setAvailableDates] = useState<AvailableDate[]>([]);
+
+    useEffect(() => {
+        const fetchAvailablePeriod = async () => {
+            try {
+                const response = await apiService.get(`v1/product/${slug}/available-period`, {
+                    params: {
+                        lang: 'EN',
+                        currency: 'SGD',
+                    }
+                });
+
+                const periods = response?.data ?? [];
+
+                const formattedPeriods: AvailablePeriod[] = periods.map((item: any) => ({
+                    label: item.name,
+                    value: item.id,
+                }));
+
+                setAvailablePeriods(formattedPeriods);
+            } catch (error) {
+                console.error("Error fetching available periods:", error);
+            }
+        }
+
+        fetchAvailablePeriod()
+        
+        const fetchAvailableDates = async () => {
+            if (!value || !slug) return;
+
+            try {
+                const response = await apiService.get(`v1/product/${slug}/available-date`, {
+                    params: {
+                        period: value,
+                        lang: 'EN',
+                        currency: 'SGD',
+                    }
+                });
+
+                setAvailableDates(response?.data ?? []);
+            } catch (error) {
+                console.error("Failed to fetch available dates:", error);
+            }
+        };
+
+        fetchAvailableDates();
+    }, [value]);
 
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -56,6 +101,12 @@ export default function AvailableDateScreen({ navigation }: any) {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View style={[styles.container, { backgroundColor: '#fff' }]}>
                 <View style={styles.titleContainer}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+                    </TouchableOpacity>
                     <Text style={styles.title}>
                         Available Dates
                     </Text>
@@ -71,10 +122,10 @@ export default function AvailableDateScreen({ navigation }: any) {
                         <DropDownPicker
                             open={open}
                             value={value}
-                            items={periods}
+                            items={availablePeriods}
                             setOpen={setOpen}
                             setValue={setValue}
-                            setItems={setPeriods}
+                            setItems={setAvailablePeriods}
                             placeholder="Please select a month"
                             style={styles.selectMonthInput}
                             dropDownContainerStyle={{ zIndex: 1000 }}
@@ -106,20 +157,20 @@ export default function AvailableDateScreen({ navigation }: any) {
                                         <View style={styles.headerCol}>
                                             <View style={styles.availableDateTextWrapper}>
                                                 <Text style={styles.insideText}>
-                                                    { availableDate.dateFrom }
+                                                    { availableDate.date_start }
                                                 </Text>
                                                 <Text style={styles.availableDateHeaderTextDay}>
-                                                    { availableDate.dayFrom }
+                                                    { availableDate.date_start_iso }
                                                 </Text>
                                             </View>
                                         </View>
                                         <View style={styles.headerCol}>
                                             <View style={styles.availableDateTextWrapper}>
                                                 <Text style={styles.insideText}>
-                                                    { availableDate.dateTo }
+                                                    { availableDate.date_end }
                                                 </Text>
                                                 <Text style={styles.availableDateHeaderTextDay}>
-                                                    { availableDate.dayTo }
+                                                    { availableDate.date_end_iso }
                                                 </Text>
                                             </View>
                                         </View>
@@ -152,10 +203,10 @@ export default function AvailableDateScreen({ navigation }: any) {
                                                     </Text>
                                                     <View style={styles.groupDateTextWrapper}>
                                                         <Text style={styles.groupDateTextDate}>
-                                                            { availableDate.dateFrom }
+                                                            { availableDate.date_start }
                                                         </Text>
                                                         <Text style={styles.groupDateTextDay}>
-                                                            { availableDate.dayFrom }
+                                                            { availableDate.date_start_iso }
                                                         </Text>
                                                     </View>
                                                 </View>
@@ -166,10 +217,10 @@ export default function AvailableDateScreen({ navigation }: any) {
                                                     </Text>
                                                     <View style={styles.groupDateTextWrapper}>
                                                         <Text style={styles.groupDateTextDate}>
-                                                            { availableDate.dateTo }
+                                                            { availableDate.date_end }
                                                         </Text>
                                                         <Text style={styles.groupDateTextDay}>
-                                                            { availableDate.dayTo }
+                                                            { availableDate.date_end_iso }
                                                         </Text>
                                                     </View>
                                                 </View>
@@ -192,7 +243,11 @@ export default function AvailableDateScreen({ navigation }: any) {
                                                     </TouchableOpacity>
                                                     <TouchableOpacity
                                                         style={styles.buttonBookNow}
-                                                        onPress={() => navigation.navigate('TripOverview')}>
+                                                        onPress={() => navigation.navigate('TripOverview', {
+                                                            slug: slug,
+                                                            dateFrom: availableDate.date_start_iso,
+                                                            dateTo: availableDate.date_end_iso,
+                                                        })}>
                                                         <Text style={styles.bookNowText}>
                                                             Book Now
                                                         </Text>

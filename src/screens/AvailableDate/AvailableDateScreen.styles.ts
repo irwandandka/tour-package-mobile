@@ -225,5 +225,12 @@ export default StyleSheet.create({
         marginTop: 10,
         color: "#EF4444",
         fontWeight: "normal",
-    }
+    },
+    backButton: {
+        backgroundColor: "#999999",
+        opacity: 0.8,
+        padding: 5,
+        borderRadius: 21,
+        marginBottom: 5,
+    },
 });
