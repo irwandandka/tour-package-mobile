@@ -71,7 +71,9 @@ export default function GeneralSection({
             {/* Button Book Now */}
             <TouchableOpacity
                 style={styles.buttonBookNow}
-                onPress={() => navigation.navigate("AvailableDate")}>
+                onPress={() => navigation.navigate("AvailableDate", {
+                    slug: productDetail?.slug || "",
+                })}>
                 <Text style={styles.buttonBookNowText}>
                     Book Now
                 </Text>
