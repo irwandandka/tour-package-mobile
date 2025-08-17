@@ -17,50 +17,22 @@ import apiService from "../../services/apiService";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import uuid from 'react-native-uuid';
+import { ProductDetail, Room, RoomType, RoomOrder, BodySaveBooking, BodySaveProductDetail, RoomPriceBreakdown } from "../../types/api";
+import { format } from "date-fns";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from "react-native-toast-message";
 
 type TripOverviewNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "TripOverview"
 >;
 
-type Room = {
-  id: string;
-  adult: number;
-  roomType: RoomType;
-  child: number;
-  infant: number;
-  senior: number;
-};
-
-type Pricing = {
-  adult: number;
-  child: number;
-  infant: number;
-  senior: number;
-  level: number;
-};
-
-type RoomType = {
-  id: string;
-  name: string;
-  image: string;
-  min_adult: number;
-  max_adult: number;
-  max_pax: number;
-  allotment: number;
-  pricing: Pricing[];
-};
-
 type RoomFieldKey = "adult" | "child" | "senior" | "infant";
-
-type RoomOccupancy = {
-  [key in RoomFieldKey]: number;
-};
 
 type TripOverviewRouteProp = RouteProp<RootStackParamList, "TripOverview">;
 
 const roomFields: { label: string; key: RoomFieldKey }[] = [
-  { label: "Adult", key: "adult" },
+  { label: "Adsult", key: "adult" },
   { label: "Child", key: "child" },
   { label: "Infant", key: "infant" },
   { label: "Senior", key: "senior" },
@@ -72,24 +44,42 @@ export default function TripOverviewScreen() {
 
   const { slug, dateFrom, dateTo } = route.params;
 
+  const [token, setToken] = useState<string | null>(null);
+
+  // Format date to display
+  const formattedDateFrom = format(new Date(dateFrom), "MMMM dd, yyyy");
+  const formattedDateTo = format(new Date(dateTo), "MMMM dd, yyyy");
+
+  // Get day names to display
+  const dayFrom = format(new Date(dateFrom), "EEEE");
+  const dayTo = format(new Date(dateTo), "EEEE");
+
   // List jenis kamar (dari API)
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
+
+  const [product, setProduct] = useState<ProductDetail | null>(null);
 
   // kamar yang dipilih user
   const [rooms, setRooms] = useState<Room[]>([]);
 
-  // default jumlah orang di setiap kamar
-  const [roomOccupancy, setRoomOccupancy] = useState<RoomOccupancy>({
-    adult: 0,
-    child: 0,
-    infant: 0,
-    senior: 0,
-  });
-
-  const totalPrice = 0;
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [breakdowns, setBreakdowns] = useState<RoomPriceBreakdown[]>([]);
 
   // Load data saat mount screen
   useEffect(() => {
+    const getToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('token');
+        if (storedToken) {
+          setToken(storedToken);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil token:", error);
+      }
+    };
+
+    getToken();
+
     const fetchRoomTypes = async () => {
       try {
         const response = await apiService.get(`v1/product/${slug}/room-type`, {
@@ -102,6 +92,16 @@ export default function TripOverviewScreen() {
         });
 
         setRoomTypes(response.data);
+
+        const responseProduct = await apiService.get(`v1/product/${slug}`, {
+          params: {
+            lang: 'EN',
+            currency: 'SGD',
+          }
+        });
+
+        setProduct(responseProduct.data);
+
       } catch (error: any) {
         console.error("Error fetching trip overview:");
       }
@@ -109,6 +109,40 @@ export default function TripOverviewScreen() {
 
     fetchRoomTypes();
   }, []);
+
+  // Hitung harga per kategori + total
+  const roomsWithPrice = useMemo(() => {
+    return rooms.map(room => {
+      const roomType = roomTypes.find(rt => rt.id === room.roomId);
+      if (!roomType) {
+        return {
+          ...room,
+          priceAdult: 0,
+          priceChild: 0,
+          priceInfant: 0,
+          priceSenior: 0,
+          total: 0,
+        };
+      }
+
+      const breakdown = calculateRoomPriceBreakdown(roomType, room);
+
+      return {
+        ...room,
+        priceAdult: breakdown.adult ?? 0,
+        priceChild: breakdown.child ?? 0,
+        priceInfant: breakdown.infant ?? 0,
+        priceSenior: breakdown.senior ?? 0,
+        total: breakdown.total ?? 0,
+      };
+    });
+  }, [rooms, roomTypes]);
+
+  // Update totalPrice
+  useEffect(() => {
+    const total = roomsWithPrice.reduce((acc, room) => acc + (room.total || 0), 0);
+    setTotalPrice(total);
+  }, [roomsWithPrice]);
 
   // Increment dan decrement jumlah orang di setiap kamar
   const incrementField = (roomId: string, field: RoomFieldKey) => {
@@ -139,30 +173,70 @@ export default function TripOverviewScreen() {
     });
   };
 
-  const calculateTotalPrice = useMemo(() => {
-    if (rooms.length === 0 || roomTypes.length === 0) return 0;
+  function calculateRoomPriceBreakdown(roomType: RoomType, order: RoomOrder) {
+    const categories: (keyof RoomOrder)[] = ["adult", "child", "infant", "senior"];
     let total = 0;
+    const breakdown: { [k in keyof RoomOrder]?: number } = { adult: 0, child: 0, infant: 0, senior: 0 };
 
-    rooms.forEach((room) => {
-      const roomType = roomTypes.find((rt) => rt.id === room.id);
-      if (!roomType) return;
+    let level = 1;
+    for (const category of categories) {
+      const count = order[category] || 0;
+      for (let i = 0; i < count; i++) {
+        const pricing = roomType.pricing.find(p => p.level === level);
+        if (!pricing) continue;
+        breakdown[category]! += pricing[category]!;
+        total += pricing[category]!;
+        level++;
+      }
+    }
 
-      // contoh: pricing ambil harga adult pertama
-      // const basePrice = roomType.pricing[0]?.price ?? 0;
+    return { ...breakdown, total };
+  }
 
-      // total per room (misalnya kali jumlah adult)
-      // const roomTotal = basePrice * room.occupancy.adult;
-
-      // total += roomTotal;
-    });
-    
-  }, [roomOccupancy]);
-
-  const onContinueToPassengerDetails = () =>{
+  const handleBooking = async () =>{
     try {
-      console.log("Navigating to Passenger Details with rooms:", rooms);
+      const bodySave: BodySaveBooking = {
+        product_id: product?.id ?? '',
+        date_from: dateFrom,
+        date_to: dateTo,
+        currency: 'SGD',
+        product_details: rooms.map(room => ({
+          product_detail: room.roomId,
+          quantity: 1,
+          quantity_adult: room.adult,
+          quantity_child: room.child,
+          quantity_infant: room.infant,
+          quantity_senior: room.senior,
+        })),
+      };
+
+      const response = await apiService.post(`v1/booking`, bodySave);
+
+      Toast.show({
+        type: "success",
+        text1: "Booking Successful",
+        text2: "Your booking has been confirmed!",
+      });
+
+      setTimeout(() => {
+        navigation.navigate("PassengerDetail", {
+          slug,
+          dateFrom,
+          dateTo,
+          transactionId: response.data.id,
+        });
+      }, 1000);
     } catch (error: any) {
-      console.error("Error continuing to passenger details:", error);
+      if (error.response) {
+        // Response dari server
+        console.error("Data:", error.response.data);
+      } else if (error.request) {
+        // Request dikirim tapi tidak ada response
+        console.error("No response received:", error.request);
+      } else {
+        // Error lain
+        console.error("Error message:", error.message);
+      }
     }
   }
 
@@ -188,14 +262,14 @@ export default function TripOverviewScreen() {
               <View style={styles.cardTopSide}>
                 <Image
                   source={{
-                    uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/bangkok-tour-1.png",
+                    uri: product?.image,
                   }}
                   style={styles.cardImage}
                 />
               </View>
               <View style={styles.cardBottomSide}>
                 <View style={styles.cardTitleWrapper}>
-                  <Text style={styles.cardTitle}>2D1N Bangkok Tour</Text>
+                  <Text style={styles.cardTitle}>{product?.name}</Text>
                   <View style={styles.cardRatingWrapper}>
                     <IonIcon
                       name="star"
@@ -227,10 +301,10 @@ export default function TripOverviewScreen() {
                       size={21}
                       color={"#F29D38"}
                     />
-                    <Text style={styles.cardStarRating}>4.8</Text>
+                    <Text style={styles.cardStarRating}>{ product?.rating }</Text>
                   </View>
 
-                  <Text style={styles.textNights}>2 Days 1 Night</Text>
+                  <Text style={styles.textNights}>{ product?.duration }</Text>
                 </View>
               </View>
             </View>
@@ -254,19 +328,24 @@ export default function TripOverviewScreen() {
 
                       const newRoom: Room = {
                         id: uuid.v4(),
-                        roomType: roomTypes[index], // ambil room type pertama
+                        roomId: selectedType.id,
+                        roomName: selectedType.name,
+                        roomImage: selectedType.image,
                         adult: roomTypes[index].min_adult,
+                        priceAdult: 0,
+                        priceChild: 0,
+                        priceInfant: 0,
+                        priceSenior: 0,
+                        total: 0,
                         child: 0,
                         infant: 0,
                         senior: 0,
                       };
 
-                      // setRooms((prev) => [...prev, newRoom]);
-
                       setRooms((prev) => {
                         // cari posisi terakhir dari roomType yang sama
                         const lastIndex = [...prev]
-                          .map((r) => r.roomType.id) // misalnya roomType ada id
+                          .map((r) => r.roomId) // misalnya roomType ada id
                           .lastIndexOf(selectedType.id);
 
                         const newRooms = [...prev];
@@ -302,7 +381,7 @@ export default function TripOverviewScreen() {
                 >
                   <View>
                     {rooms
-                      .filter((room) => room.roomType.id === roomType.id)
+                      .filter((room) => room.roomId === roomType.id)
                       .map((room, index) => {
                         const currentIndex = roomIndex++;
 
@@ -311,12 +390,12 @@ export default function TripOverviewScreen() {
                             <View style={styles.roomTitleWrapper}>
                               <Image
                                 style={styles.roomCardBodyImage}
-                                source={{ uri: room.roomType.image }}
+                                source={{ uri: room.roomImage }}
                               />
 
                               <View style={styles.roomTitleWithDelete}>
                                 <Text style={styles.roomCardBodyTitle}>
-                                  {room.roomType.name} #{index + 1}
+                                  {room.roomName} #{index + 1}
                                 </Text>
 
                                 <TouchableOpacity
@@ -410,8 +489,8 @@ export default function TripOverviewScreen() {
 
               <View style={styles.dateSummaryTextGroup}>
                 <Text style={styles.dateSummaryText}>From Date</Text>
-                <Text style={styles.dateSummaryString}>August 1, 2023</Text>
-                <Text style={styles.dateSummaryDayName}>Monday</Text>
+                <Text style={styles.dateSummaryString}>{formattedDateFrom}</Text>
+                <Text style={styles.dateSummaryDayName}>{dayFrom}</Text>
               </View>
             </View>
 
@@ -420,9 +499,37 @@ export default function TripOverviewScreen() {
 
               <View style={styles.dateSummaryTextGroup}>
                 <Text style={styles.dateSummaryText}>To Date</Text>
-                <Text style={styles.dateSummaryString}>August 1, 2023</Text>
-                <Text style={styles.dateSummaryDayName}>Monday</Text>
+                <Text style={styles.dateSummaryString}>{formattedDateTo}</Text>
+                <Text style={styles.dateSummaryDayName}>{dayTo}</Text>
               </View>
+            </View>
+
+            {/* Room Details */}
+            <View style={styles.wrapperRoomDetail}>
+              {rooms.length === 0 ? (
+                <Text style={styles.noRoomSelectedText}>No rooms selected</Text>
+              ) : (
+                <>
+                  {roomsWithPrice.map((room, index) => (
+                    <View key={room.id} style={styles.groupRoomDetail}>
+                      <Text style={styles.roomTitle}>{room.roomName}</Text>
+                      <Text style={styles.roomSequence}>Room #{index + 1}</Text>
+                      {room.adult > 0 && (
+                        <Text style={styles.roomPricing}>{room.adult} Adult = SGD {room.priceAdult.toFixed(2)}</Text>
+                      )}
+                      {room.child > 0 && (
+                        <Text style={styles.roomPricing}>{room.child} Child = SGD {room.priceChild.toFixed(2)}</Text>
+                      )}
+                      {room.infant > 0 && (
+                        <Text style={styles.roomPricing}>{room.infant} Infant = SGD {room.priceInfant.toFixed(2)}</Text>
+                      )}
+                      {room.senior > 0 && (
+                        <Text style={styles.roomPricing}>{room.senior} Senior = SGD {room.priceSenior.toFixed(2)}</Text>
+                      )}
+                    </View>
+                  ))}
+                </>
+              )}
             </View>
 
             {/* Divider */}
@@ -443,7 +550,7 @@ export default function TripOverviewScreen() {
             <TouchableOpacity 
               disabled={rooms.length == 0} 
               style={rooms.length > 0 ? styles.continueButton : styles.disabledButton}
-              onPress={onContinueToPassengerDetails}
+              onPress={handleBooking}
             >
               <Text style={rooms.length > 0 ? styles.continueButtonText : styles.disabledButtonText}>Continue to Passenger Details</Text>
             </TouchableOpacity>

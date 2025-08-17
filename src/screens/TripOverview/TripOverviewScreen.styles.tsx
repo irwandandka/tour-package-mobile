@@ -5,13 +5,12 @@ export default StyleSheet.create({
         padding: 21,
     },
     backButton: {
-        position: "absolute",
-        top: 19,
-        left: 15,
         backgroundColor: "#999999",
         opacity: 0.8,
         padding: 5,
         borderRadius: 21,
+        marginBottom: 5,
+        alignSelf: 'flex-start',
     },
     headerSection: {
         flexDirection: 'column',
@@ -266,6 +265,38 @@ export default StyleSheet.create({
         fontWeight: 'semibold',
         color: '#777',
     },
+    // Room Detail Section
+    wrapperRoomDetail: {
+        flexDirection: 'column',
+        gap: 10,
+    },
+    groupRoomDetail: {
+        flexDirection: 'column',
+        gap: 7,
+    },
+    noRoomSelectedText: {
+        fontSize: 16,
+        color: '#999',
+        textAlign: 'center',
+    },
+    roomTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000000',
+    },
+    roomSequence: {
+        fontSize: 15,
+        color: '#000000',
+        fontWeight: 'bold',
+    },
+    roomPricing: {
+        fontSize: 15,
+        color: '#000000',
+        fontWeight: 'semibold',
+        textAlign: 'right',
+    },
+
+    // Total Price Section
     groupTotalPrice: {
         flexDirection: 'row',
         justifyContent: 'space-between',

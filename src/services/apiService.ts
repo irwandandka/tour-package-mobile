@@ -10,9 +10,9 @@ const apiService = {
         }
     },
 
-    post: async (url: string, data = {}) => {
+    post: async (url: string, data = {}, params = {}) => {
         try {
-            const response = await api.post(url, data);
+            const response = await api.post(url, data, { params });
             return response.data;
         } catch (error) {
             throw error;

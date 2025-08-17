@@ -6,6 +6,12 @@ export type RootStackParamList = {
     Landing: undefined;
     AvailableDate: { slug: string };
     TripOverview: { slug: string, dateFrom: string, dateTo: string };
+    PassengerDetail: {
+        slug: string;
+        dateFrom: string;
+        dateTo: string;
+        transactionId: string;
+    };
     Auth: undefined;
     Main: undefined;
 };
