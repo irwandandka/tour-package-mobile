@@ -125,8 +125,8 @@ export default function LoginScreen() {
         if (token && userJson) {
           const user = JSON.parse(decodeURIComponent(userJson));
           await login(token, user);
-          await AsyncStorage.setItem("authToken", token);
-          await AsyncStorage.setItem("userInfo", JSON.stringify(user));
+          await AsyncStorage.setItem("token", token);
+          await AsyncStorage.setItem("user", JSON.stringify(user));
 
           console.log("Token saved!");
           navigation.navigate("Home");
