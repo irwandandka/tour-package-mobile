@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiService from '../src/services/apiService';
 
 interface AuthContextProps {
   isAuthorized: boolean;
@@ -21,11 +22,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const loadToken = async () => {
-      const token = await AsyncStorage.getItem('authToken');
-      const userInfo = await AsyncStorage.getItem('userInfo');
-      if (token && userInfo) {
+      const token = await AsyncStorage.getItem('token');
+      const userInfo = await AsyncStorage.getItem('user');
+
+      if (token) {
         setIsAuthorized(true);
-        setUser(JSON.parse(userInfo));
+        setUser(JSON.parse(userInfo || "{}"));
       }
     };
 
@@ -33,15 +35,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (token: string, user: any) => {
-    await AsyncStorage.setItem('authToken', token);
-    await AsyncStorage.setItem('userInfo', JSON.stringify(user));
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(user));
     setIsAuthorized(true);
     setUser(user);
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('authToken');
-    await AsyncStorage.removeItem('userInfo');
+    await apiService.post('v1/auth/logout');
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('user');
     setIsAuthorized(false);
     setUser(null);
   };

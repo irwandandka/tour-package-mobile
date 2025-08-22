@@ -20,6 +20,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import * as Location from 'expo-location';
 import type { LocationObject } from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from "react-native-toast-message";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -69,6 +70,34 @@ export default function HomeScreen() {
   const handleOpenDestination = (slug: string) => {
     navigation.navigate("Product", { slug });
   };
+
+  const handleLogout = async () => {
+    try {
+      console.log("Logging out...");
+      await logout();
+
+      Toast.show({
+        type: "success",
+        text1: "Logout Successful",
+        text2: "See you next time!",
+      });
+
+      setTimeout(() => {
+        navigation.navigate("Home");
+      }, 1000);
+    } catch (error: any) {
+      if (error.response) {
+        // Response dari server
+        console.error("Data:", error.response.data);
+      } else if (error.request) {
+        // Request dikirim tapi tidak ada response
+        console.error("No response received:", error.request);
+      } else {
+        // Error lain
+        console.error("Error message:", error.message);
+      }
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -135,6 +164,16 @@ export default function HomeScreen() {
     };
 
     fetchData();
+
+    const checkAuthorized = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const userinfo = await AsyncStorage.getItem('user');
+      console.log('Token from AsyncStorage:', token);
+      console.log('UserInfo from AsyncStorage:', userinfo);
+      console.log('isAuthorized', isAuthorized);
+    };
+
+    checkAuthorized();
   }, []);
 
   const handleSelected = async (index: number) => {
@@ -241,7 +280,9 @@ export default function HomeScreen() {
             </View>
 
             <View style={styles.menuItemParent}>
-              <TouchableOpacity style={styles.menuItem}>
+              <TouchableOpacity 
+                style={styles.menuItem}
+                onPress={handleLogout}>
                 <FeatherIcon name="log-out" size={24} color={"black"} />
                 <Text style={styles.menuText}>Logout</Text>
               </TouchableOpacity>
@@ -290,7 +331,7 @@ export default function HomeScreen() {
 
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Hi Irwanda,</Text>
+          <Text style={styles.welcomeTitle}>Hi Irwanda</Text>
           <Text style={styles.welcomeSubtitle}>Where do you wanna go?</Text>
         </View>
 
