@@ -4,6 +4,14 @@ export default StyleSheet.create({
     container: {
         padding: 21,
     },
+    backButton: {
+        backgroundColor: "#999999",
+        opacity: 0.8,
+        padding: 5,
+        borderRadius: 21,
+        marginBottom: 5,
+        alignSelf: 'flex-start',
+    },
     headerSection: {
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -71,7 +79,7 @@ export default StyleSheet.create({
 
     // Contact Information
     contactInformationTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "bold",
         marginBottom: 12,
     },
@@ -84,7 +92,7 @@ export default StyleSheet.create({
     },
     contactInformationWrapper: {
         flexDirection: "column",
-        gap: 8,
+        gap: 5,
     },
     groupLabel: {
         fontSize: 16,
@@ -103,6 +111,7 @@ export default StyleSheet.create({
         borderColor: "#eee",
         borderRadius: 4,
         padding: 12,
+        marginBottom: 14,
     },
     inputCombo: {
         fontSize: 14,
@@ -112,5 +121,50 @@ export default StyleSheet.create({
         borderRadius: 4,
         padding: 12,
         backgroundColor: "#fff",
+    },
+    groupParentPassenger: {
+        flexDirection: "column",
+        gap: 12,
+    },
+    roomDetailName: {
+        fontSize: 16,
+        fontWeight: "600",
+        color: "#333",
+    },
+    passengerTitleCount: {
+        fontSize: 16,
+        fontWeight: "600",
+        marginVertical: 8
+    },
+    groupInputPassenger: {
+        flexDirection: "column",
+        backgroundColor: "#fff",
+        gap: 12,
+        padding: 12,
+        borderRadius: 8,
+    },
+    continueButton: {
+        backgroundColor: '#f29d38',
+        borderRadius: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+    },
+    continueButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    disabledButton: {
+        backgroundColor: '#f5c487ff',
+        borderRadius: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+    },
+    disabledButtonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });
