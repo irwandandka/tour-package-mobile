@@ -10,6 +10,8 @@ import { useNavigation } from "@react-navigation/native";
 import apiService from "../../services/apiService";
 import { RouteProp, useRoute } from '@react-navigation/native';
 
+import { AvailablePeriod, AvailableDate } from "../../types/api";
+
 type AvailableDateNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "AvailableDate"
@@ -26,21 +28,7 @@ export default function AvailableDateScreen() {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<string | null>(null); // selected period ID
 
-    type AvailablePeriod = {
-        label: string;
-        value: string;
-    }
     const [availablePeriods, setAvailablePeriods] = useState<AvailablePeriod[]>([]);
-
-    type AvailableDate = {
-        id: number;
-        date_start: string;
-        date_end: string;
-        date_start_iso: string;
-        date_end_iso: string;
-        price: string;
-        allotment?: number;
-    }
 
     const [availableDates, setAvailableDates] = useState<AvailableDate[]>([]);
 
