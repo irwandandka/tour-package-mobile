@@ -138,12 +138,38 @@ export interface Passenger {
     title: string;
     first_name: string;
     last_name: string;
-    gender: string;
-    birth_date: string;
-    birth_place: string;
-    natinality: string;
-    passport_number: string;
-    passport_expiry_date: string;
-    passport_issue_country: string;
-    passport_issue_date: string;
+    gender?: string;
+    type?: "Adult" | "Child" | "Infant" | "Senior";
+    roomName?: string;
+    birth_date?: string;
+    birth_place?: string;
+    natinality?: string;
+    passport_number?: string;
+    passport_expiry_date?: string;
+    passport_issue_country?: string;
+    passport_issue_date?: string;
+}
+
+export interface Transaction {
+  id: string;
+  code: string;
+  status: string;
+  product: string;
+  total_amount: number;
+  booking_date: string;
+  transaction_details: TransactionDetail[];
+}
+
+export interface TransactionDetail {
+  id: string;
+  product_detail_name: string;
+  product_detail_image: string;
+  quantity_adult: number;
+  quantity_child: number;
+  quantity_infant: number;
+  quantity_senior: number;
+  sales_adult: number;
+  sales_child: number;
+  sales_infant: number;
+  sales_senior: number;
 }
