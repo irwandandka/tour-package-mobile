@@ -173,3 +173,10 @@ export interface TransactionDetail {
   sales_infant: number;
   sales_senior: number;
 }
+
+export interface PaymentMethod {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+}

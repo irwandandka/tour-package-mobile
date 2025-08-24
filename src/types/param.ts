@@ -12,6 +12,9 @@ export type RootStackParamList = {
         dateTo: string;
         transactionId: string;
     };
+    PaymentMethod: {
+        transactionId: string;
+    };
     Auth: undefined;
     Main: undefined;
 };

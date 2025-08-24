@@ -9,6 +9,7 @@ import AvailableDateScreen from "../screens/AvailableDate/AvailableDateScreen";
 import TripOverviewScreen from "../screens/TripOverview/TripOverviewScreen";
 import { RootStackParamList } from "../types/param";
 import PassengerDetailScreen from "../screens/PassengerDetail/PassengerDetailScreen";
+import PaymentMethodScreen from "../screens/PaymentMethod/PaymentMethodScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -21,6 +22,7 @@ export default function RootNavigator() {
         <Stack.Screen name="AvailableDate" component={AvailableDateScreen} />
         <Stack.Screen name="TripOverview" component={TripOverviewScreen} />
         <Stack.Screen name="PassengerDetail" component={PassengerDetailScreen} />
+        <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
         {/* Jika user belum login, arahkan ke stack auth (Login/Register) */}
         <Stack.Screen name="Auth" component={AuthStack} />
         {/* Jika user sudah login, arahkan ke tab utama */}
