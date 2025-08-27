@@ -7,6 +7,9 @@ import {
   ScrollView,
   Animated,
   Dimensions,
+  TextInput,
+  ActivityIndicator,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -21,6 +24,8 @@ import * as Location from 'expo-location';
 import type { LocationObject } from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "react-native-toast-message";
+import { UserLogin, SearchGlobalResponse } from "../../types/api";
+import { CommonActions } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -67,6 +72,8 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [userLogin, setUserLogin] = useState<UserLogin | null>(null);
+
   const handleOpenDestination = (slug: string) => {
     navigation.navigate("Product", { slug });
   };
@@ -83,7 +90,13 @@ export default function HomeScreen() {
       });
 
       setTimeout(() => {
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Home" }], // refresh balik ke Home, stack direset
+          })
+        );
       }, 1000);
     } catch (error: any) {
       if (error.response) {
@@ -168,13 +181,55 @@ export default function HomeScreen() {
     const checkAuthorized = async () => {
       const token = await AsyncStorage.getItem('token');
       const userinfo = await AsyncStorage.getItem('user');
-      console.log('Token from AsyncStorage:', token);
-      console.log('UserInfo from AsyncStorage:', userinfo);
-      console.log('isAuthorized', isAuthorized);
+
+      setUserLogin(userinfo ? JSON.parse(userinfo) : null);
     };
 
     checkAuthorized();
   }, []);
+
+
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchGlobalResponse[]>([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
+  useEffect(() => {
+    if (query.length < 3) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timeoutId = setTimeout(async () => {
+      setLoadingSearch(true);
+      try {
+        const response = await apiService.get("v1/search", {
+          params: { query: query },
+        });
+        setSearchResults(response.data);
+      } catch (error: any) {
+        if (error.response) {
+          // Server ngasih response dengan status code di luar 2xx
+          console.error("Response error:", error.response.data);
+          console.error("Status:", error.response.status);
+          console.error("Headers:", error.response.headers);
+        } else if (error.request) {
+          // Request dikirim tapi ga ada response
+          console.error("No response received:", error.request);
+        } else {
+          // Error waktu setup request
+          console.error("Request setup error:", error.message);
+        }
+      } finally {
+        setLoadingSearch(false);
+      }
+    }, 500); // debounce 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [query]);
+
+  const handlePressItem = (item: SearchGlobalResponse) => {
+    navigation.navigate("Product", { slug: item.slug });
+  };
 
   const handleSelected = async (index: number) => {
     setActiveButton(index);
@@ -217,10 +272,6 @@ export default function HomeScreen() {
     }).start(() => setMenuVisible(false));
   };
 
-  const handleProfilePress = () => {
-    console.log("Profile button pressed");
-  };
-
   // Location State
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationName, setLocationName] = useState("Loading...");
@@ -242,51 +293,107 @@ export default function HomeScreen() {
             color={"black"}
             onPress={handleMenuClose}
           />
-          <View style={styles.menuProfileParent}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1467010234262-77bada75a47d?q=80&w=3373&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              }}
-              style={styles.menuBarAvatar}
-            />
-            <Text style={styles.menuUserName}>Irwanda Andika Putra</Text>
-            <Text style={styles.menuUserEmail}>irwndandka@gmail.com</Text>
-          </View>
+          {userLogin && (
+            <View style={styles.menuProfileParent}>
+              <Image
+                source={{
+                  uri: userLogin?.profile_picture_url,
+                }}
+                style={styles.menuBarAvatar}
+              />
+              <Text style={styles.menuUserName}>{userLogin?.username}</Text>
+              <Text style={styles.menuUserEmail}>{userLogin?.email}</Text>
+            </View>
+          )}
 
-          <View style={styles.menuDivider} />
+          {userLogin && <View style={styles.menuDivider} />}
 
           <View style={styles.menuParent}>
-            <View style={styles.menuItemParent}>
-              <TouchableOpacity style={styles.menuItem}>
-                <FeatherIcon name="home" size={24} color={"black"} />
-                <Text style={styles.menuText}>Home</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <FeatherIcon name="bookmark" size={24} color={"black"} />
-                <Text style={styles.menuText}>Bookmarks</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <FeatherIcon name="settings" size={24} color={"black"} />
-                <Text style={styles.menuText}>Settings</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <FeatherIcon name="shopping-cart" size={24} color={"black"} />
-                <Text style={styles.menuText}>Order History</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <FeatherIcon name="user" size={24} color={"black"} />
-                <Text style={styles.menuText}>Profile</Text>
-              </TouchableOpacity>
-            </View>
+            {userLogin ? (
+              <View style={styles.menuItemParent}>
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="home" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Home</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                  handleMenuClose();
+                  navigation.navigate("Profile", { userId: userLogin?.id });
+                }} style={styles.menuItem}>
+                  <FeatherIcon name="user" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Profile</Text>
+                </TouchableOpacity>
 
-            <View style={styles.menuItemParent}>
-              <TouchableOpacity 
-                style={styles.menuItem}
-                onPress={handleLogout}>
-                <FeatherIcon name="log-out" size={24} color={"black"} />
-                <Text style={styles.menuText}>Logout</Text>
-              </TouchableOpacity>
-            </View>
+                <View style={styles.menuDivider} />
+                
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="bell" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Notifications</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="globe" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Languages</Text>
+                </TouchableOpacity>
+
+                <View style={styles.menuDivider} />
+
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="heart" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Favorites</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="shopping-cart" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Order History</Text>
+                </TouchableOpacity>
+
+                <View style={styles.menuDivider} />
+
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="file-text" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Terms & Conditions</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="message-circle" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Feedback</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.menuItemParent}>
+                <TouchableOpacity style={styles.menuItem}>
+                  <FeatherIcon name="home" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Home</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.menuItem}
+                  onPress={() => {
+                    handleMenuClose();
+                    navigation.navigate("Auth", { screen: "Login" });
+                  }}>
+                  <FeatherIcon name="log-in" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.menuItem}
+                  onPress={() => {
+                    handleMenuClose();
+                    navigation.navigate("Auth", { screen: "Register" });
+                  }}
+                >
+                  <FeatherIcon name="user-plus" size={24} color={"black"} />
+                  <Text style={styles.menuText}>Register</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {userLogin && (
+              <View style={styles.menuItemParent}>
+                <TouchableOpacity 
+                  style={styles.menuItem}
+                  onPress={handleLogout}>
+                  <FeatherIcon name="log-out" size={24} color={"red"} />
+                  <Text style={[styles.menuText, { color: "red" }]}>Logout</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </Animated.View>
       )}
@@ -294,6 +401,7 @@ export default function HomeScreen() {
       <ScrollView
         horizontal={false} // Membuat scroll vertikal
         contentContainerStyle={{ paddingBottom: 0 }}
+        nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false} // Menyembunyikan scrollbar vertikal
       >
         {/* Top Bar Section */}
@@ -310,20 +418,20 @@ export default function HomeScreen() {
           </View>
 
           {/* Profile */}
-          {isAuthorized ? (
+          {userLogin ? (
             <View style={styles.avatarSectionWrapper}>
               <TouchableOpacity
-                onPress={handleProfilePress}
+                onPress={() => navigation.navigate("Profile", { userId: userLogin?.id })}
                 style={styles.avatarSection}
               >
                 <Image
-                  source={{ uri: "https://i.pravatar.cc/150?img=3" }} // contoh avatar
+                  source={{ uri: userLogin.profile_picture_url }}
                   style={styles.avatar}
                 />
               </TouchableOpacity>
             </View>
           ) : (
-            <TouchableOpacity onPress={() => navigation.navigate("Auth")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Auth", { screen: "Login" })}>
               <Text style={styles.loginButtonText}>Sign In</Text>
             </TouchableOpacity>
           )}
@@ -331,17 +439,65 @@ export default function HomeScreen() {
 
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Hi Irwanda</Text>
+          {userLogin ? (
+            <Text style={styles.welcomeTitle}>Hi! {userLogin.username}</Text>
+          ) : (
+            <Text style={styles.welcomeTitle}>Hi! are you ready to explore?</Text>
+          )}
           <Text style={styles.welcomeSubtitle}>Where do you wanna go?</Text>
         </View>
 
         {/* Search Section */}
-        <View style={styles.searchSection}>
-          <View style={styles.searchInput}>
-            <FeatherIcon name="search" size={23} color="#7B7575" />
-            <Text style={styles.searchText}>Search destination...</Text>
+        <View>
+          {/* Search bar */}
+          <View style={styles.searchSection}>
+            <View style={styles.searchInput}>
+              <FeatherIcon
+                name="search"
+                size={20}
+                color="#888"
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Search destination..."
+                onChangeText={setQuery}
+                placeholderTextColor="#aaa"
+                autoCapitalize="none"
+                keyboardType="default"
+              />
+            </View>
+            <FeatherIcon
+              name="filter"
+              size={20}
+              color="#444"
+              style={styles.filterIcon}
+            />
           </View>
-          <FeatherIcon name="filter" size={23} color="#7B7575" />
+
+          {/* Loading */}
+          {loadingSearch && (
+            <ActivityIndicator
+              size="small"
+              color="#FF8000"
+              style={{ marginTop: 10 }}
+            />
+          )}
+
+          {/* Search results */}
+          {searchResults.length > 0 && (
+            <View style={styles.resultsContainer}>
+              {searchResults.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.resultItem}
+                  onPress={() => handlePressItem(item)}
+                >
+                  <Text style={styles.resultText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
 
         {/* Top Destination Section */}
@@ -431,10 +587,14 @@ export default function HomeScreen() {
                 style={styles.recommendedCard}
                 onPress={() => handleOpenDestination(destination.slug)}
               >
-                <Image
-                  source={{ uri: destination.image }}
-                  style={styles.recommendedCardImage}
-                />
+                <View style={styles.imageShadowWrapper}>
+                  <View style={styles.imageClip}>
+                    <Image
+                      source={{ uri: destination.image }}
+                      style={styles.recommendedCardImage}
+                    />
+                  </View>
+                </View>
                 <View style={styles.recommendedCardParent}>
                   <Text style={styles.recommendedCardTitle}>
                     {destination.name}

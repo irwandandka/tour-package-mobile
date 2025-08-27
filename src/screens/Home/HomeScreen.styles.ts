@@ -49,7 +49,6 @@ export default StyleSheet.create({
   menuDivider: {
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
-    marginVertical: 10,
   },
   menuParent: {
     flexDirection: "column",
@@ -58,7 +57,7 @@ export default StyleSheet.create({
   },
   menuItemParent: {
     flexDirection: "column",
-    gap: 33,
+    gap: 21,
     marginTop: 23,
   },
   menuItem: {
@@ -127,23 +126,79 @@ export default StyleSheet.create({
   },
   searchSection: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 30,
-    backgroundColor: "lightgrey",
-    opacity: 0.7,
-    paddingVertical: 17,
-    paddingHorizontal: 21,
+    marginTop: 20,
+    backgroundColor: "#FFFFFF", // putih biar kontras dengan background abu
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     borderRadius: 15,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    elevation: 4, // Android shadow
   },
+
   searchInput: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 21,
+    flex: 1,
   },
-  searchText: {
-    fontSize: 17,
-    color: "#636060",
+
+  searchIcon: {
+    marginRight: 10,
+  },
+
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
+
+  filterIcon: {
+    marginLeft: 12,
+  },
+
+  input: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 15,
+    fontSize: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  resultsContainer: {
+    position: "absolute",
+    top: 60, // tinggi search bar + margin
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    maxHeight: 300,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    elevation: 3,
+    zIndex: 1000, // biar nggak ketimpa komponen lain
+  },
+  resultItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  resultText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  resultSubText: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 2,
   },
   topDestinationSection: {
     marginTop: 30,
@@ -234,25 +289,62 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   recommendedCard: {
-    width: 270,
-    height: 250,
+    width: 260,
+    height: 300,
     borderRadius: 15,
     padding: 14,
+    marginBottom: 20,
     backgroundColor: "#FFFFFF",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
   },
+  imageShadowWrapper: {
+    height: "60%",
+    borderRadius: 12,
+
+    // shadow utk image
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.22,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+
+  // clip rounded corner
+  imageClip: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  recommendedCardImageWrapper: {
+    borderRadius: 15,
+    overflow: "hidden", // biar rounded
+    flex: 1, // biar isi ruang tersisa
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  // isi penuh wrapper + crop rapi
   recommendedCardImage: {
     width: "100%",
-    height: "60%",
-    borderRadius: 15,
+    height: "100%",
+    resizeMode: "cover",
   },
   recommendedCardParent: {
     marginTop: 10,
+    flex: 1,
     flexDirection: "column",
-    gap: 9,
+    justifyContent: 'space-between',
   },
   recommendedCardTitle: {
-    fontSize: 21,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "800",
     color: "#263C54",
   },
   recommendedCardLocationParent: {
@@ -272,8 +364,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   recommendedCardPrice: {
-    fontSize: 21,
-    fontWeight: "semibold",
+    fontSize: 17,
+    fontWeight: "600",
     color: "black",
   },
   recommendedCardRatingParent: {
