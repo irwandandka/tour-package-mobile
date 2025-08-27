@@ -157,6 +157,10 @@ export interface Transaction {
   product: string;
   total_amount: number;
   booking_date: string;
+  from_date: string;
+  to_date: string;
+  customer_name: string;
+  customer_email: string;
   transaction_details: TransactionDetail[];
 }
 
@@ -177,6 +181,59 @@ export interface TransactionDetail {
 export interface PaymentMethod {
   id: string;
   name: string;
+  code: string;
   description: string;
   logo: string;
+}
+
+export interface UserLogin {
+  id: string;
+  name: string;
+  email: string;
+  username: string;
+  profile_picture_url: string;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  username: string;
+  profile_picture_url: string;
+  address: string;
+  phone: string;
+  birth_date: string;
+  gender: string;
+  email_verified_at: string;
+  country: Country | null;
+  city: City | null;
+}
+
+export interface Country {
+  id: string;
+  name: string;
+}
+
+export interface City {
+  id: string;
+  name: string;
+}
+
+export interface UserProfileRequest {
+  name: string;
+  email: string;
+  username: string;
+  address: string;
+  phone: string;
+  birth_date: string;
+  gender: string;
+  country: Country | null;
+  city: City | null;
+}
+
+export interface SearchGlobalResponse {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
 }

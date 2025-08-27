@@ -1,6 +1,7 @@
 export type RootStackParamList = {
     Register: undefined;
     Login: undefined;
+    Profile: { userId: string };
     Home: undefined;
     Product: { slug: string };
     Landing: undefined;
@@ -15,6 +16,12 @@ export type RootStackParamList = {
     PaymentMethod: {
         transactionId: string;
     };
-    Auth: undefined;
+    PaymentSummary: {
+        transactionId: string;
+        paymentMethodId: string;
+    };
+    Auth: {
+        screen: "Login" | "Register";
+    };
     Main: undefined;
 };
