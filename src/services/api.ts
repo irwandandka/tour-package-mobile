@@ -1,6 +1,8 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { createNavigationContainerRef } from "@react-navigation/native";
+export const navigationRef = createNavigationContainerRef<any>();
 
 const config = Constants.expoConfig?.extra ?? {};
 
@@ -23,6 +25,28 @@ api.interceptors.request.use(
         return config;
     },
     (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response) {
+      const code = error.response.data.code;
+
+      if (code === "token_expired" || code === "token_invalid" || code === "token_missing") {
+        // 1. clear async storage
+        await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("user");
+
+        // 2. redirect ke login
+        if (navigationRef.isReady()) {
+            navigationRef.navigate("Auth", { screen: "Login" });
+        }
+      }
+    }
+
+    return Promise.reject(error);
+  }
 );
 
 export default api;

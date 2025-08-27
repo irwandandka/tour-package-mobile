@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "../ProductScreen.styles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { ProductDetail } from "../../../types/api";
+import apiService from "../../../services/apiService";
 
 interface GeneralSectionProps {
     productDetail: ProductDetail | null;
@@ -25,6 +26,21 @@ export default function GeneralSection({
     fullDescription.length > maxLength
         ? fullDescription.substring(0, maxLength).trim() + "..."
         : fullDescription;
+
+    const handleBookNow = async () => {
+        console.log('anjing');
+        const response = await apiService.get(`v1/user/profile`, {
+            params: {
+                lang: 'EN',
+            }
+        });
+
+        console.log(response);
+
+        navigation.navigate("AvailableDate", {
+            slug: productDetail?.slug || "",
+        })
+    }
         
     return (
         <View style={styles.generalSection}>
@@ -71,9 +87,7 @@ export default function GeneralSection({
             {/* Button Book Now */}
             <TouchableOpacity
                 style={styles.buttonBookNow}
-                onPress={() => navigation.navigate("AvailableDate", {
-                    slug: productDetail?.slug || "",
-                })}>
+                onPress={handleBookNow}>
                 <Text style={styles.buttonBookNowText}>
                     Book Now
                 </Text>
