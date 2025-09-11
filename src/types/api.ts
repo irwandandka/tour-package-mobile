@@ -237,3 +237,9 @@ export interface SearchGlobalResponse {
   slug: string;
   type: string;
 }
+
+export interface Language {
+  name: string;
+  code: string;
+  logo: string;
+}

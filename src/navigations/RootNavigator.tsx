@@ -13,6 +13,7 @@ import PassengerDetailScreen from "../screens/PassengerDetail/PassengerDetailScr
 import PaymentMethodScreen from "../screens/PaymentMethod/PaymentMethodScreen";
 import PaymentSummaryScreen from "../screens/PaymentSummary/PaymentSummaryScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
+import LanguageScreen from "../screens/Language/LanguageScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,6 +23,7 @@ export default function RootNavigator() {
         <Stack.Screen name="Landing" component={LandingScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Language" component={LanguageScreen} />
         <Stack.Screen name="Product" component={ProductScreen} />
         <Stack.Screen name="AvailableDate" component={AvailableDateScreen} />
         <Stack.Screen name="TripOverview" component={TripOverviewScreen} />

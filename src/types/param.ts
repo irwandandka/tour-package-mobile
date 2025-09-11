@@ -2,6 +2,7 @@ export type RootStackParamList = {
     Register: undefined;
     Login: undefined;
     Profile: { userId: string };
+    Language: undefined;
     Home: undefined;
     Product: { slug: string };
     Landing: undefined;
