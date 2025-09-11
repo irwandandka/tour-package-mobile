@@ -16,15 +16,42 @@ const api = axios.create({
     }
 });
 
+// api.interceptors.request.use(
+//     async (config) => {
+//         const token = await AsyncStorage.getItem("token");
+//         if (token) {
+//             config.headers.Authorization = `Bearer ${token}`;
+//         }
+//         return config;
+//     },
+//     (error) => Promise.reject(error)
+// );
+
 api.interceptors.request.use(
-    async (config) => {
-        const token = await AsyncStorage.getItem("token");
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  async (requestConfig) => {
+    try {
+      // Token
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        requestConfig.headers.Authorization = `Bearer ${token}`;
+      }
+
+      // Language & Currency
+      const lang = (await AsyncStorage.getItem("lang")) || "en";
+      const currency = (await AsyncStorage.getItem("currency")) || "SGD";
+
+      requestConfig.params = {
+        ...(requestConfig.params || {}),
+        lang: lang.toUpperCase(),
+        currency,
+      };
+    } catch (err) {
+      console.error("Interceptor error:", err);
+    }
+
+    return requestConfig;
+  },
+  (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(

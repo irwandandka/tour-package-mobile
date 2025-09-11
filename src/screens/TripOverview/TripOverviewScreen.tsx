@@ -1,3 +1,4 @@
+// Hooks
 import React, { useEffect, useState, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -8,16 +9,28 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+
+// Icon
 import IonIcon from "react-native-vector-icons/Ionicons";
+import FeatherIcon from "react-native-vector-icons/Feather";
+
+// Style
 import styles from "./TripOverviewScreen.styles";
+
+// Navigation
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
-import apiService from "../../services/apiService";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import FeatherIcon from "react-native-vector-icons/Feather";
-import uuid from 'react-native-uuid';
+
+// Service
+import apiService from "../../services/apiService";
+
+// Interfaces
 import { ProductDetail, Room, RoomType, RoomOrder, BodySaveBooking, BodySaveProductDetail, RoomPriceBreakdown } from "../../types/api";
+
+// Library
+import uuid from 'react-native-uuid';
 import { format } from "date-fns";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "react-native-toast-message";
@@ -44,8 +57,6 @@ export default function TripOverviewScreen() {
 
   const { slug, dateFrom, dateTo } = route.params;
 
-  const [token, setToken] = useState<string | null>(null);
-
   // Format date to display
   const formattedDateFrom = format(new Date(dateFrom), "MMMM dd, yyyy");
   const formattedDateTo = format(new Date(dateTo), "MMMM dd, yyyy");
@@ -63,23 +74,9 @@ export default function TripOverviewScreen() {
   const [rooms, setRooms] = useState<Room[]>([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
-  const [breakdowns, setBreakdowns] = useState<RoomPriceBreakdown[]>([]);
 
   // Load data saat mount screen
   useEffect(() => {
-    const getToken = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('token');
-        if (storedToken) {
-          setToken(storedToken);
-        }
-      } catch (error) {
-        console.error("Gagal mengambil token:", error);
-      }
-    };
-
-    getToken();
-
     const fetchRoomTypes = async () => {
       try {
         const response = await apiService.get(`v1/product/${slug}/room-type`, {
@@ -195,6 +192,8 @@ export default function TripOverviewScreen() {
 
   const handleBooking = async () =>{
     try {
+      AsyncStorage.setItem('rooms', JSON.stringify(roomsWithPrice));
+
       const bodySave: BodySaveBooking = {
         product_id: product?.id ?? '',
         date_from: dateFrom,
