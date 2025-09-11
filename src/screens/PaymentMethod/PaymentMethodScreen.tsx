@@ -33,6 +33,7 @@ import Toast from "react-native-toast-message";
 // Icons
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type PaymentMethodNavigationProp = NativeStackNavigationProp<
     RootStackParamList,
@@ -101,6 +102,9 @@ export default function PaymentMethodScreen() {
     const handlePaymentMethodSelected = async (id: string) => {
         try {
             setSelectedPayment(id);
+
+            const selectedPayment = paymentMethods.find(method => method.id === id);
+            await AsyncStorage.setItem('selectedPayment', JSON.stringify(selectedPayment));
         } catch (error: any) {
             console.error(error);
             Toast.show({
@@ -161,7 +165,15 @@ export default function PaymentMethodScreen() {
                             <Text style={styles.titleTotalAmount}>Total Amount</Text>
                             <Text style={styles.amountTotal}>SGD {transaction?.total_amount}</Text>
                         </View>
-                        <TouchableOpacity style={selectedPayment ? styles.buttonChoose : styles.buttonUnchoosed}>
+                        <TouchableOpacity 
+                            style={selectedPayment ? styles.buttonChoose : styles.buttonUnchoosed}
+                            onPress={() => {
+                                if (selectedPayment && transaction?.id) {
+                                    navigation.navigate("PaymentSummary", { transactionId: transaction.id, paymentMethodId: selectedPayment });
+                                }
+                            }}
+                            disabled={!selectedPayment}
+                        >
                             <Text style={styles.textButtonChoose}>Choose</Text>
                         </TouchableOpacity>
                     </View>
