@@ -1,6 +1,11 @@
 {
   "email_required": "Email is required",
   "invalid_email": "Invalid email format",
+  "WelcomeScreen": {
+    "title": "Explore Unforgettable Journeys With Us",
+    "subtitle": "Discover the beauty of the world with our travel app. Find your next adventure and create unforgettable memories.",
+    "button": "Explore Now"
+  },
   "loginScreen": {
     "title": "Let's get started!",
     "subtitle": "Log in to continue planning your unforgettable journeys and discover new destinations with us.",
@@ -24,6 +29,118 @@
     "loginWithFacebook": "Continue with Facebook",
     "login": "Already have an account?",
     "loginButton": "Sign In"
+  },
+  "ProfileScreen": {
+    "title": "Profile",
+    "information": "Your Information",
+    "fullName": "Full Name",
+    "username": "Username",
+    "birthDate": "Birth Date",
+    "address": "Address",
+    "country": "Country",
+    "city": "City",
+    "email": "Email",
+    "phone": "Phone Number",
+    "logout": "Logout"
+  },
+  "HomeScreen": {
+    "greet": "Hi!",
+    "subtitle": "Discover amazing places and experiences",
+    "placeHolderSearch": "Search for destinations, tours, and more",
+    "titleTopDestination": "Top Destinations",
+    "titleRecommendedDestination": "Recommended Destinations",
+    "navbar": {
+      "home": "Home",
+      "profile": "Profile",
+      "favorite": "Favorites",
+      "notification": "Notifications",
+      "language": "Languages",
+      "orderHistory": "Order History",
+      "termCondition": "Terms and Conditions",
+      "feedback": "Feedback",
+      "logout": "Logout"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "General",
+      "reviews": "Reviews",
+      "itinerary": "Itineraries"
+    },
+    "rating": "Rating",
+    "duration": "Duration",
+    "day": "Days",
+    "night": "Nights",
+    "description": "Description",
+    "price": "Price",
+    "readMore": "Read More",
+    "readLess": "Read Less",
+    "showOnMap": "Show On Map",
+    "closeMap": "Close",
+    "button": "Book Now"
+  },
+  "AvailableDateScreen": {
+    "title": "Available Dates",
+    "subtitle": "Choose your preferred travel dates",
+    "selectMonth": "Select Month",
+    "placeholderSelectMonth": "Please Select a Month",
+    "departure": "Departure",
+    "return": "Return",
+    "price": "Price",
+    "button": "Check Availability"
+  },
+  "TripOverviewScreen": {
+    "title": "Trip Overview",
+    "room": "Room",
+    "addRoom": "Add Room",
+    "roomLeft": "Rooms left",
+    "travelSummary": "Travel Summary",
+    "noRoomSelected": "No rooms selected",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "total": "Total",
+    "continuePassengerDetail": "Continue to Passenger Details",
+    "note": "No hidden fees, no surprises. The price you see is the price you pay."
+  },
+  "PassengerDetailScreen": {
+    "title": "Passenger Details",
+    "contactPerson": "Contact Person (Person responsible for booking)",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "contactDetail": "Contact Details",
+    "phoneNumber": "Phone Number",
+    "emailAddress": "Email Address",
+    "personalDetail": "Personal Details",
+    "country": "Country",
+    "city": "City",
+    "address": "Address",
+    "postalCode": "Postal Code",
+    "passenger": "Passenger",
+    "proceedButton": "Proceed to Payment"
+  },
+  "PaymentMethodScreen": {
+    "title": "Payment Method",
+    "searchSubtitle": "Search your payment method",
+    "totalAmount": "Total Amount",
+    "choose": "Choose"
+  },
+  "PaymentSummaryScreen": {
+    "title": "Payment Confirmation",
+    "bookingInformation": "Booking Information",
+    "bookingCode": "Booking Code",
+    "customerName": "Customer Name",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "room": "Room",
+    "adult": "Adult",
+    "child": "Child",
+    "senior": "Senior",
+    "infant": "Infant",
+    "subtotalAmount": "Subtotal Amount",
+    "grandTotal": "Grand Total",
+    "paymentMethod": "Payment Method",
+    "change": "Change",
+    "pay": "Pay"
   },
   "validation": {
     "email_required": "Email is required",

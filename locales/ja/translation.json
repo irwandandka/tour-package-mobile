@@ -1,0 +1,151 @@
+{
+  "email_required": "メールアドレスは必須です",
+  "invalid_email": "無効なメール形式です",
+  "WelcomeScreen": {
+    "title": "忘れられない旅を一緒に探検しよう",
+    "subtitle": "私たちの旅行アプリで世界の美しさを発見し、次の冒険を見つけて忘れられない思い出を作りましょう。",
+    "button": "今すぐ探検"
+  },
+  "loginScreen": {
+    "title": "さあ、始めましょう！",
+    "subtitle": "ログインして忘れられない旅の計画を続け、新しい目的地を一緒に発見しましょう。",
+    "rememberMe": "ログイン状態を保持",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "loginButton": "ログイン",
+    "orSignInWith": "または以下でログイン",
+    "loginWithGoogle": "Googleで続行",
+    "loginWithFacebook": "Facebookで続行",
+    "register": "アカウントをお持ちでないですか？",
+    "registerButton": "サインアップ"
+  },
+  "registerScreen": {
+    "title": "世界を発見する準備はできましたか？",
+    "subtitle": "アカウントを作成して、あなたの旅行の夢を現実にするために特別に設計されたツアーパッケージを探検しましょう。",
+    "rememberMe": "ログイン状態を保持",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "registerButton": "サインアップ",
+    "orSignUpWith": "または以下で登録",
+    "loginWithGoogle": "Googleで続行",
+    "loginWithFacebook": "Facebookで続行",
+    "login": "すでにアカウントをお持ちですか？",
+    "loginButton": "ログイン"
+  },
+  "ProfileScreen": {
+    "title": "プロフィール",
+    "information": "あなたの情報",
+    "fullName": "氏名",
+    "username": "ユーザー名",
+    "birthDate": "生年月日",
+    "address": "住所",
+    "country": "国",
+    "city": "市区町村",
+    "email": "メール",
+    "phone": "電話番号",
+    "logout": "ログアウト"
+  },
+  "HomeScreen": {
+    "greet": "こんにちは！",
+    "subtitle": "素晴らしい場所と体験を見つけよう",
+    "placeHolderSearch": "目的地、ツアーなどを検索",
+    "titleTopDestination": "人気の目的地",
+    "titleRecommendedDestination": "おすすめの目的地",
+    "navbar": {
+      "home": "ホーム",
+      "profile": "プロフィール",
+      "favorite": "お気に入り",
+      "notification": "通知",
+      "language": "言語",
+      "orderHistory": "注文履歴",
+      "termCondition": "利用規約",
+      "feedback": "フィードバック",
+      "logout": "ログアウト"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "概要",
+      "reviews": "レビュー",
+      "itinerary": "旅程"
+    },
+    "rating": "評価",
+    "duration": "期間",
+    "day": "日",
+    "night": "泊",
+    "description": "説明",
+    "price": "価格",
+    "readMore": "もっと読む",
+    "readLess": "閉じる",
+    "showOnMap": "地図で表示",
+    "closeMap": "閉じる",
+    "button": "今すぐ予約"
+  },
+  "AvailableDateScreen": {
+    "title": "利用可能な日付",
+    "subtitle": "希望の旅行日を選択してください",
+    "selectMonth": "月を選択",
+    "placeholderSelectMonth": "月を選択してください",
+    "departure": "出発",
+    "return": "帰着",
+    "price": "価格",
+    "button": "空き状況を確認"
+  },
+  "TripOverviewScreen": {
+    "title": "旅行概要",
+    "room": "部屋",
+    "addRoom": "部屋を追加",
+    "roomLeft": "残りの部屋",
+    "travelSummary": "旅行概要",
+    "noRoomSelected": "部屋が選択されていません",
+    "fromDate": "出発日",
+    "toDate": "帰着日",
+    "total": "合計",
+    "continuePassengerDetail": "乗客詳細へ進む",
+    "note": "隠れた料金はありません。表示されている価格が実際に支払う金額です。"
+  },
+  "PassengerDetailScreen": {
+    "title": "乗客の詳細",
+    "contactPerson": "連絡先（予約者）",
+    "firstName": "名",
+    "lastName": "姓",
+    "contactDetail": "連絡先情報",
+    "phoneNumber": "電話番号",
+    "emailAddress": "メールアドレス",
+    "personalDetail": "個人情報",
+    "country": "国",
+    "city": "市区町村",
+    "address": "住所",
+    "postalCode": "郵便番号",
+    "passenger": "乗客",
+    "proceedButton": "支払いに進む"
+  },
+  "PaymentMethodScreen": {
+    "title": "支払い方法",
+    "searchSubtitle": "支払い方法を検索",
+    "totalAmount": "合計金額",
+    "choose": "選択"
+  },
+  "PaymentSummaryScreen": {
+    "title": "支払い確認",
+    "bookingInformation": "予約情報",
+    "bookingCode": "予約コード",
+    "customerName": "顧客名",
+    "fromDate": "出発日",
+    "toDate": "帰着日",
+    "room": "部屋",
+    "adult": "大人",
+    "child": "子供",
+    "senior": "高齢者",
+    "infant": "乳児",
+    "subtotalAmount": "小計",
+    "grandTotal": "合計金額",
+    "paymentMethod": "支払い方法",
+    "change": "変更",
+    "pay": "支払う"
+  },
+  "validation": {
+    "email_required": "メールアドレスは必須です",
+    "email_invalid": "無効なメール形式です",
+    "password_required": "パスワードは必須です",
+    "password_length": "パスワードは6文字以上である必要があります"
+  }
+}

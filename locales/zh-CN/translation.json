@@ -1,0 +1,151 @@
+{
+  "email_required": "邮箱为必填项",
+  "invalid_email": "邮箱格式无效",
+  "WelcomeScreen": {
+    "title": "与我们一起探索难忘的旅程",
+    "subtitle": "通过我们的旅行应用发现世界之美。寻找您的下一个冒险，创造难忘的回忆。",
+    "button": "立即探索"
+  },
+  "loginScreen": {
+    "title": "让我们开始吧！",
+    "subtitle": "登录以继续规划您的难忘之旅并发现新目的地。",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "loginButton": "登录",
+    "orSignInWith": "或使用以下方式登录",
+    "loginWithGoogle": "使用 Google 登录",
+    "loginWithFacebook": "使用 Facebook 登录",
+    "register": "还没有账户？",
+    "registerButton": "注册"
+  },
+  "registerScreen": {
+    "title": "准备好探索世界了吗？",
+    "subtitle": "创建您的账户并开始探索我们为您设计的独家旅行套餐，实现您的旅行梦想。",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "registerButton": "注册",
+    "orSignUpWith": "或使用以下方式注册",
+    "loginWithGoogle": "使用 Google 注册",
+    "loginWithFacebook": "使用 Facebook 注册",
+    "login": "已经有账户？",
+    "loginButton": "登录"
+  },
+  "ProfileScreen": {
+    "title": "个人资料",
+    "information": "您的信息",
+    "fullName": "姓名",
+    "username": "用户名",
+    "birthDate": "出生日期",
+    "address": "地址",
+    "country": "国家",
+    "city": "城市",
+    "email": "电子邮箱",
+    "phone": "电话号码",
+    "logout": "退出登录"
+  },
+  "HomeScreen": {
+    "greet": "你好！",
+    "subtitle": "探索令人惊叹的地方和体验",
+    "placeHolderSearch": "搜索目的地、旅游等",
+    "titleTopDestination": "热门目的地",
+    "titleRecommendedDestination": "推荐目的地",
+    "navbar": {
+      "home": "首页",
+      "profile": "个人资料",
+      "favorite": "收藏夹",
+      "notification": "通知",
+      "language": "语言",
+      "orderHistory": "订单历史",
+      "termCondition": "条款和条件",
+      "feedback": "反馈",
+      "logout": "退出"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "常规",
+      "reviews": "评价",
+      "itinerary": "行程"
+    },
+    "rating": "评分",
+    "duration": "时长",
+    "day": "天",
+    "night": "晚",
+    "description": "描述",
+    "price": "价格",
+    "readMore": "查看更多",
+    "readLess": "收起",
+    "showOnMap": "在地图上显示",
+    "closeMap": "关闭",
+    "button": "立即预订"
+  },
+  "AvailableDateScreen": {
+    "title": "可用日期",
+    "subtitle": "选择您喜欢的旅行日期",
+    "selectMonth": "选择月份",
+    "placeholderSelectMonth": "请选择一个月份",
+    "departure": "出发",
+    "return": "返回",
+    "price": "价格",
+    "button": "检查可用性"
+  },
+  "TripOverviewScreen": {
+    "title": "行程概览",
+    "room": "房间",
+    "addRoom": "添加房间",
+    "roomLeft": "剩余房间",
+    "travelSummary": "旅行摘要",
+    "noRoomSelected": "未选择房间",
+    "fromDate": "起始日期",
+    "toDate": "结束日期",
+    "total": "总计",
+    "continuePassengerDetail": "继续填写乘客信息",
+    "note": "无隐藏费用，无额外惊喜。您看到的价格就是您支付的价格。"
+  },
+  "PassengerDetailScreen": {
+    "title": "乘客详情",
+    "contactPerson": "联系人（负责预订的人）",
+    "firstName": "名",
+    "lastName": "姓",
+    "contactDetail": "联系方式",
+    "phoneNumber": "电话号码",
+    "emailAddress": "电子邮箱地址",
+    "personalDetail": "个人信息",
+    "country": "国家",
+    "city": "城市",
+    "address": "地址",
+    "postalCode": "邮政编码",
+    "passenger": "乘客",
+    "proceedButton": "继续支付"
+  },
+  "PaymentMethodScreen": {
+    "title": "支付方式",
+    "searchSubtitle": "搜索您的支付方式",
+    "totalAmount": "总金额",
+    "choose": "选择"
+  },
+  "PaymentSummaryScreen": {
+    "title": "支付确认",
+    "bookingInformation": "预订信息",
+    "bookingCode": "预订代码",
+    "customerName": "客户姓名",
+    "fromDate": "起始日期",
+    "toDate": "结束日期",
+    "room": "房间",
+    "adult": "成人",
+    "child": "儿童",
+    "senior": "老人",
+    "infant": "婴儿",
+    "subtotalAmount": "小计",
+    "grandTotal": "总金额",
+    "paymentMethod": "支付方式",
+    "change": "更改",
+    "pay": "支付"
+  },
+  "validation": {
+    "email_required": "邮箱为必填项",
+    "email_invalid": "邮箱格式无效",
+    "password_required": "密码为必填项",
+    "password_length": "密码至少为6个字符"
+  }
+}

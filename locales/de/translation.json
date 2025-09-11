@@ -1,0 +1,151 @@
+{
+  "email_required": "E-Mail ist erforderlich",
+  "invalid_email": "Ungültiges E-Mail-Format",
+  "WelcomeScreen": {
+    "title": "Erlebe unvergessliche Reisen mit uns",
+    "subtitle": "Entdecke die Schönheit der Welt mit unserer Reise-App. Finde dein nächstes Abenteuer und schaffe unvergessliche Erinnerungen.",
+    "button": "Jetzt entdecken"
+  },
+  "loginScreen": {
+    "title": "Lass uns anfangen!",
+    "subtitle": "Melde dich an, um deine unvergesslichen Reisen zu planen und neue Ziele mit uns zu entdecken.",
+    "rememberMe": "Angemeldet bleiben",
+    "forgotPassword": "Passwort vergessen?",
+    "loginButton": "Anmelden",
+    "orSignInWith": "Oder anmelden mit",
+    "loginWithGoogle": "Mit Google fortfahren",
+    "loginWithFacebook": "Mit Facebook fortfahren",
+    "register": "Noch kein Konto?",
+    "registerButton": "Registrieren"
+  },
+  "registerScreen": {
+    "title": "Bereit, die Welt zu entdecken?",
+    "subtitle": "Erstelle dein Konto und beginne mit der Erkundung unserer exklusiven Reisepakete, die deine Reiseträume Wirklichkeit werden lassen.",
+    "rememberMe": "Angemeldet bleiben",
+    "forgotPassword": "Passwort vergessen?",
+    "registerButton": "Registrieren",
+    "orSignUpWith": "Oder registrieren mit",
+    "loginWithGoogle": "Mit Google fortfahren",
+    "loginWithFacebook": "Mit Facebook fortfahren",
+    "login": "Bereits ein Konto?",
+    "loginButton": "Anmelden"
+  },
+  "ProfileScreen": {
+    "title": "Profil",
+    "information": "Deine Informationen",
+    "fullName": "Vollständiger Name",
+    "username": "Benutzername",
+    "birthDate": "Geburtsdatum",
+    "address": "Adresse",
+    "country": "Land",
+    "city": "Stadt",
+    "email": "E-Mail",
+    "phone": "Telefonnummer",
+    "logout": "Abmelden"
+  },
+  "HomeScreen": {
+    "greet": "Hallo!",
+    "subtitle": "Entdecke erstaunliche Orte und Erlebnisse",
+    "placeHolderSearch": "Suche nach Reisezielen, Touren und mehr",
+    "titleTopDestination": "Top-Reiseziele",
+    "titleRecommendedDestination": "Empfohlene Reiseziele",
+    "navbar": {
+      "home": "Startseite",
+      "profile": "Profil",
+      "favorite": "Favoriten",
+      "notification": "Benachrichtigungen",
+      "language": "Sprache",
+      "orderHistory": "Bestellhistorie",
+      "termCondition": "AGB",
+      "feedback": "Feedback",
+      "logout": "Abmelden"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "Allgemein",
+      "reviews": "Bewertungen",
+      "itinerary": "Reiseroute"
+    },
+    "rating": "Bewertung",
+    "duration": "Dauer",
+    "day": "Tage",
+    "night": "Nächte",
+    "description": "Beschreibung",
+    "price": "Preis",
+    "readMore": "Mehr anzeigen",
+    "readLess": "Weniger anzeigen",
+    "showOnMap": "Auf Karte anzeigen",
+    "closeMap": "Schließen",
+    "button": "Jetzt buchen"
+  },
+  "AvailableDateScreen": {
+    "title": "Verfügbare Daten",
+    "subtitle": "Wähle deine bevorzugten Reisedaten",
+    "selectMonth": "Monat auswählen",
+    "placeholderSelectMonth": "Bitte einen Monat auswählen",
+    "departure": "Abreise",
+    "return": "Rückkehr",
+    "price": "Preis",
+    "button": "Verfügbarkeit prüfen"
+  },
+  "TripOverviewScreen": {
+    "title": "Reiseübersicht",
+    "room": "Zimmer",
+    "addRoom": "Zimmer hinzufügen",
+    "roomLeft": "Verfügbare Zimmer",
+    "travelSummary": "Reisezusammenfassung",
+    "noRoomSelected": "Kein Zimmer ausgewählt",
+    "fromDate": "Von Datum",
+    "toDate": "Bis Datum",
+    "total": "Gesamt",
+    "continuePassengerDetail": "Weiter zu Passagierdetails",
+    "note": "Keine versteckten Gebühren. Der angezeigte Preis ist der zu zahlende Preis."
+  },
+  "PassengerDetailScreen": {
+    "title": "Passagierdetails",
+    "contactPerson": "Kontaktperson (verantwortlich für die Buchung)",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "contactDetail": "Kontaktdetails",
+    "phoneNumber": "Telefonnummer",
+    "emailAddress": "E-Mail-Adresse",
+    "personalDetail": "Persönliche Details",
+    "country": "Land",
+    "city": "Stadt",
+    "address": "Adresse",
+    "postalCode": "Postleitzahl",
+    "passenger": "Passagier",
+    "proceedButton": "Weiter zur Zahlung"
+  },
+  "PaymentMethodScreen": {
+    "title": "Zahlungsmethode",
+    "searchSubtitle": "Suche deine Zahlungsmethode",
+    "totalAmount": "Gesamtbetrag",
+    "choose": "Wählen"
+  },
+  "PaymentSummaryScreen": {
+    "title": "Zahlungsbestätigung",
+    "bookingInformation": "Buchungsinformationen",
+    "bookingCode": "Buchungscode",
+    "customerName": "Kundenname",
+    "fromDate": "Von Datum",
+    "toDate": "Bis Datum",
+    "room": "Zimmer",
+    "adult": "Erwachsener",
+    "child": "Kind",
+    "senior": "Senior",
+    "infant": "Kleinkind",
+    "subtotalAmount": "Zwischensumme",
+    "grandTotal": "Gesamtsumme",
+    "paymentMethod": "Zahlungsmethode",
+    "change": "Ändern",
+    "pay": "Bezahlen"
+  },
+  "validation": {
+    "email_required": "E-Mail ist erforderlich",
+    "email_invalid": "Ungültiges E-Mail-Format",
+    "password_required": "Passwort ist erforderlich",
+    "password_length": "Das Passwort muss mindestens 6 Zeichen lang sein"
+  }
+}

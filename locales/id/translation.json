@@ -1,4 +1,151 @@
 {
   "email_required": "Email wajib diisi",
-  "invalid_email": "Format email tidak valid"
+  "invalid_email": "Format email tidak valid",
+  "WelcomeScreen": {
+    "title": "Jelajahi Perjalanan Tak Terlupakan Bersama Kami",
+    "subtitle": "Temukan keindahan dunia dengan aplikasi travel kami. Cari petualangan berikutnya dan ciptakan kenangan tak terlupakan.",
+    "button": "Jelajahi Sekarang"
+  },
+  "loginScreen": {
+    "title": "Ayo mulai!",
+    "subtitle": "Masuk untuk melanjutkan rencana perjalananmu dan temukan destinasi baru bersama kami.",
+    "rememberMe": "Ingat saya",
+    "forgotPassword": "Lupa kata sandi?",
+    "loginButton": "Masuk",
+    "orSignInWith": "Atau masuk dengan",
+    "loginWithGoogle": "Lanjutkan dengan Google",
+    "loginWithFacebook": "Lanjutkan dengan Facebook",
+    "register": "Belum punya akun?",
+    "registerButton": "Daftar"
+  },
+  "registerScreen": {
+    "title": "Siap Menjelajahi Dunia?",
+    "subtitle": "Buat akunmu dan mulailah menjelajahi paket wisata eksklusif kami untuk mewujudkan impian perjalananmu.",
+    "rememberMe": "Ingat saya",
+    "forgotPassword": "Lupa kata sandi?",
+    "registerButton": "Daftar",
+    "orSignUpWith": "Atau daftar dengan",
+    "loginWithGoogle": "Lanjutkan dengan Google",
+    "loginWithFacebook": "Lanjutkan dengan Facebook",
+    "login": "Sudah punya akun?",
+    "loginButton": "Masuk"
+  },
+  "ProfileScreen": {
+    "title": "Profil",
+    "information": "Informasi Anda",
+    "fullName": "Nama Lengkap",
+    "username": "Username",
+    "birthDate": "Tanggal Lahir",
+    "address": "Alamat",
+    "country": "Negara",
+    "city": "Kota",
+    "email": "Email",
+    "phone": "Nomor Telepon",
+    "logout": "Keluar"
+  },
+  "HomeScreen": {
+    "greet": "Hai!",
+    "subtitle": "Temukan tempat dan pengalaman menakjubkan",
+    "placeHolderSearch": "Cari destinasi, tur, dan lainnya",
+    "titleTopDestination": "Destinasi Terpopuler",
+    "titleRecommendedDestination": "Destinasi Rekomendasi",
+    "navbar": {
+      "home": "Beranda",
+      "profile": "Profil",
+      "favorite": "Favorit",
+      "notification": "Notifikasi",
+      "language": "Bahasa",
+      "orderHistory": "Riwayat Pesanan",
+      "termCondition": "Syarat dan Ketentuan",
+      "feedback": "Masukan",
+      "logout": "Keluar"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "Umum",
+      "reviews": "Ulasan",
+      "itinerary": "Itinerary"
+    },
+    "rating": "Rating",
+    "duration": "Durasi",
+    "day": "Hari",
+    "night": "Malam",
+    "description": "Deskripsi",
+    "price": "Harga",
+    "readMore": "Selengkapnya",
+    "readLess": "Sembunyikan",
+    "showOnMap": "Tampilkan di Peta",
+    "closeMap": "Tutup",
+    "button": "Pesan Sekarang"
+  },
+  "AvailableDateScreen": {
+    "title": "Tanggal Tersedia",
+    "subtitle": "Pilih tanggal perjalananmu",
+    "selectMonth": "Pilih Bulan",
+    "placeholderSelectMonth": "Silakan pilih bulan",
+    "departure": "Keberangkatan",
+    "return": "Kepulangan",
+    "price": "Harga",
+    "button": "Cek Ketersediaan"
+  },
+  "TripOverviewScreen": {
+    "title": "Ringkasan Perjalanan",
+    "room": "Kamar",
+    "addRoom": "Tambah Kamar",
+    "roomLeft": "Sisa kamar",
+    "travelSummary": "Ringkasan Perjalanan",
+    "noRoomSelected": "Belum ada kamar dipilih",
+    "fromDate": "Dari Tanggal",
+    "toDate": "Sampai Tanggal",
+    "total": "Total",
+    "continuePassengerDetail": "Lanjut ke Detail Penumpang",
+    "note": "Tanpa biaya tersembunyi, tanpa kejutan. Harga yang kamu lihat adalah harga yang kamu bayar."
+  },
+  "PassengerDetailScreen": {
+    "title": "Detail Penumpang",
+    "contactPerson": "Kontak Utama (Penanggung jawab pemesanan)",
+    "firstName": "Nama Depan",
+    "lastName": "Nama Belakang",
+    "contactDetail": "Detail Kontak",
+    "phoneNumber": "Nomor Telepon",
+    "emailAddress": "Alamat Email",
+    "personalDetail": "Detail Pribadi",
+    "country": "Negara",
+    "city": "Kota",
+    "address": "Alamat",
+    "postalCode": "Kode Pos",
+    "passenger": "Penumpang",
+    "proceedButton": "Lanjut ke Pembayaran"
+  },
+  "PaymentMethodScreen": {
+    "title": "Metode Pembayaran",
+    "searchSubtitle": "Cari metode pembayaranmu",
+    "totalAmount": "Total",
+    "choose": "Pilih"
+  },
+  "PaymentSummaryScreen": {
+    "title": "Konfirmasi Pembayaran",
+    "bookingInformation": "Informasi Pemesanan",
+    "bookingCode": "Kode Booking",
+    "customerName": "Nama Pelanggan",
+    "fromDate": "Dari Tanggal",
+    "toDate": "Sampai Tanggal",
+    "room": "Kamar",
+    "adult": "Dewasa",
+    "child": "Anak-anak",
+    "senior": "Lansia",
+    "infant": "Bayi",
+    "subtotalAmount": "Subtotal",
+    "grandTotal": "Total Akhir",
+    "paymentMethod": "Metode Pembayaran",
+    "change": "Ubah",
+    "pay": "Bayar"
+  },
+  "validation": {
+    "email_required": "Email wajib diisi",
+    "email_invalid": "Format email tidak valid",
+    "password_required": "Kata sandi wajib diisi",
+    "password_length": "Kata sandi minimal 6 karakter"
+  }
 }

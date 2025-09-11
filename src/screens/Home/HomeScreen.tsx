@@ -26,6 +26,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "react-native-toast-message";
 import { UserLogin, SearchGlobalResponse } from "../../types/api";
 import { CommonActions } from "@react-navigation/native";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { useTranslation } from "react-i18next";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -35,6 +38,8 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
+  
   const [token, setToken] = useState<string | null>(null);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -80,7 +85,6 @@ export default function HomeScreen() {
 
   const handleLogout = async () => {
     try {
-      console.log("Logging out...");
       await logout();
 
       Toast.show({
@@ -112,81 +116,88 @@ export default function HomeScreen() {
     }
   }
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setLocationName("Permission Denied");
-        return;
-      }
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc);
-
-      let reverseGeocode = await Location.reverseGeocodeAsync({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
-
-      if (reverseGeocode.length > 0) {
-        const { city, region, country } = reverseGeocode[0];
-        setLocationName(`${city ?? region}, ${country}`);
-      }
-    })();
-
-    const getToken = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('token');
-        if (storedToken) {
-          setToken(storedToken);
+      (async () => {
+        // === Location Permission ===
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          if (isActive) setLocationName("Permission Denied");
+          return;
         }
-      } catch (error) {
-        console.error("Gagal mengambil token:", error);
-      }
-    };
 
-    getToken();
+        let loc = await Location.getCurrentPositionAsync({});
+        if (isActive) setLocation(loc);
 
-    const fetchData = async () => {
-      try {
-        const [regionsData, topDest, destinationsData] = await Promise.all([
-          apiService.get("v1/region/list"),
-          apiService.get("v1/product/explore-now", {
-            params: {
-              lang: "EN",//
-            }
-          }),
-          apiService.get("v1/product/popular-destination", {
-            params: {
-              lang: 'EN',
-              currency: 'SGD'
-            },
-          }),
-        ]);
+        let reverseGeocode = await Location.reverseGeocodeAsync({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        });
 
-        setTopDestination(topDest.data);
-        setRegion(regionsData.data);
-        setDestination(destinationsData.data);
-      } catch (err) {
-        setError("Failed to fetch data");
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500); // delay 1.5 detik
-      }
-    };
+        if (isActive && reverseGeocode.length > 0) {
+          const { city, region, country } = reverseGeocode[0];
+          setLocationName(`${city ?? region}, ${country}`);
+        }
 
-    fetchData();
+        // === Token ===
+        try {
+          const storedToken = await AsyncStorage.getItem('token');
+          if (storedToken && isActive) {
+            setToken(storedToken);
+          }
+        } catch (error) {
+          console.error("Gagal mengambil token:", error);
+        }
 
-    const checkAuthorized = async () => {
-      const token = await AsyncStorage.getItem('token');
-      const userinfo = await AsyncStorage.getItem('user');
+        // === Fetch Data ===
+        try {
+          const [regionsData, topDest, destinationsData] = await Promise.all([
+            apiService.get("v1/region/list"),
+            apiService.get("v1/product/explore-now", {
+              params: { lang: "EN" },
+            }),
+            apiService.get("v1/product/popular-destination", {
+              params: { lang: 'EN', currency: 'SGD' },
+            }),
+          ]);
 
-      setUserLogin(userinfo ? JSON.parse(userinfo) : null);
-    };
+          if (isActive) {
+            setTopDestination(topDest.data);
+            setRegion(regionsData.data);
+            setDestination(destinationsData.data);
+          }
+        } catch (err) {
+          if (isActive) setError("Failed to fetch data");
+        } finally {
+          if (isActive) {
+            setTimeout(() => {
+              setLoading(false);
+            }, 1500);
+          }
+        }
 
-    checkAuthorized();
-  }, []);
+        // === User Auth ===
+        const token = await AsyncStorage.getItem('token');
+        const userinfo = await AsyncStorage.getItem('user');
+        if (isActive) {
+          setUserLogin(userinfo ? JSON.parse(userinfo) : null);
+        }
+
+        // === Language ===
+        const lang = await AsyncStorage.getItem('lang');
+        if (!lang && isActive) {
+          await AsyncStorage.setItem('lang', 'en');
+        }
+      })();
+
+      // cleanup pas screen kehilangan fokus
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
 
   const [query, setQuery] = useState("");
@@ -313,47 +324,53 @@ export default function HomeScreen() {
               <View style={styles.menuItemParent}>
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="home" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Home</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.home")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                   handleMenuClose();
                   navigation.navigate("Profile", { userId: userLogin?.id });
                 }} style={styles.menuItem}>
                   <FeatherIcon name="user" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Profile</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.profile")}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.menuDivider} />
                 
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="bell" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Notifications</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.notification")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
+                <TouchableOpacity 
+                  style={styles.menuItem}
+                  onPress={() => {
+                    handleMenuClose();
+                    navigation.navigate("Language");
+                  }}
+                >
                   <FeatherIcon name="globe" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Languages</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.language")}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.menuDivider} />
 
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="heart" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Favorites</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.favorite")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="shopping-cart" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Order History</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.orderHistory")}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.menuDivider} />
 
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="file-text" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Terms & Conditions</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.termCondition")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="message-circle" size={24} color={"black"} />
-                  <Text style={styles.menuText}>Feedback</Text>
+                  <Text style={styles.menuText}>{t("HomeScreen.navbar.feedback")}</Text>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -390,7 +407,7 @@ export default function HomeScreen() {
                   style={styles.menuItem}
                   onPress={handleLogout}>
                   <FeatherIcon name="log-out" size={24} color={"red"} />
-                  <Text style={[styles.menuText, { color: "red" }]}>Logout</Text>
+                  <Text style={[styles.menuText, { color: "red" }]}>{t("HomeScreen.navbar.logout")}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -440,11 +457,11 @@ export default function HomeScreen() {
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
           {userLogin ? (
-            <Text style={styles.welcomeTitle}>Hi! {userLogin.username}</Text>
+            <Text style={styles.welcomeTitle}>{t("HomeScreen.greet")} {userLogin.username}</Text>
           ) : (
             <Text style={styles.welcomeTitle}>Hi! are you ready to explore?</Text>
           )}
-          <Text style={styles.welcomeSubtitle}>Where do you wanna go?</Text>
+          <Text style={styles.welcomeSubtitle}>{t("HomeScreen.subtitle")}</Text>
         </View>
 
         {/* Search Section */}
@@ -460,7 +477,7 @@ export default function HomeScreen() {
               />
               <TextInput
                 style={styles.textInput}
-                placeholder="Search destination..."
+                placeholder={t("HomeScreen.placeHolderSearch")}
                 onChangeText={setQuery}
                 placeholderTextColor="#aaa"
                 autoCapitalize="none"
@@ -502,7 +519,7 @@ export default function HomeScreen() {
 
         {/* Top Destination Section */}
         <View style={styles.topDestinationSection}>
-          <Text style={styles.topDestinationTitle}>Top Destination</Text>
+          <Text style={styles.topDestinationTitle}>{t("HomeScreen.titleTopDestination")}</Text>
           <ScrollView
             horizontal={true} // Membuat scroll horizontal
             showsHorizontalScrollIndicator={false} // Menyembunyikan scrollbar horizontal
@@ -574,7 +591,7 @@ export default function HomeScreen() {
 
         {/* Destination Section */}
         <View style={styles.recommendedSection}>
-          <Text style={styles.recommendedTitle}>Recommended Destination</Text>
+          <Text style={styles.recommendedTitle}>{t("HomeScreen.titleRecommendedDestination")}</Text>
 
           <ScrollView
             horizontal={true}

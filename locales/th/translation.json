@@ -1,0 +1,151 @@
+{
+  "email_required": "กรุณากรอกอีเมล",
+  "invalid_email": "รูปแบบอีเมลไม่ถูกต้อง",
+  "WelcomeScreen": {
+    "title": "สำรวจการเดินทางที่น่าจดจำไปกับเรา",
+    "subtitle": "ค้นพบความงดงามของโลกด้วยแอปท่องเที่ยวของเรา หาการผจญภัยครั้งต่อไปและสร้างความทรงจำที่ไม่มีวันลืม",
+    "button": "สำรวจเลย"
+  },
+  "loginScreen": {
+    "title": "มาเริ่มกันเลย!",
+    "subtitle": "เข้าสู่ระบบเพื่อวางแผนการเดินทางที่น่าจดจำและค้นหาสถานที่ใหม่ ๆ กับเรา",
+    "rememberMe": "จดจำฉัน",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "loginButton": "เข้าสู่ระบบ",
+    "orSignInWith": "หรือเข้าสู่ระบบด้วย",
+    "loginWithGoogle": "เข้าสู่ระบบด้วย Google",
+    "loginWithFacebook": "เข้าสู่ระบบด้วย Facebook",
+    "register": "ยังไม่มีบัญชี?",
+    "registerButton": "สมัครสมาชิก"
+  },
+  "registerScreen": {
+    "title": "พร้อมที่จะค้นพบโลกหรือยัง?",
+    "subtitle": "สร้างบัญชีของคุณและเริ่มสำรวจแพ็คเกจทัวร์สุดพิเศษที่เราจัดไว้เพื่อทำให้ความฝันการเดินทางของคุณเป็นจริง",
+    "rememberMe": "จดจำฉัน",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "registerButton": "สมัครสมาชิก",
+    "orSignUpWith": "หรือสมัครด้วย",
+    "loginWithGoogle": "สมัครด้วย Google",
+    "loginWithFacebook": "สมัครด้วย Facebook",
+    "login": "มีบัญชีอยู่แล้ว?",
+    "loginButton": "เข้าสู่ระบบ"
+  },
+  "ProfileScreen": {
+    "title": "โปรไฟล์",
+    "information": "ข้อมูลของคุณ",
+    "fullName": "ชื่อเต็ม",
+    "username": "ชื่อผู้ใช้",
+    "birthDate": "วันเกิด",
+    "address": "ที่อยู่",
+    "country": "ประเทศ",
+    "city": "เมือง",
+    "email": "อีเมล",
+    "phone": "เบอร์โทรศัพท์",
+    "logout": "ออกจากระบบ"
+  },
+  "HomeScreen": {
+    "greet": "สวัสดี!",
+    "subtitle": "ค้นหาสถานที่และประสบการณ์ที่น่าทึ่ง",
+    "placeHolderSearch": "ค้นหาสถานที่ท่องเที่ยว ทัวร์ และอื่น ๆ",
+    "titleTopDestination": "จุดหมายปลายทางยอดนิยม",
+    "titleRecommendedDestination": "จุดหมายปลายทางแนะนำ",
+    "navbar": {
+      "home": "หน้าแรก",
+      "profile": "โปรไฟล์",
+      "favorite": "รายการโปรด",
+      "notification": "การแจ้งเตือน",
+      "language": "ภาษา",
+      "orderHistory": "ประวัติการจอง",
+      "termCondition": "ข้อกำหนดและเงื่อนไข",
+      "feedback": "ข้อเสนอแนะ",
+      "logout": "ออกจากระบบ"
+    }
+  },
+  "ProductPage": {
+    "navbar": {
+      "general": "ทั่วไป",
+      "reviews": "รีวิว",
+      "itinerary": "แผนการเดินทาง"
+    },
+    "rating": "คะแนน",
+    "duration": "ระยะเวลา",
+    "day": "วัน",
+    "night": "คืน",
+    "description": "รายละเอียด",
+    "price": "ราคา",
+    "readMore": "อ่านเพิ่มเติม",
+    "readLess": "อ่านน้อยลง",
+    "showOnMap": "แสดงบนแผนที่",
+    "closeMap": "ปิด",
+    "button": "จองตอนนี้"
+  },
+  "AvailableDateScreen": {
+    "title": "วันที่ที่มีให้เลือก",
+    "subtitle": "เลือกวันที่เดินทางที่คุณต้องการ",
+    "selectMonth": "เลือกเดือน",
+    "placeholderSelectMonth": "กรุณาเลือกเดือน",
+    "departure": "วันออกเดินทาง",
+    "return": "วันกลับ",
+    "price": "ราคา",
+    "button": "ตรวจสอบวันว่าง"
+  },
+  "TripOverviewScreen": {
+    "title": "ภาพรวมการเดินทาง",
+    "room": "ห้อง",
+    "addRoom": "เพิ่มห้อง",
+    "roomLeft": "ห้องที่เหลือ",
+    "travelSummary": "สรุปการเดินทาง",
+    "noRoomSelected": "ยังไม่ได้เลือกห้อง",
+    "fromDate": "จากวันที่",
+    "toDate": "ถึงวันที่",
+    "total": "รวมทั้งหมด",
+    "continuePassengerDetail": "ดำเนินการต่อไปยังรายละเอียดผู้โดยสาร",
+    "note": "ไม่มีค่าธรรมเนียมแอบแฝง ราคาที่คุณเห็นคือราคาที่คุณจ่าย"
+  },
+  "PassengerDetailScreen": {
+    "title": "รายละเอียดผู้โดยสาร",
+    "contactPerson": "ผู้ติดต่อ (ผู้รับผิดชอบการจอง)",
+    "firstName": "ชื่อจริง",
+    "lastName": "นามสกุล",
+    "contactDetail": "ข้อมูลติดต่อ",
+    "phoneNumber": "เบอร์โทรศัพท์",
+    "emailAddress": "อีเมล",
+    "personalDetail": "ข้อมูลส่วนบุคคล",
+    "country": "ประเทศ",
+    "city": "เมือง",
+    "address": "ที่อยู่",
+    "postalCode": "รหัสไปรษณีย์",
+    "passenger": "ผู้โดยสาร",
+    "proceedButton": "ดำเนินการต่อไปยังการชำระเงิน"
+  },
+  "PaymentMethodScreen": {
+    "title": "วิธีการชำระเงิน",
+    "searchSubtitle": "ค้นหาวิธีการชำระเงินของคุณ",
+    "totalAmount": "จำนวนเงินทั้งหมด",
+    "choose": "เลือก"
+  },
+  "PaymentSummaryScreen": {
+    "title": "การยืนยันการชำระเงิน",
+    "bookingInformation": "ข้อมูลการจอง",
+    "bookingCode": "รหัสการจอง",
+    "customerName": "ชื่อลูกค้า",
+    "fromDate": "จากวันที่",
+    "toDate": "ถึงวันที่",
+    "room": "ห้อง",
+    "adult": "ผู้ใหญ่",
+    "child": "เด็ก",
+    "senior": "ผู้สูงอายุ",
+    "infant": "ทารก",
+    "subtotalAmount": "ยอดรวมย่อย",
+    "grandTotal": "ยอดรวมทั้งหมด",
+    "paymentMethod": "วิธีการชำระเงิน",
+    "change": "เปลี่ยน",
+    "pay": "ชำระเงิน"
+  },
+  "validation": {
+    "email_required": "กรุณากรอกอีเมล",
+    "email_invalid": "รูปแบบอีเมลไม่ถูกต้อง",
+    "password_required": "กรุณากรอกรหัสผ่าน",
+    "password_length": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"
+  }
+}
