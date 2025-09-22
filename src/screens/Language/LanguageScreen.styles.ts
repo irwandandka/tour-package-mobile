@@ -8,20 +8,19 @@ export default StyleSheet.create({
     headerContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 12,
-        height: 50, // kasih tinggi biar posisi relatif jelas
+        justifyContent: "space-between",
+        height: 50,
+        marginBottom: 21,
     },
     title: {
-        position: "absolute",
-        left: 0,
-        right: 0,
-        textAlign: "center",
-        fontSize: 18,
+        fontSize: 23,
         fontWeight: "bold",
+        textAlign: "center",
+        flex: 1,
     },
     backButton: {
         padding: 6,
-        borderRadius: 30, 
+        borderRadius: 30,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -48,7 +47,7 @@ export default StyleSheet.create({
     },
     wrapperFlag: {
         padding: 2, // kasih ruang biar shadow kelihatan
-        borderRadius: 20, 
+        borderRadius: 20,
         backgroundColor: '#fff', // wajib biar shadow/elevation muncul di Android
         shadowColor: "#000",
         shadowOffset: {

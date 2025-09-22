@@ -242,7 +242,6 @@ export default function PassengerDetailScreen() {
                 text2: "Your passenger details have been successfully saved.",
             });
 
-            console.log('Hasil Update Passenger', response.data);
             setTimeout(() => {
                 navigation.navigate("PaymentMethod", {
                     transactionId: transactionId,

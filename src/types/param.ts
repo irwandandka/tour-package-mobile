@@ -4,6 +4,10 @@ export type RootStackParamList = {
     Profile: { userId: string };
     Language: undefined;
     Home: undefined;
+    OrderHistory: undefined;
+    OrderDetail: { orderId: string };
+    TermCondition: undefined;
+    Favorite: undefined;
     Product: { slug: string };
     Landing: undefined;
     AvailableDate: { slug: string };

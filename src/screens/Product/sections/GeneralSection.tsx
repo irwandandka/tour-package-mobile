@@ -28,15 +28,6 @@ export default function GeneralSection({
         : fullDescription;
 
     const handleBookNow = async () => {
-        console.log('anjing');
-        const response = await apiService.get(`v1/user/profile`, {
-            params: {
-                lang: 'EN',
-            }
-        });
-
-        console.log(response);
-
         navigation.navigate("AvailableDate", {
             slug: productDetail?.slug || "",
         })

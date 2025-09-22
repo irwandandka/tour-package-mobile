@@ -24,89 +24,96 @@ type LanguageNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function LanguageScreen() {
-    const navigation = useNavigation<LanguageNavigationProp>();
+  const navigation = useNavigation<LanguageNavigationProp>();
 
-    const [languages, setLanguages] = useState<Language[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
 
-    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchLanguage = async () => {
-            try {
-                const response = await apiService.get('v1/base/languages');
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const response = await apiService.get("v1/base/languages");
 
-                setLanguages(response.data);
-            } catch (error: any) {
-                console.log(error);
-            }
-        }
-        
-        fetchLanguage();
-
-        const getLanguage = async () => {
-            const language = await AsyncStorage.getItem('lang');
-            setSelectedLanguage(language);
-        }
-
-        getLanguage();
-    }, []);
-
-    const handleSelectedLanguage = (code: string) => {
-        setSelectedLanguage(code);
-
-        AsyncStorage.setItem('lang', code);
-        i18n.changeLanguage(code);
+        setLanguages(response.data);
+      } catch (error: any) {
+        console.log(error);
+      }
     };
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.headerContainer}>
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.backButton}
-                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+    fetchLanguage();
+
+    const getLanguage = async () => {
+      const language = await AsyncStorage.getItem("lang");
+      setSelectedLanguage(language);
+    };
+
+    getLanguage();
+  }, []);
+
+  const handleSelectedLanguage = (code: string) => {
+    setSelectedLanguage(code);
+
+    AsyncStorage.setItem("lang", code);
+    i18n.changeLanguage(code);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <IonIcon name="arrow-back" size={24} color="#000" />
+          </TouchableOpacity>
+
+          <Text style={styles.title}>Booking History</Text>
+
+          <View style={{ width: 40 }} />
+        </View>
+
+        <View style={styles.menuDivider} />
+
+        <View style={styles.listGroup}>
+          {languages.map((language) => {
+            const isSelected = selectedLanguage === language.code;
+
+            return (
+              <View id={language.code}>
+                <View style={styles.listItem}>
+                  <View style={styles.groupFlag}>
+                    <View style={styles.wrapperFlag}>
+                      <Image
+                        source={{ uri: language.logo }}
+                        style={styles.flagLogo}
+                      />
+                    </View>
+                    <Text style={styles.listTitle}>{language.name}</Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.listToggleSelect}
+                    onPress={() => handleSelectedLanguage(language.code)}
+                  >
+                    <View
+                      style={[
+                        styles.outerCircle,
+                        isSelected && styles.outerCircleSelected,
+                      ]}
                     >
-                        <IonIcon name="arrow-back" size={24} color="#000" />
-                    </TouchableOpacity>
-
-                    <Text style={styles.title}>Languages</Text>
+                      {isSelected && <View style={styles.innerCircle} />}
+                    </View>
+                  </TouchableOpacity>
                 </View>
-
-                <View style={styles.menuDivider} />
-
-                <View style={styles.listGroup}>
-                    {languages.map((language) => {
-                        const isSelected = selectedLanguage === language.code;
-
-                        return (
-                            <View id={language.code}>
-                                <View style={styles.listItem}>
-                                    <View style={styles.groupFlag}>
-                                        <View style={styles.wrapperFlag}>
-                                            <Image source={{ uri: language.logo }} style={styles.flagLogo} />
-                                        </View>
-                                        <Text style={styles.listTitle}>
-                                            {language.name}
-                                        </Text>
-                                    </View>
-                                    
-                                    <TouchableOpacity
-                                        style={styles.listToggleSelect}
-                                        onPress={() => handleSelectedLanguage(language.code)}
-                                    >
-                                        <View style={[styles.outerCircle, isSelected && styles.outerCircleSelected]}>
-                                            {isSelected && <View style={styles.innerCircle} />}
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.listDivider} />
-                            </View>
-                        );
-                    })}
-                </View>
-
-            </ScrollView>
-        </SafeAreaView>
-    );
+                <View style={styles.listDivider} />
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }

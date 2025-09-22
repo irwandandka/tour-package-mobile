@@ -116,7 +116,7 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         // alignItems: "flex-start",
-        gap: 10,
+        gap: 15,
         backgroundColor: '#FFFFFF',
     },
     listExpandLeftSide: {
@@ -135,7 +135,7 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        // gap: 2,
+        gap: 5,
         marginBottom: 8,
     },
     groupDateText: {

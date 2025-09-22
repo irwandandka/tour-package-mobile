@@ -33,6 +33,7 @@ api.interceptors.request.use(
       // Token
       const token = await AsyncStorage.getItem("token");
       if (token) {
+        console.log("Attaching token to request:", token);
         requestConfig.headers.Authorization = `Bearer ${token}`;
       }
 

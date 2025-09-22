@@ -243,3 +243,31 @@ export interface Language {
   code: string;
   logo: string;
 }
+
+export interface OrderHistory {
+  id: string;
+  code: string;
+  status: string;
+  product: string;
+  image: string;
+  total_amount: number;
+  booking_date: string;
+  notes: string;
+}
+
+export interface OrderDetail {
+  id: string;
+  code: string;
+  status: string;
+  product: string;
+  image: string;
+  total_amount: number;
+  booking_date: string;
+  from_date: string;
+  to_date: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  notes: string;
+  transaction_details: TransactionDetail[];
+}

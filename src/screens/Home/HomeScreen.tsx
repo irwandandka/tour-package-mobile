@@ -357,7 +357,10 @@ export default function HomeScreen() {
                   <FeatherIcon name="heart" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.favorite")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => navigation.navigate("OrderHistory")}
+                >
                   <FeatherIcon name="shopping-cart" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.orderHistory")}</Text>
                 </TouchableOpacity>

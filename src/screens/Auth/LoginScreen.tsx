@@ -272,11 +272,11 @@ export default function LoginScreen() {
           </TouchableOpacity>
 
           {/* Sign In with Google & Facebook */}
-          <Text style={styles.orSignInWith}>
+          {/* <Text style={styles.orSignInWith}>
             {t("loginScreen.orSignInWith")}
-          </Text>
+          </Text> */}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.loginWithGoogle}
             onPress={() => handleLoginWithGoogle()}
           >
@@ -302,7 +302,7 @@ export default function LoginScreen() {
             >
               {t("loginScreen.loginWithFacebook")}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* Sign Up Link */}
           <View style={styles.signUpWrapper}>
