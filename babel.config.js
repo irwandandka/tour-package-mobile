@@ -3,14 +3,30 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      "react-native-reanimated/plugin",
+      "react-native-worklets/plugin",
       [
-        "module:react-native-dotenv",
+        "module-resolver",
         {
-          moduleName: "@env",
-          path: ".env",
+          root: ["./"],
+          alias: {
+            "@app": "./src/app",
+            "@features": "./src/features",
+            "@navigation": "./src/navigation",
+            "@shared": "./src/shared",
+          },
+          extensions: [
+            ".ios.ts",
+            ".android.ts",
+            ".ts",
+            ".ios.tsx",
+            ".android.tsx",
+            ".tsx",
+            ".jsx",
+            ".js",
+            ".json",
+          ],
         },
       ],
-    ], // tambahkan ini
+    ],
   };
 };
