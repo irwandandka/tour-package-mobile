@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigations/RootNavigator";
-import "./i18n";
+import i18n from "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
 import Toast from "react-native-toast-message";
-import { navigationRef } from "./src/services/api";
+import { navigationRef } from "@shared/api";
+import { AppProviders } from "@app/providers/AppProviders";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import i18n from "./i18n";
 
 export default function App() {
   useEffect(() => {
@@ -23,12 +23,14 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      {/* The AuthProvider wraps the entire app to provide authentication context */}
-      <NavigationContainer ref={navigationRef}>
-        <RootNavigator />
-        <Toast />
-      </NavigationContainer>
-    </AuthProvider>
+    <AppProviders>
+      <AuthProvider>
+        {/* The AuthProvider wraps the entire app to provide authentication context */}
+        <NavigationContainer ref={navigationRef}>
+          <RootNavigator />
+          <Toast />
+        </NavigationContainer>
+      </AuthProvider>
+    </AppProviders>
   );
 }
