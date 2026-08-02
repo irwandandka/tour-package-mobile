@@ -30,9 +30,7 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-const formatParticipants = (
-  details: TransactionDetail[] | undefined
-): string => {
+const formatParticipants = (details: TransactionDetail[] | undefined): string => {
   if (!details || details.length === 0) return "Tidak ada data peserta";
 
   const detail = details[0];
@@ -40,16 +38,12 @@ const formatParticipants = (
   if (detail.quantity_adult > 0) parts.push(`${detail.quantity_adult} Dewasa`);
   if (detail.quantity_child > 0) parts.push(`${detail.quantity_child} Anak`);
   if (detail.quantity_infant > 0) parts.push(`${detail.quantity_infant} Bayi`);
-  if (detail.quantity_senior > 0)
-    parts.push(`${detail.quantity_senior} Lansia`);
+  if (detail.quantity_senior > 0) parts.push(`${detail.quantity_senior} Lansia`);
 
   return parts.length > 0 ? parts.join(", ") : "N/A";
 };
 
-type OrderDetailNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "OrderDetail"
->;
+type OrderDetailNavigationProp = NativeStackNavigationProp<RootStackParamList, "OrderDetail">;
 type OrderDetailRouteProp = RouteProp<RootStackParamList, "OrderDetail">;
 
 export default function OrderDetailScreen() {
@@ -112,23 +106,17 @@ export default function OrderDetailScreen() {
                 return { ...prevDetails, status: "cancelled" };
               });
 
-              Alert.alert(
-                "Success",
-                "Your booking has been successfully cancelled."
-              );
+              Alert.alert("Success", "Your booking has been successfully cancelled.");
             } catch (error: any) {
               console.error("Failed to cancel order:", error);
-              Alert.alert(
-                "Failed",
-                "An error occurred while trying to cancel the booking."
-              );
+              Alert.alert("Failed", "An error occurred while trying to cancel the booking.");
             } finally {
               setIsCancelling(false);
             }
           },
           style: "destructive",
         },
-      ]
+      ],
     );
   };
 
@@ -182,22 +170,16 @@ export default function OrderDetailScreen() {
   const mainImage = orderDetail.transaction_details?.[0]?.product_detail_image;
 
   const isCancellable =
-    orderDetail &&
-    !["completed", "cancelled"].includes(orderDetail.status.toLowerCase());
-  const isVoucherActive =
-    orderDetail && orderDetail.status.toLowerCase() !== "cancelled";
+    orderDetail && !["completed", "cancelled"].includes(orderDetail.status.toLowerCase());
+  const isVoucherActive = orderDetail && orderDetail.status.toLowerCase() !== "cancelled";
 
-  const canReview =
-    orderDetail && orderDetail.status.toLowerCase() === "settlement";
+  const canReview = orderDetail && orderDetail.status.toLowerCase() === "settlement";
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header SELALU ditampilkan di luar kondisi */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <IonIcon name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.title}>Detail Booking</Text>
@@ -218,18 +200,8 @@ export default function OrderDetailScreen() {
             <View style={styles.card}>
               <View style={styles.cardHeader}>
                 <Text style={styles.cardTitle}>Booking Status</Text>
-                <View
-                  style={[
-                    styles.statusBadge,
-                    getStatusStyle(orderDetail.status).badge,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.statusText,
-                      getStatusStyle(orderDetail.status).text,
-                    ]}
-                  >
+                <View style={[styles.statusBadge, getStatusStyle(orderDetail.status).badge]}>
+                  <Text style={[styles.statusText, getStatusStyle(orderDetail.status).text]}>
                     {orderDetail.status}
                   </Text>
                 </View>
@@ -250,8 +222,7 @@ export default function OrderDetailScreen() {
                 {orderDetail.transaction_details?.[0]?.product_detail_image && (
                   <Image
                     source={{
-                      uri: orderDetail.transaction_details?.[0]
-                        ?.product_detail_image,
+                      uri: orderDetail.transaction_details?.[0]?.product_detail_image,
                     }}
                     style={styles.serviceImage}
                   />
@@ -280,16 +251,12 @@ export default function OrderDetailScreen() {
               <Text style={styles.cardTitle}>Payment Details</Text>
               <View style={styles.infoRow}>
                 <Text style={styles.infoLabel}>Payment Method</Text>
-                <Text style={styles.infoValue}>
-                  {orderDetail.payment_method}
-                </Text>
+                <Text style={styles.infoValue}>{orderDetail.payment_method}</Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.infoRow}>
                 <Text style={styles.totalLabel}>Total Payment</Text>
-                <Text style={styles.totalValue}>
-                  {formatCurrency(orderDetail.total_amount)}
-                </Text>
+                <Text style={styles.totalValue}>{formatCurrency(orderDetail.total_amount)}</Text>
               </View>
             </View>
 
@@ -304,37 +271,24 @@ export default function OrderDetailScreen() {
                     <ActivityIndicator size="small" color="#dc3545" />
                   ) : (
                     <>
-                      <IonIcon
-                        name="close-circle-outline"
-                        size={20}
-                        color="#dc3545"
-                      />
-                      <Text style={styles.cancelButtonText}>
-                        Cancel Booking
-                      </Text>
+                      <IonIcon name="close-circle-outline" size={20} color="#dc3545" />
+                      <Text style={styles.cancelButtonText}>Cancel Booking</Text>
                     </>
                   )}
                 </TouchableOpacity>
               )}
               <TouchableOpacity
-                style={[
-                  styles.primaryButton,
-                  !isVoucherActive && styles.disabledButton,
-                ]}
+                style={[styles.primaryButton, !isVoucherActive && styles.disabledButton]}
                 disabled={!isVoucherActive}
                 onPress={async () => {
-                  if (isVoucherActive && orderDetail?.eticket.url) {
+                  const eticketUrl = orderDetail?.eticket?.url;
+                  if (isVoucherActive && eticketUrl) {
                     try {
-                      const supported = await Linking.canOpenURL(
-                        orderDetail.eticket.url
-                      );
+                      const supported = await Linking.canOpenURL(eticketUrl);
                       if (supported) {
-                        await Linking.openURL(orderDetail.eticket.url);
+                        await Linking.openURL(eticketUrl);
                       } else {
-                        Alert.alert(
-                          "Error",
-                          `Tidak bisa membuka URL ini: ${orderDetail.eticket.url}`
-                        );
+                        Alert.alert("Error", `Tidak bisa membuka URL ini: ${eticketUrl}`);
                       }
                     } catch (error) {
                       Alert.alert("Error", "Gagal membuka E-Voucher.");
@@ -349,10 +303,7 @@ export default function OrderDetailScreen() {
                   color={isVoucherActive ? "#FFF" : "#333333"}
                 />
                 <Text
-                  style={[
-                    styles.primaryButtonText,
-                    !isVoucherActive && styles.disabledButtonText,
-                  ]}
+                  style={[styles.primaryButtonText, !isVoucherActive && styles.disabledButtonText]}
                 >
                   Lihat E-Voucher
                 </Text>
