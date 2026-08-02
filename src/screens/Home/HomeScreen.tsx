@@ -94,23 +94,19 @@ export default function HomeScreen() {
       });
 
       setTimeout(() => {
-        // navigation.navigate("Home");
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: "Home" }], // refresh balik ke Home, stack direset
+            routes: [{ name: "Home" }],
           })
         );
       }, 1000);
     } catch (error: any) {
       if (error.response) {
-        // Response dari server
         console.error("Data:", error.response.data);
       } else if (error.request) {
-        // Request dikirim tapi tidak ada response
         console.error("No response received:", error.request);
       } else {
-        // Error lain
         console.error("Error message:", error.message);
       }
     }
@@ -121,7 +117,6 @@ export default function HomeScreen() {
       let isActive = true;
 
       (async () => {
-        // === Location Permission ===
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           if (isActive) setLocationName("Permission Denied");
@@ -141,7 +136,6 @@ export default function HomeScreen() {
           setLocationName(`${city ?? region}, ${country}`);
         }
 
-        // === Token ===
         try {
           const storedToken = await AsyncStorage.getItem('token');
           if (storedToken && isActive) {
@@ -151,7 +145,6 @@ export default function HomeScreen() {
           console.error("Gagal mengambil token:", error);
         }
 
-        // === Fetch Data ===
         try {
           const [regionsData, topDest, destinationsData] = await Promise.all([
             apiService.get("v1/region/list"),
@@ -159,7 +152,7 @@ export default function HomeScreen() {
               params: { lang: "EN" },
             }),
             apiService.get("v1/product/popular-destination", {
-              params: { lang: 'EN', currency: 'SGD' },
+              params: { lang: 'EN', currency: 'IDR' },
             }),
           ]);
 
@@ -178,21 +171,18 @@ export default function HomeScreen() {
           }
         }
 
-        // === User Auth ===
         const token = await AsyncStorage.getItem('token');
         const userinfo = await AsyncStorage.getItem('user');
         if (isActive) {
           setUserLogin(userinfo ? JSON.parse(userinfo) : null);
         }
 
-        // === Language ===
         const lang = await AsyncStorage.getItem('lang');
         if (!lang && isActive) {
           await AsyncStorage.setItem('lang', 'en');
         }
       })();
 
-      // cleanup pas screen kehilangan fokus
       return () => {
         isActive = false;
       };
@@ -219,21 +209,18 @@ export default function HomeScreen() {
         setSearchResults(response.data);
       } catch (error: any) {
         if (error.response) {
-          // Server ngasih response dengan status code di luar 2xx
           console.error("Response error:", error.response.data);
           console.error("Status:", error.response.status);
           console.error("Headers:", error.response.headers);
         } else if (error.request) {
-          // Request dikirim tapi ga ada response
           console.error("No response received:", error.request);
         } else {
-          // Error waktu setup request
           console.error("Request setup error:", error.message);
         }
       } finally {
         setLoadingSearch(false);
       }
-    }, 500); // debounce 500ms
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [query]);
@@ -262,7 +249,7 @@ export default function HomeScreen() {
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 1500); // delay 1.5 detik
+      }, 1500);
     }
   };
 
@@ -283,7 +270,6 @@ export default function HomeScreen() {
     }).start(() => setMenuVisible(false));
   };
 
-  // Location State
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationName, setLocationName] = useState("Loading...");
 
@@ -335,12 +321,12 @@ export default function HomeScreen() {
                 </TouchableOpacity>
 
                 <View style={styles.menuDivider} />
-                
+
                 <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="bell" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.notification")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => {
                     handleMenuClose();
@@ -367,14 +353,16 @@ export default function HomeScreen() {
 
                 <View style={styles.menuDivider} />
 
-                <TouchableOpacity style={styles.menuItem}>
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => navigation.navigate("TermCondition")}>
                   <FeatherIcon name="file-text" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.termCondition")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
+                {/* <TouchableOpacity style={styles.menuItem}>
                   <FeatherIcon name="message-circle" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.feedback")}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             ) : (
               <View style={styles.menuItemParent}>
@@ -419,10 +407,10 @@ export default function HomeScreen() {
       )}
 
       <ScrollView
-        horizontal={false} // Membuat scroll vertikal
+        horizontal={false}
         contentContainerStyle={{ paddingBottom: 0 }}
         nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false} // Menyembunyikan scrollbar vertikal
+        showsVerticalScrollIndicator={false}
       >
         {/* Top Bar Section */}
         <View style={styles.topBarSection}>
@@ -524,8 +512,8 @@ export default function HomeScreen() {
         <View style={styles.topDestinationSection}>
           <Text style={styles.topDestinationTitle}>{t("HomeScreen.titleTopDestination")}</Text>
           <ScrollView
-            horizontal={true} // Membuat scroll horizontal
-            showsHorizontalScrollIndicator={false} // Menyembunyikan scrollbar horizontal
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.topDestinationButtonGroup}
           >
             {regions.map((region, index) => (

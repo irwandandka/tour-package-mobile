@@ -13,20 +13,17 @@ export default StyleSheet.create({
         marginBottom: 15,
         alignSelf: 'flex-start',
     },
-    // Search Section
     groupSearch: {
         borderRadius: 7,
         backgroundColor: "#fff",
         padding: 16,
         marginBottom: 15,
 
-        // Shadow iOS
         shadowColor: "#000",
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
 
-        // Shadow Android
         elevation: 5,
     },
     searchTitle: {
@@ -55,20 +52,17 @@ export default StyleSheet.create({
         //
     },
 
-    // List Payment Method Section
     groupPaymentMethod: {
         borderRadius: 7,
         backgroundColor: "#fff",
         padding: 16,
         marginBottom: 15,
 
-        // Shadow iOS
         shadowColor: "#000",
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
 
-        // Shadow Android
         elevation: 5,
     },
     listPaymentMethod: {
@@ -102,23 +96,16 @@ export default StyleSheet.create({
         width: 24,
         height: 24,
         borderRadius: 12,
-        borderWidth: 2, // ketebalan ring
+        borderWidth: 2,
         borderColor: "#aaa",
         justifyContent: "center",
         alignItems: "center",
     },
     ringActive: {
         borderColor: "#42CE6D",
-        borderWidth: 3, // bisa atur tebal aktif
+        borderWidth: 3,
     },
-    // dot: {
-    //     width: 12,
-    //     height: 12,
-    //     borderRadius: 6,
-    //     backgroundColor: "#4CAF50",
-    // },
 
-    // Total Amount Section
     groupTotalAmount: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -128,13 +115,11 @@ export default StyleSheet.create({
         padding: 16,
         marginBottom: 15,
 
-        // Shadow iOS
         shadowColor: "#000",
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
 
-        // Shadow Android
         elevation: 5,
     },
     groupAmount: {

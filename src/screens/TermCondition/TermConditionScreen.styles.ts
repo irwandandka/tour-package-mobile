@@ -26,6 +26,7 @@ export default StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
+        marginTop: 30,
         fontWeight: "bold",
         textAlign: "center",
         flex: 1,
@@ -48,7 +49,7 @@ export default StyleSheet.create({
     },
 
     agreeButton: {
-        backgroundColor: "#007BFF",
+        backgroundColor: "#fd7e14",
         margin: 16,
         paddingVertical: 14,
         borderRadius: 10,

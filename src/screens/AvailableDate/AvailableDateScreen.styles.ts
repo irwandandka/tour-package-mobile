@@ -72,7 +72,6 @@ export default StyleSheet.create({
         fontWeight: "bold",
         color: "#000000",
         textTransform: "uppercase",
-        // borderWidth: 1,
     },
     availableDateHeaderTextDay: {
         fontSize: 13,
@@ -115,7 +114,6 @@ export default StyleSheet.create({
     listExpand: {
         flexDirection: "row",
         justifyContent: "space-between",
-        // alignItems: "flex-start",
         gap: 15,
         backgroundColor: '#FFFFFF',
     },
@@ -153,6 +151,7 @@ export default StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-between",
         gap: 5,
+        flex: 1,
     },
     groupDateTextDate: {
         fontSize: 12,
@@ -199,7 +198,6 @@ export default StyleSheet.create({
         borderColor: "#3A5694",
         borderRadius: 8,
         paddingVertical: 12,
-        // paddingHorizontal: 21,
         width: '70%',
         marginBottom: 21,
     },

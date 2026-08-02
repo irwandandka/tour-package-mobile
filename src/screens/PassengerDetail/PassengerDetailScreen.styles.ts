@@ -25,7 +25,6 @@ export default StyleSheet.create({
         color: '#000',
     },
     card: {
-        // height: 330,
         flexDirection: 'column',
         justifyContent: 'space-between',
         backgroundColor: '#f8f8f8',
@@ -77,7 +76,6 @@ export default StyleSheet.create({
         color: '#999',
     },
 
-    // Contact Information
     contactInformationTitle: {
         fontSize: 16,
         fontWeight: "bold",

@@ -26,7 +26,7 @@ export default function AvailableDateScreen() {
     const { slug } = route.params;
 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState<string | null>(null); // selected period ID
+    const [value, setValue] = useState<string | null>(null);
 
     const [availablePeriods, setAvailablePeriods] = useState<AvailablePeriod[]>([]);
 
@@ -38,7 +38,7 @@ export default function AvailableDateScreen() {
                 const response = await apiService.get(`v1/product/${slug}/available-period`, {
                     params: {
                         lang: 'EN',
-                        currency: 'SGD',
+                        currency: 'IDR',
                     }
                 });
 
@@ -65,9 +65,11 @@ export default function AvailableDateScreen() {
                     params: {
                         period: value,
                         lang: 'EN',
-                        currency: 'SGD',
+                        currency: 'IDR',
                     }
                 });
+
+                console.log(response.data);
 
                 setAvailableDates(response?.data ?? []);
             } catch (error) {

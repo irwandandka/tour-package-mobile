@@ -74,15 +74,6 @@ export default function GeneralSection({
                     </TouchableOpacity>
                 )}
             </View>
-
-            {/* Button Book Now */}
-            <TouchableOpacity
-                style={styles.buttonBookNow}
-                onPress={handleBookNow}>
-                <Text style={styles.buttonBookNowText}>
-                    Book Now
-                </Text>
-            </TouchableOpacity>
         </View>
     );
 }

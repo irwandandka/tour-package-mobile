@@ -46,9 +46,9 @@ export default StyleSheet.create({
         gap: 12,
     },
     wrapperFlag: {
-        padding: 2, // kasih ruang biar shadow kelihatan
+        padding: 2,
         borderRadius: 20,
-        backgroundColor: '#fff', // wajib biar shadow/elevation muncul di Android
+        backgroundColor: '#fff',
         shadowColor: "#000",
         shadowOffset: {
             width: 2,
@@ -75,7 +75,7 @@ export default StyleSheet.create({
     outerCircle: {
         width: 24,
         height: 24,
-        borderRadius: 12, // bulat
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#ccc",
         justifyContent: "center",
@@ -83,14 +83,14 @@ export default StyleSheet.create({
     },
 
     outerCircleSelected: {
-        borderColor: "#1609ccff", // warna aktif
+        borderColor: "#1609ccff",
     },
 
     innerCircle: {
         width: 12,
         height: 12,
         borderRadius: 6,
-        backgroundColor: "#1203bcb4", // warna isi lingkaran saat aktif
+        backgroundColor: "#1203bcb4",
     },
     listDivider: {
         borderBottomColor: "#ccc",

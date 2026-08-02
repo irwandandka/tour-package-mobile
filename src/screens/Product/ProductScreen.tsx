@@ -20,10 +20,8 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
 
   const { slug } = route.params;
 
-  // State for active panel
   const [activePanel, setActivePanel] = useState("general");
   
-  // State for read more/less description
   const maxLength = 200;
   const [isReadMore, setIsReadMore] = useState(false);
 
@@ -38,13 +36,15 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
 
   const [selectedItineraryForMap, setSelectedItineraryForMap] = useState<Itinerary | null>(null);
 
+  const [activeDay, setActiveDay] = useState<number>(1);
+
   useEffect(() => {
     const fetchProductDetail = async () => {
       try {
         const productDetail = await apiService.get(`v1/product/${slug}`, {
           params: {
             lang: 'EN',
-            currency: 'SGD',
+            currency: 'IDR',
           }
         });
 
@@ -58,6 +58,16 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
 
     fetchProductDetail();
   }, []);
+
+  const formatCurrency = (value: number) => {
+    if (typeof value !== 'number') {
+      return '0.00';
+    }
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
 
   return (
     <SafeAreaView>
@@ -116,6 +126,8 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
               itineraries={itineraries}
               selectedItineraryForMap={selectedItineraryForMap}
               setSelectedItineraryForMap={setSelectedItineraryForMap}
+              activeDay={activeDay}
+              setActiveDay={setActiveDay}
             />
           )}
 
@@ -127,6 +139,22 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
           )}
         </View>
       </ScrollView>
+
+      <View style={styles.floatingBar}>
+        <View>
+          <Text style={styles.priceLabel}>Start from</Text>
+          <Text style={styles.priceText}>
+            {/* Format harga Anda di sini */}
+              {productDetail?.price}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.bookNowButton}
+          onPress={() => navigation.navigate("AvailableDate", { slug: productDetail?.slug || "" })}
+        >
+          <Text style={styles.bookNowButtonText}>Book Now</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }

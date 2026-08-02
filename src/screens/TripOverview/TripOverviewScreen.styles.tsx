@@ -25,7 +25,6 @@ export default StyleSheet.create({
         color: '#000',
     },
     card: {
-        // height: 330,
         flexDirection: 'column',
         justifyContent: 'space-between',
         backgroundColor: '#f8f8f8',
@@ -77,7 +76,6 @@ export default StyleSheet.create({
         color: '#999',
     },
 
-    // Room Section
     roomSection: {
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -150,7 +148,7 @@ export default StyleSheet.create({
     roomTitleWithDelete: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10, // atau gunakan margin jika gap tidak support
+        gap: 10,
     },
 
     deleteIcon: {
@@ -186,7 +184,6 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
     },
     roomInputButtonDecrement: {
-        // backgroundColor: '#f0f0f0',
         padding: 5,
         borderRadius: 21,
     },
@@ -199,7 +196,6 @@ export default StyleSheet.create({
         lineHeight: 25,
     },
     roomInputButtonIncrement: {
-        // backgroundColor: '#f0f0f0',
         padding: 5,
         borderRadius: 21,
     },
@@ -218,7 +214,6 @@ export default StyleSheet.create({
         color: '#000',
     },
 
-    // Travel Summary Section
     travelSummaryCard: {
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -243,8 +238,7 @@ export default StyleSheet.create({
         marginLeft: 10,
     },
     dateSummaryIcon: {
-        // width: 24,
-        // height: 24,
+        //
     },
     dateSummaryTextGroup: {
         flexDirection: 'column',
@@ -265,7 +259,6 @@ export default StyleSheet.create({
         fontWeight: 'semibold',
         color: '#777',
     },
-    // Room Detail Section
     wrapperRoomDetail: {
         flexDirection: 'column',
         gap: 10,
@@ -296,7 +289,6 @@ export default StyleSheet.create({
         textAlign: 'right',
     },
 
-    // Total Price Section
     groupTotalPrice: {
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -22,7 +22,6 @@ export default StyleSheet.create({
         color: "#393939ff"
     },
 
-    // Booking Info Section
     groupPanel: {
         borderRadius: 7,
         backgroundColor: "#fff",
@@ -30,13 +29,11 @@ export default StyleSheet.create({
         marginHorizontal: 12,
         marginBottom: 15,
 
-        // Shadow iOS
         shadowColor: "#000",
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
 
-        // Shadow Android
         elevation: 5,
     },
     groupBookingInfo: {
@@ -57,7 +54,6 @@ export default StyleSheet.create({
         color: "#666",
     },
 
-    // Booking Detail Section
     groupRoomDetail: {
         flexDirection: "column",
         gap: 5,
@@ -90,7 +86,6 @@ export default StyleSheet.create({
         color: "#666",
     },
 
-    // Payment Method Section
     groupPaymentMethod: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -127,13 +122,11 @@ export default StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
 
-        // Shadow iOS
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
 
-        // Shadow Android
         elevation: 5,
     },
     groupTextButton: {

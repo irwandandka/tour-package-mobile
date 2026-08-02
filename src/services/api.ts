@@ -16,30 +16,17 @@ const api = axios.create({
     }
 });
 
-// api.interceptors.request.use(
-//     async (config) => {
-//         const token = await AsyncStorage.getItem("token");
-//         if (token) {
-//             config.headers.Authorization = `Bearer ${token}`;
-//         }
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
-
 api.interceptors.request.use(
   async (requestConfig) => {
     try {
-      // Token
       const token = await AsyncStorage.getItem("token");
       if (token) {
         console.log("Attaching token to request:", token);
         requestConfig.headers.Authorization = `Bearer ${token}`;
       }
 
-      // Language & Currency
       const lang = (await AsyncStorage.getItem("lang")) || "en";
-      const currency = (await AsyncStorage.getItem("currency")) || "SGD";
+      const currency = (await AsyncStorage.getItem("currency")) || "IDR";
 
       requestConfig.params = {
         ...(requestConfig.params || {}),
@@ -62,11 +49,9 @@ api.interceptors.response.use(
       const code = error.response.data.code;
 
       if (code === "token_expired" || code === "token_invalid" || code === "token_missing") {
-        // 1. clear async storage
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("user");
 
-        // 2. redirect ke login
         if (navigationRef.isReady()) {
             navigationRef.navigate("Auth", { screen: "Login" });
         }

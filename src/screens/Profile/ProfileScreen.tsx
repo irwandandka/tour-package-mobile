@@ -1,4 +1,3 @@
-// Hooks
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -11,10 +10,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Style
+import * as ImagePicker from 'expo-image-picker';
+
 import styles from "./ProfileScreen.styles";
 
-// Navigation
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
@@ -27,15 +26,12 @@ import {
   Country,
 } from "../../types/api";
 
-// Services
 import apiService from "../../services/apiService";
 
-// Library
 import Toast from "react-native-toast-message";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
 
-// Icon
 import IonIcon from "react-native-vector-icons/Ionicons";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -57,6 +53,8 @@ export default function ProfileScreen() {
 
   const [loading, setLoading] = useState(false);
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const [formData, setFormData] = useState<UserProfileRequest>({
     name: "",
     email: "",
@@ -69,17 +67,15 @@ export default function ProfileScreen() {
     city: null,
   });
 
-  // Date Picker
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
 
   const handleConfirm = (date: Date) => {
-    // simpan ke formData
     setFormData((prev) => ({
       ...prev,
-      birth_date: date.toISOString().split("T")[0], // simpan format YYYY-MM-DD
+      birth_date: date.toISOString().split("T")[0],
     }));
     hideDatePicker();
   };
@@ -94,7 +90,56 @@ export default function ProfileScreen() {
     });
   };
 
-  // Combosource for countries
+  const handlePickImage = async () => {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+          alert("Anda menolak izin untuk mengakses galeri foto!");
+          return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.5,
+      });
+
+      if (!pickerResult.canceled) {
+          const image = pickerResult.assets[0];
+          
+          setUserProfile(prev => prev ? { ...prev, profile_picture_url: image.uri } : null);
+          
+          setIsUploading(true);
+          const formData = new FormData();
+
+          formData.append('image', {
+            uri: image.uri,
+            name: image.fileName || `photo-${Date.now()}.jpg`,
+            type: image.mimeType,
+          } as any);
+
+          try {
+              const response = await apiService.post('v1/user/upload-profile-picture', formData);
+
+              setUserProfile(prev => prev ? { ...prev, profile_picture_url: response.data.url } : null);
+              Toast.show({ type: 'success', text1: 'Success', text2: 'Profile picture updated.' });
+
+          } catch (error: any) {
+              if (error.response) {
+                console.error("Data:", error.response.data);
+              } else if (error.request) {
+                console.error("No response received:", error.request);
+              } else {
+                console.error("Error message:", error.message);
+              }
+              Toast.show({ type: 'error', text1: 'Error', text2: 'Failed to upload image.' });
+          } finally {
+              setIsUploading(false);
+          }
+      }
+  };
+
   const [countries, setCountries] = useState<Country[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
@@ -110,7 +155,6 @@ export default function ProfileScreen() {
     setLoading(false);
   };
 
-  // Combosource for cities
   const [cities, setCities] = useState<City[]>([]);
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
@@ -152,11 +196,7 @@ export default function ProfileScreen() {
 
   const handleSaveProfile = async () => {
     try {
-      const response = await apiService.get(`v1/user/profile`, {
-        params: {
-          lang: "EN",
-        },
-      });
+      const response = await apiService.post(`v1/user/save-profile`, formData);
 
       setUserProfile(response.data);
 
@@ -166,12 +206,13 @@ export default function ProfileScreen() {
         text2: "Profile saved successfully.",
       });
     } catch (error: any) {
-      console.error("Error saving profile:", error);
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Failed to save profile. Please try again.",
-      });
+      if (error.response) {
+        console.error("Data:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
     }
   };
 
@@ -203,7 +244,7 @@ export default function ProfileScreen() {
     };
 
     fetchUserProfile();
-  }, [userId, userProfile]);
+  }, [userId]);
 
   return (
     <SafeAreaView>
@@ -234,11 +275,11 @@ export default function ProfileScreen() {
                 style={styles.imageProfile}
               />
 
-              <TouchableOpacity style={styles.iconAddPhoto}>
-                <View style={styles.wrapperIcon}>
-                  <IonIcon name="camera" size={15} color="#5c5c5cff" />
-                </View>
-              </TouchableOpacity>
+              {isUploading && (
+                  <View style={styles.uploadingOverlay}>
+                      <ActivityIndicator size="large" color="#FFFFFF" />
+                  </View>
+              )}
             </View>
           </View>
 
@@ -251,7 +292,7 @@ export default function ProfileScreen() {
               <TextInput
                 style={styles.inputField}
                 placeholder="Full Name"
-                value={userProfile?.name}
+                value={formData.name}
                 onChangeText={(text) =>
                   setFormData((prev) => ({ ...prev, name: text }))
                 }
@@ -264,9 +305,9 @@ export default function ProfileScreen() {
               <TextInput
                 style={styles.inputField}
                 placeholder="Username"
-                value={userProfile?.username}
+                value={formData.username}
                 onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, name: text }))
+                  setFormData((prev) => ({ ...prev, username: text }))
                 }
               />
             </View>
@@ -277,7 +318,7 @@ export default function ProfileScreen() {
               <TextInput
                 style={styles.inputField}
                 placeholder="johndoe@example.com"
-                value={userProfile?.email}
+                value={formData.email}
                 onChangeText={(text) =>
                   setFormData((prev) => ({ ...prev, email: text }))
                 }
@@ -305,7 +346,7 @@ export default function ProfileScreen() {
                   formData.birth_date
                     ? new Date(formData.birth_date)
                     : new Date()
-                } // default ke profile / today
+                }
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
@@ -317,9 +358,9 @@ export default function ProfileScreen() {
               <TextInput
                 style={styles.inputField}
                 placeholder="+1 (555) 123-4567"
-                value={userProfile?.phone}
+                value={formData.phone}
                 onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, email: text }))
+                  setFormData((prev) => ({ ...prev, phone: text }))
                 }
               />
             </View>
@@ -351,9 +392,9 @@ export default function ProfileScreen() {
               <TextInput
                 style={styles.inputField}
                 placeholder="123 Main St, City, Country"
-                value={userProfile?.address}
+                value={formData.address}
                 onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, email: text }))
+                  setFormData((prev) => ({ ...prev, address: text }))
                 }
               />
             </View>

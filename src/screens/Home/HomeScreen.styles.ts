@@ -22,8 +22,10 @@ export default StyleSheet.create({
     height: screenHeight,
   },
   menuBarClose: {
-    left: 280,
+    position: 'absolute',
     top: 40,
+    right: 20,
+    zIndex: 1000,
   },
   menuProfileParent: {
     flexDirection: "column",
@@ -91,7 +93,6 @@ export default StyleSheet.create({
     fontWeight: "semibold",
   },
   avatarSectionWrapper: {
-    // Tempatkan shadow di sini untuk memastikan bayangan terlihat
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -128,7 +129,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 20,
-    backgroundColor: "#FFFFFF", // putih biar kontras dengan background abu
+    backgroundColor: "#FFFFFF",
     paddingVertical: 12,
     paddingHorizontal: 15,
     borderRadius: 15,
@@ -136,7 +137,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
-    elevation: 4, // Android shadow
+    elevation: 4,
   },
 
   searchInput: {
@@ -172,7 +173,7 @@ export default StyleSheet.create({
   },
   resultsContainer: {
     position: "absolute",
-    top: 60, // tinggi search bar + margin
+    top: 60,
     left: 0,
     right: 0,
     backgroundColor: "#fff",
@@ -183,7 +184,7 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
-    zIndex: 1000, // biar nggak ketimpa komponen lain
+    zIndex: 1000,
   },
   resultItem: {
     padding: 12,
@@ -268,7 +269,7 @@ export default StyleSheet.create({
   },
   topDestinationCardOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.3)", // Dark overlay
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
     borderRadius: 15,
   },
   recommendedSection: {
@@ -306,7 +307,6 @@ export default StyleSheet.create({
     height: "60%",
     borderRadius: 12,
 
-    // shadow utk image
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.22,
@@ -314,7 +314,6 @@ export default StyleSheet.create({
     elevation: 6,
   },
 
-  // clip rounded corner
   imageClip: {
     flex: 1,
     borderRadius: 12,
@@ -322,15 +321,14 @@ export default StyleSheet.create({
   },
   recommendedCardImageWrapper: {
     borderRadius: 15,
-    overflow: "hidden", // biar rounded
-    flex: 1, // biar isi ruang tersisa
+    overflow: "hidden",
+    flex: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
   },
-  // isi penuh wrapper + crop rapi
   recommendedCardImage: {
     width: "100%",
     height: "100%",

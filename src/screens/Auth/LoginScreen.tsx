@@ -63,7 +63,6 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      // Handle login logic here
       const response = await apiService.post("v1/auth/login", {
         email: email,
         password: password,
@@ -71,7 +70,6 @@ export default function LoginScreen() {
 
       const { access_token, user } = response;
 
-      // Store token and user data
       await AsyncStorage.setItem('token', access_token);
       await AsyncStorage.setItem('user', JSON.stringify(user));
 
@@ -94,12 +92,10 @@ export default function LoginScreen() {
     try {
       console.log("Starting Google login process...");
 
-      // 1. Buat redirect URI untuk kembali ke React Native app
       const redirectUri = "tour-package://redirect";
 
       console.log("Redirect URI:", redirectUri);
 
-      // 2. Ambil URL login Google dari backend dengan redirectUri
       const response = await apiService.get("v1/auth/google", {
         params: {
           redirect_uri: redirectUri,
@@ -108,7 +104,6 @@ export default function LoginScreen() {
 
       const authUrl = response.url;
 
-      // 3. Buka browser untuk login ke Google
       const result = await WebBrowser.openAuthSessionAsync(
         authUrl,
         redirectUri
@@ -117,7 +112,6 @@ export default function LoginScreen() {
       console.log("WebBrowser result:", result);
 
       if (result.type === "success" && result.url) {
-        // 4. Ambil ?token & ?user (hasil redirect dari backend Laravel)
         const urlObj = new URL(result.url);
         const token = urlObj.searchParams.get("token");
         const userJson = urlObj.searchParams.get("user");
@@ -230,26 +224,6 @@ export default function LoginScreen() {
             ) : null}
           </View>
 
-          {/* Remember Me & Forgot Password */}
-          <View style={styles.rememberMeParent}>
-            <View style={styles.rememberMeWrapper}>
-              <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
-                <IonIcon
-                  name={rememberMe ? "checkbox-outline" : "square-outline"}
-                  size={24}
-                  color={rememberMe ? "#3A5694" : "#aaa"}
-                />
-              </TouchableOpacity>
-              <Text>{t("loginScreen.rememberMe")}</Text>
-            </View>
-
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>
-                {t("loginScreen.forgotPassword")}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
           {/* Sign in Button */}
           <TouchableOpacity
             style={
@@ -270,39 +244,6 @@ export default function LoginScreen() {
               {t("loginScreen.loginButton")}
             </Text>
           </TouchableOpacity>
-
-          {/* Sign In with Google & Facebook */}
-          {/* <Text style={styles.orSignInWith}>
-            {t("loginScreen.orSignInWith")}
-          </Text> */}
-
-          {/* <TouchableOpacity
-            style={styles.loginWithGoogle}
-            onPress={() => handleLoginWithGoogle()}
-          >
-            <Image
-              style={{ width: 19 }}
-              source={{
-                uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/Icon-Google.png",
-              }}
-            />
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              {t("loginScreen.loginWithGoogle")}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginWithFacebook}>
-            <Image
-              style={{ width: 19 }}
-              source={{
-                uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/Icon-Facebook.png",
-              }}
-            />
-            <Text
-              style={{ fontSize: 16, fontWeight: "bold", color: "#FFFFFF" }}
-            >
-              {t("loginScreen.loginWithFacebook")}
-            </Text>
-          </TouchableOpacity> */}
 
           {/* Sign Up Link */}
           <View style={styles.signUpWrapper}>

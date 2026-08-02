@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 
-// Hooks
 import { useState } from "react";
 import { 
     View,
@@ -8,29 +7,24 @@ import {
     ScrollView,
     TouchableOpacity,
     TextInput,
-    Image
+    Image,
+    ActivityIndicator
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Styles
 import styles from './PaymentMethodScreen.styles';
 
-// Navigation
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
-// Services
 import apiService from "../../services/apiService";
 
-// interface
 import { Transaction, PaymentMethod } from "../../types/api";
 
-// Toast
 import Toast from "react-native-toast-message";
 
-// Icons
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -50,12 +44,12 @@ export default function PaymentMethodScreen() {
 
     const { transactionId } = route.params;
 
-    // transaction state
     const [transaction, setTransaction] = useState<Transaction | null>(null);
 
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
     const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         const getTransaction = async () => {
@@ -63,7 +57,7 @@ export default function PaymentMethodScreen() {
                 const response = await apiService.get(`v1/booking/${transactionId}`, {
                     params: {
                         lang: 'EN',
-                        currency: 'SGD',
+                        currency: 'IDR',
                     }
                 });
 
@@ -115,6 +109,43 @@ export default function PaymentMethodScreen() {
         }
     }
 
+    const handlePaymentMethodChoosed = async () => {
+        if (!selectedPayment || !transaction?.id) return;
+
+        setIsProcessing(true);
+        try {
+            const body = {
+                payment_method: selectedPayment,
+                transaction_id: transaction.id,
+            }
+
+            const response = await apiService.post(`v1/payment/set-payment-method`, body);
+
+            navigation.navigate("PaymentSummary", { transactionId: transaction.id, paymentMethodId: selectedPayment });
+        
+        } catch (error: any) {
+            if (error.response) {
+                console.error("Data:", error.response.data);
+                Toast.show({ type: 'error', text1: 'Error', text2: error.response.data.message || 'Gagal memproses pembayaran.' });
+            } else {
+                console.error("Error message:", error.message);
+                Toast.show({ type: 'error', text1: 'Error', text2: 'Terjadi masalah koneksi.' });
+            }
+        } finally {
+            setIsProcessing(false);
+        }
+    }
+
+    const formatCurrency = (value: number) => {
+        if (typeof value !== 'number') {
+          return '0.00';
+        }
+        return new Intl.NumberFormat('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(value);
+    };
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -160,23 +191,17 @@ export default function PaymentMethodScreen() {
                         ))}
                     </View>
 
-                    <View style={styles.groupTotalAmount}>
-                        <View style={styles.groupAmount}>
-                            <Text style={styles.titleTotalAmount}>Total Amount</Text>
-                            <Text style={styles.amountTotal}>SGD {transaction?.total_amount}</Text>
-                        </View>
-                        <TouchableOpacity 
-                            style={selectedPayment ? styles.buttonChoose : styles.buttonUnchoosed}
-                            onPress={() => {
-                                if (selectedPayment && transaction?.id) {
-                                    navigation.navigate("PaymentSummary", { transactionId: transaction.id, paymentMethodId: selectedPayment });
-                                }
-                            }}
-                            disabled={!selectedPayment}
-                        >
+                    <TouchableOpacity 
+                        style={selectedPayment && !isProcessing ? styles.buttonChoose : styles.buttonUnchoosed}
+                        onPress={handlePaymentMethodChoosed}
+                        disabled={!selectedPayment || isProcessing}
+                    >
+                        {isProcessing ? (
+                            <ActivityIndicator size="small" color="#FFFFFF" />
+                        ) : (
                             <Text style={styles.textButtonChoose}>Choose</Text>
-                        </TouchableOpacity>
-                    </View>
+                        )}
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>

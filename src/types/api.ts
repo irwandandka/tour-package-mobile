@@ -178,6 +178,13 @@ export interface TransactionDetail {
   sales_senior: number;
 }
 
+export interface ETicket {
+  id: string;
+  url: string;
+  filename: string;
+  ticket_code: string;
+}
+
 export interface PaymentMethod {
   id: string;
   name: string;
@@ -249,6 +256,7 @@ export interface OrderHistory {
   code: string;
   status: string;
   product: string;
+  slug: string;
   image: string;
   total_amount: number;
   booking_date: string;
@@ -260,6 +268,7 @@ export interface OrderDetail {
   code: string;
   status: string;
   product: string;
+  slug: string;
   image: string;
   total_amount: number;
   booking_date: string;
@@ -268,6 +277,8 @@ export interface OrderDetail {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
+  payment_method: string;
   notes: string;
   transaction_details: TransactionDetail[];
+  eticket: ETicket | null;
 }

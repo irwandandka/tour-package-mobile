@@ -1,5 +1,17 @@
 import { StyleSheet } from "react-native";
 
+const COLORS = {
+    primary: '#3A5694',
+    orange: '#FF8000',
+    white: '#FFFFFF',
+    black: '#000000',
+    lightGray: '#F5F5F5',
+    gray: '#8A8A8A',
+    darkGray: '#333333',
+    yellow: '#FBBC04',
+    red: '#EF4444'
+};
+
 export default StyleSheet.create({
     imageContainer: {
         position: "relative",
@@ -12,293 +24,394 @@ export default StyleSheet.create({
     },
     backButton: {
         position: "absolute",
-        top: 19,
-        left: 15,
-        backgroundColor: "#999999",
-        opacity: 0.8,
-        padding: 5,
-        borderRadius: 21,
+        top: 20,
+        left: 16,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        padding: 8,
+        borderRadius: 20,
     },
     container: {
-        padding: 20,
+        padding: 16,
+        paddingBottom: 100,
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: "bold",
-        marginBottom: 10,
+        color: COLORS.darkGray,
+        marginBottom: 8,
     },
     locationParent: {
         flexDirection: "row",
-        justifyContent: "space-between",
         alignItems: "center",
-        gap: 5,
+        gap: 8,
     },
     locationTitle: {
-        fontSize: 16,
-        color: "#666",
+        fontSize: 15,
+        color: COLORS.gray,
     },
+
     panelSection: {
         flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        gap: 29,
-        marginTop: 32,
+        gap: 24,
+        marginTop: 24,
+        borderBottomWidth: 1,
+        borderBottomColor: '#EAEAEA',
+    },
+    panelButton: {
+        paddingBottom: 12,
+        position: 'relative',
     },
     panelText: {
-        fontSize: 21,
-        fontWeight: "bold",
-        color: "black",
+        fontSize: 16,
+        fontWeight: "600",
+        color: COLORS.gray,
     },
     panelTextActive: {
-        color: "#F29D38", // contoh saat aktif
+        color: COLORS.primary,
     },
-    // General Style
+    activeIndicator: {
+        height: 3,
+        backgroundColor: COLORS.primary,
+        borderTopLeftRadius: 3,
+        borderTopRightRadius: 3,
+        position: 'absolute',
+        bottom: -1,
+        left: 0,
+        right: 0,
+    },
+
     generalSection: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 11,
+        paddingTop: 24,
+        gap: 24,
     },
-    ratingDurationContainer: {
+    infoContainer: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-around',
+        backgroundColor: COLORS.lightGray,
+        padding: 16,
+        borderRadius: 12,
+    },
+    infoBox: {
         alignItems: 'center',
-        marginTop: 20,
-        gap: 29,
+        gap: 8,
     },
-    generalSubSection: {
-        flexDirection: 'column',
-        width: '21%',
-        height: 70,
-        justifyContent: 'space-between',
+    infoBoxTitle: {
+        fontSize: 14,
+        color: COLORS.gray,
     },
-    generalSubSectionIcon: {
+    infoBoxValue: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 9,
+        gap: 6,
     },
-    generalSubSectionText: {
-        fontSize: 23,
-        color: "black",
+    infoBoxText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: COLORS.darkGray,
     },
-    generalSectionText: {
-        fontSize: 19,
-        color: "#666",
-        textAlign: "right",
+    descriptionTitle: {
+        fontSize: 18,
         fontWeight: "bold",
-        marginTop: 5,
+        color: COLORS.darkGray,
     },
-    generalDurationText: {
-        fontSize: 19,
-        width: '65%',
-        color: "black",
-        fontWeight: "500",
-        textAlign: "right",
-    },
-    generalSubSectionDuration: {
-        flexDirection: 'column',
-        width: '27%',
-        justifyContent: 'space-between',
-    },
-    generalDescriptionSection: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 13,
-        marginTop: 20,
-    },
-    generalDescriptionTitle: {
-        fontSize: 21,
-        fontWeight: "bold",
-        color: 'black',
-    },
-    generalDescriptionText: {
+    descriptionText: {
         fontSize: 15,
+        lineHeight: 22,
+        color: COLORS.darkGray,
         textAlign: 'justify',
     },
-    generalDescriptionReadMore: {
+    readMoreText: {
         fontSize: 15,
-        color: "#EF4444",
+        color: COLORS.primary,
         fontWeight: "700",
+        marginTop: 4,
     },
-    buttonBookNow: {
-        backgroundColor: "#3A5694",
-        borderRadius: 13,
-        paddingVertical: 21,
-        marginTop: 15,
-    },
-    buttonBookNowText: {
-        fontSize: 21,
-        color: "#FFFFFF",
-        fontWeight: "bold",
-        textAlign: "center",
-    },
-    // End General Style
 
-    // Itinerary Style
-    itinerarySection: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 13,
-        marginTop: 15,
+    itineraryContainer: {
+        paddingTop: 24,
+        gap: 16,
     },
-    itineraryCardHeader: {
+    itineraryCard: {
+        backgroundColor: COLORS.white,
+        borderRadius: 12,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#EAEAEA',
+    },
+    itineraryHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#E3E4EB',
-        borderRadius: 13,
-        paddingVertical: 11,
-        paddingHorizontal: 13,
+        padding: 16,
+        backgroundColor: COLORS.lightGray,
     },
-    itineraryCardTitle: {
-        fontSize: 21,
-        fontWeight: "600",
-        color: "#000000",
+    itineraryDayTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: COLORS.darkGray,
     },
     itineraryContentWrapper: {
+        padding: 16,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 13,
-        width: '100%',
-        height: 180,
-        paddingVertical: 19,
-        paddingHorizontal: 13,
+        gap: 16,
     },
-    itineraryContentPathSymbol: {
-        width: "8%",
-        flexDirection: 'column',
+    timeline: {
         alignItems: 'center',
     },
-    itineraryContentPathLine: {
-        width: 2,
-        height: "100%",
-        backgroundColor: "black",
-        borderRadius: 13,
-    },
-    itineraryContentPathWrapper: {
+    timelineDot: {},
+    timelineLine: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 13,
-        width: '92%',
+        width: 2,
+        backgroundColor: COLORS.primary,
     },
-    itineraryContentPathTitle: {
-        fontSize: 21,
+    timelineContent: {
+        flex: 1,
+        gap: 8,
+    },
+    timelineTitle: {
+        fontSize: 16,
         fontWeight: "600",
-        color: "#000000",
+        color: COLORS.darkGray,
     },
-    itineraryContentPathDescription: {
-        fontSize: 15,
-        color: "#666",
+    timelineDescription: {
+        fontSize: 14,
+        lineHeight: 20,
+        color: COLORS.gray,
         textAlign: 'justify',
-        fontWeight: "500",
     },
-    itineraryContentPathTimeAndMap: {
+    timelineFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: 8,
     },
-    itineraryContentPathTime: {
-        fontSize: 15,
-        color: "#666",
-        textAlign: 'justify',
+    timelineTime: {
+        fontSize: 14,
+        color: COLORS.gray,
         fontWeight: "500",
     },
-    itineraryContentPathTextShowMap: {
-        fontSize: 15,
-        color: "#EF4444",
-        textAlign: 'justify',
+    showMapText: {
+        fontSize: 14,
+        color: COLORS.red,
         fontWeight: "700",
     },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    mapContainer: {
-        width: '90%',
-        height: 300,
-        borderRadius: 10,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-    },
-    closeButton: {
-        position: 'absolute',
-        bottom: 10,
-        alignSelf: 'center',
-        backgroundColor: 'black',
-        padding: 8,
-        borderRadius: 5,
-    },
-    // End Itinerary Style
 
-    // Review Style
     reviewSection: {
-        flexDirection: 'column',
-        marginTop: 20,
-        gap: 21,
+        paddingTop: 24,
+        gap: 16,
     },
     reviewCard: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 11,
-        paddingVertical: 15,
-        paddingHorizontal: 13,
-        backgroundColor: "#F5F5F5",
-        borderRadius: 13,
-        shadowColor: 'black',
-        shadowOffset: { width: 3, height: 3 },
-        shadowOpacity: 0.2,
+        backgroundColor: COLORS.white,
+        borderRadius: 12,
+        padding: 16,
+        gap: 12,
+        borderWidth: 1,
+        borderColor: '#EAEAEA',
+    },
+    reviewCardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    reviewDate: {
+        fontSize: 13,
+        color: COLORS.gray,
+    },
+    reviewComment: {
+        fontSize: 15,
+        fontStyle: 'italic',
+        lineHeight: 22,
+        color: COLORS.darkGray,
+    },
+    reviewUserInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#EAEAEA',
+        paddingTop: 12,
+        marginTop: 4,
+    },
+    reviewAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+    },
+    reviewName: {
+        fontSize: 15,
+        fontWeight: "700",
+        color: COLORS.darkGray,
+    },
+    reviewEmail: {
+        fontSize: 13,
+        color: COLORS.gray,
+    },
+
+    floatingBar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        backgroundColor: COLORS.white,
+        borderTopWidth: 1,
+        borderTopColor: '#EAEAEA',
+        elevation: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.1,
         shadowRadius: 4,
     },
-    reviewRatingAndDateContainer: {
+    priceLabel: {
+        fontSize: 14,
+        color: COLORS.gray,
+    },
+    priceText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    bookNowButton: {
+        backgroundColor: COLORS.primary,
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        borderRadius: 10,
+    },
+    bookNowButtonText: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    modalContainer: { /* ... ... */ },
+    mapContainer: { /* ... ... */ },
+    closeButton: { /* ... ... */ },
+
+    ratingDurationContainer: {
+
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    reviewCardRatingGroup: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 5,
-    },
-    reviewCardDate: {
-        fontSize: 15,
-        color: "#666",
-        fontWeight: "700",
-    },
-    reviewCardDescription: {
-        fontSize: 15,
-        color: "black",
-        textAlign: 'justify',
-    },
-    reviewCardAvatarAndNameContainer: {
-        flexDirection: 'row',
+
         justifyContent: 'flex-start',
+
         alignItems: 'center',
-        gap: 13,
+
+        marginTop: 20,
+
+        gap: 29,
+
     },
-    reviewCardAvatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-    },
-    reviewCardNameEmailContainer: {
+
+    generalSubSection: {
+
         flexDirection: 'column',
-        justifyContent: 'flex-start',
-        gap: 2,
+
+        width: '21%',
+
+        height: 70,
+
+        justifyContent: 'space-between',
+
     },
-    reviewCardName: {
-        fontSize: 19,
-        fontWeight: "700",
+
+    generalSubSectionIcon: {
+
+        flexDirection: 'row',
+
+        justifyContent: 'space-between',
+
+        alignItems: 'center',
+
+        gap: 9,
+
+    },
+
+    generalSubSectionText: {
+
+        fontSize: 23,
+
         color: "black",
+
     },
-    reviewCardEmail: {
-        fontSize: 15,
+
+    generalSectionText: {
+
+        fontSize: 19,
+
         color: "#666",
-        fontWeight: "600",
-    }
-    // End Review Style
+
+        textAlign: "right",
+
+        fontWeight: "bold",
+
+        marginTop: 5,
+
+    },
+
+    generalDurationText: {
+
+        fontSize: 19,
+
+        width: '65%',
+
+        color: "black",
+
+        fontWeight: "500",
+
+        textAlign: "right",
+
+    },
+
+    generalSubSectionDuration: {
+
+        flexDirection: 'column',
+
+        width: '27%',
+
+        justifyContent: 'space-between',
+
+    },
+
+    generalDescriptionSection: {
+
+        flexDirection: 'column',
+
+        justifyContent: 'flex-start',
+
+        gap: 13,
+
+        marginTop: 20,
+
+    },
+
+    generalDescriptionTitle: {
+
+        fontSize: 21,
+
+        fontWeight: "bold",
+
+        color: 'black',
+
+    },
+
+    generalDescriptionText: {
+
+        fontSize: 15,
+
+        textAlign: 'justify',
+
+    },
+
+    generalDescriptionReadMore: {
+
+        fontSize: 15,
+
+        color: "#EF4444",
+
+        fontWeight: "700",
+
+    },
 });

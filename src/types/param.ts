@@ -25,6 +25,14 @@ export type RootStackParamList = {
         transactionId: string;
         paymentMethodId: string;
     };
+    PaymentQr: {
+        qrData: string;
+        transaction: {
+            id: string;
+            total_amount: number | string;
+        } | null;
+    };
+    OrderStatus: { transactionId: string };
     Auth: {
         screen: "Login" | "Register";
     };

@@ -39,13 +39,20 @@ export default StyleSheet.create({
 
         shadowColor: "#000",
         shadowOffset: {
-            width: 2,   // geser ke kanan
-            height: 2,  // geser ke bawah
+            width: 2,
+            height: 2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 5,
 
         elevation: 5,
+    },
+    uploadingOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 90,
     },
     wrapperIcon: {
         borderColor: '#888888ff',
@@ -56,8 +63,8 @@ export default StyleSheet.create({
     },
     iconAddPhoto: {
         position: 'absolute',
-        bottom: 11, // kasih minus biar setengah keluar
-        right: 11,  // geser keluar dikit
+        bottom: 11,
+        right: 11,
     },
 
     groupInformation: {
@@ -74,7 +81,7 @@ export default StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 8,
         padding: 12,
-        flexDirection: "row", // biar ada icon di kanan
+        flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
     },
@@ -89,10 +96,10 @@ export default StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 8,
         alignItems: "center",
-        overflow: "hidden", // biar radius rapi
+        overflow: "hidden",
     },
     countryCode: {
-        width: 100, // lebar dropdown
+        width: 100,
         height: 50,
     },
     phoneInput: {

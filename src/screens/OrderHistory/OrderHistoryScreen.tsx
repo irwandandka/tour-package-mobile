@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./OrderHistoryScreen.styles";
 
@@ -22,14 +29,28 @@ type OrderHistoryNavigationProp = NativeStackNavigationProp<
 export default function OrderHistoryScreen() {
   const navigation = useNavigation<OrderHistoryNavigationProp>();
 
-  const status = ["all", "completed", "upcoming", "canceled"];
-
+  const statusFilters = [
+    { label: "All", value: "all" },
+    { label: "Settlement", value: "settlement" },
+    { label: "Entry", value: "entry" },
+    { label: "Cancelled", value: "canceled" },
+  ];
   const [statusActive, setStatusActive] = useState<string>("all");
-
   const [orderHistories, setOrderHistories] = useState<OrderHistory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const formatCurrency = (value: number) => {
+    if (typeof value !== "number") return "Rp 0";
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
+      setIsLoading(true);
       try {
         const response = await apiService.get("v1/booking/history", {
           params: {
@@ -40,92 +61,158 @@ export default function OrderHistoryScreen() {
         setOrderHistories(response.data);
       } catch (error: any) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchOrderHistory();
   }, [statusActive]);
 
+  const getStatusStyle = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case "settlement":
+        return {
+          badge: { backgroundColor: "#EAF7EC", borderColor: "#28a745" },
+          text: { color: "#28a745" },
+        };
+      case "cancelled":
+      case "canceled":
+        return {
+          badge: { backgroundColor: "#FBEBEE", borderColor: "#dc3545" },
+          text: { color: "#dc3545" },
+        };
+      case "entry":
+      default:
+        return {
+          badge: { backgroundColor: "#FFF3E8", borderColor: "#FF8000" },
+          text: { color: "#FF8000" },
+        };
+    }
+  };
+
+  const EmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <IonIcon name="document-text-outline" size={60} color="#BDBDBD" />
+      <Text style={styles.emptyText}>Tidak ada riwayat pesanan</Text>
+      <Text style={styles.emptySubtext}>
+        Coba ganti filter atau buat pesanan baru.
+      </Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.headerContainer}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <IonIcon name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Booking History</Text>
+
+        <View style={{ width: 40 }} />
+      </View>
+
+      <View style={styles.groupTabStatus}>
+        {statusFilters.map((filter) => (
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            key={filter.value}
+            style={[
+              styles.itemTabStatus,
+              statusActive === filter.value
+                ? styles.activeTab
+                : styles.inactiveTab,
+            ]}
+            onPress={() => setStatusActive(filter.value)}
           >
-            <IonIcon name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-
-          <Text style={styles.title}>Booking History</Text>
-
-          <View style={{ width: 40 }} />
-        </View>
-
-        <View style={styles.groupTabStatus}>
-          {status.map((item) => (
-            <TouchableOpacity
-              key={item}
+            <Text
               style={[
-                styles.itemTabStatus,
-                statusActive === item ? styles.activeTab : styles.inactiveTab,
+                styles.textTabStatus,
+                statusActive === filter.value
+                  ? styles.activeTextTab
+                  : styles.inactiveTextTab,
               ]}
-              onPress={() => setStatusActive(item)}
             >
-              <Text
-                style={[
-                  styles.textTabStatus,
-                  statusActive === item
-                    ? styles.activeTextTab
-                    : styles.inactiveTextTab,
-                ]}
+              {filter.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#FF8000"
+          style={{ marginTop: 50 }}
+        />
+      ) : orderHistories.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.listContainer}
+        >
+          {orderHistories.map((order) => {
+            const statusStyle = getStatusStyle(order.status);
+            return (
+              <TouchableOpacity
+                key={order.id}
+                style={styles.card}
+                onPress={() =>
+                  navigation.navigate("OrderDetail", { orderId: order.id })
+                }
               >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={styles.groupOrderHistory}>
-          {orderHistories.map((order) => (
-            <View key={order.id} style={styles.itemOrderHistory}>
-              <View style={styles.orderRow}>
-                <Text style={styles.orderLabel}>{order.product}</Text>
-                <View style={styles.orderStatusContainer}>
-                  <Text style={styles.orderValue}>
-                    {order.status.charAt(0).toUpperCase() +
-                      order.status.slice(1)}
+                <View style={styles.cardHeader}>
+                  <Text style={styles.productTitle} numberOfLines={1}>
+                    {order.product}
                   </Text>
+                  <View style={[styles.statusBadge, statusStyle.badge]}>
+                    <Text style={[styles.statusText, statusStyle.text]}>
+                      {order.status.charAt(0).toUpperCase() +
+                        order.status.slice(1)}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.groupOrderDate}>
-                <IonIcon name="calendar" style={styles.iconCalendar} />
-                <Text style={styles.orderDate}>{order.booking_date}</Text>
-              </View>
-              <Text style={styles.orderPrice}>
-                SGD {order.total_amount.toFixed(2)}
-              </Text>
 
-              <View style={styles.groupButton}>
-                <TouchableOpacity
-                  style={styles.buttonDetails}
-                  // onPress={() => navigation.navigate('OrderDetail', { id: order.id })}
-                >
-                  <Text style={styles.buttonDetailsText}>View Details</Text>
-                </TouchableOpacity>
+                <View style={styles.dateContainer}>
+                  <IonIcon
+                    name="calendar-outline"
+                    style={styles.iconCalendar}
+                  />
+                  <Text style={styles.orderDate}>{order.booking_date}</Text>
+                </View>
 
-                <TouchableOpacity
-                  style={styles.buttonBookAgain}
-                  // onPress={() => navigation.navigate('Booking', { productId: order.product_id })}
-                >
-                  <Text style={styles.buttonBookAgainText}>Book Again</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+                <Text style={styles.orderPrice}>
+                  {formatCurrency(order.total_amount)}
+                </Text>
+
+                <View style={styles.buttonGroup}>
+                  <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={() =>
+                      navigation.navigate("Product", { slug: order.slug })
+                    }
+                  >
+                    <Text style={styles.secondaryButtonText}>Book Again</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={() =>
+                      navigation.navigate("OrderDetail", { orderId: order.id })
+                    }
+                  >
+                    <Text style={styles.primaryButtonText}>View Details</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }

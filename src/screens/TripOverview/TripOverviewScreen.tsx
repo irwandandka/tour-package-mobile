@@ -1,4 +1,3 @@
-// Hooks
 import React, { useEffect, useState, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -10,26 +9,20 @@ import {
   Image,
 } from "react-native";
 
-// Icon
 import IonIcon from "react-native-vector-icons/Ionicons";
 import FeatherIcon from "react-native-vector-icons/Feather";
 
-// Style
 import styles from "./TripOverviewScreen.styles";
 
-// Navigation
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
-// Service
 import apiService from "../../services/apiService";
 
-// Interfaces
 import { ProductDetail, Room, RoomType, RoomOrder, BodySaveBooking, BodySaveProductDetail, RoomPriceBreakdown } from "../../types/api";
 
-// Library
 import uuid from 'react-native-uuid';
 import { format } from "date-fns";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -45,7 +38,7 @@ type RoomFieldKey = "adult" | "child" | "senior" | "infant";
 type TripOverviewRouteProp = RouteProp<RootStackParamList, "TripOverview">;
 
 const roomFields: { label: string; key: RoomFieldKey }[] = [
-  { label: "Adsult", key: "adult" },
+  { label: "Adult", key: "adult" },
   { label: "Child", key: "child" },
   { label: "Infant", key: "infant" },
   { label: "Senior", key: "senior" },
@@ -57,32 +50,37 @@ export default function TripOverviewScreen() {
 
   const { slug, dateFrom, dateTo } = route.params;
 
-  // Format date to display
   const formattedDateFrom = format(new Date(dateFrom), "MMMM dd, yyyy");
   const formattedDateTo = format(new Date(dateTo), "MMMM dd, yyyy");
 
-  // Get day names to display
   const dayFrom = format(new Date(dateFrom), "EEEE");
   const dayTo = format(new Date(dateTo), "EEEE");
 
-  // List jenis kamar (dari API)
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
 
   const [product, setProduct] = useState<ProductDetail | null>(null);
 
-  // kamar yang dipilih user
   const [rooms, setRooms] = useState<Room[]>([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // Load data saat mount screen
+  const formatCurrency = (value: number) => {
+    if (typeof value !== 'number') {
+      return '0.00';
+    }
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
   useEffect(() => {
     const fetchRoomTypes = async () => {
       try {
         const response = await apiService.get(`v1/product/${slug}/room-type`, {
           params: {
             lang: "EN",
-            currency: "SGD",
+            currency: "IDR",
             date_start: dateFrom,
             date_end: dateTo,
           },
@@ -93,7 +91,7 @@ export default function TripOverviewScreen() {
         const responseProduct = await apiService.get(`v1/product/${slug}`, {
           params: {
             lang: 'EN',
-            currency: 'SGD',
+            currency: 'IDR',
           }
         });
 
@@ -107,7 +105,6 @@ export default function TripOverviewScreen() {
     fetchRoomTypes();
   }, []);
 
-  // Hitung harga per kategori + total
   const roomsWithPrice = useMemo(() => {
     return rooms.map(room => {
       const roomType = roomTypes.find(rt => rt.id === room.roomId);
@@ -135,13 +132,11 @@ export default function TripOverviewScreen() {
     });
   }, [rooms, roomTypes]);
 
-  // Update totalPrice
   useEffect(() => {
     const total = roomsWithPrice.reduce((acc, room) => acc + (room.total || 0), 0);
     setTotalPrice(total);
   }, [roomsWithPrice]);
 
-  // Increment dan decrement jumlah orang di setiap kamar
   const incrementField = (roomId: string, field: RoomFieldKey) => {
     setRooms(prev =>
       prev.map(r =>
@@ -152,7 +147,6 @@ export default function TripOverviewScreen() {
     );
   };
 
-  // Decrement jumlah orang di setiap kamar
   const decrementField = (roomId: string, field: RoomFieldKey) => {
     setRooms(prev =>
       prev.map(r =>
@@ -198,7 +192,7 @@ export default function TripOverviewScreen() {
         product_id: product?.id ?? '',
         date_from: dateFrom,
         date_to: dateTo,
-        currency: 'SGD',
+        currency: 'IDR',
         product_details: rooms.map(room => ({
           product_detail: room.roomId,
           quantity: 1,
@@ -227,13 +221,10 @@ export default function TripOverviewScreen() {
       }, 1000);
     } catch (error: any) {
       if (error.response) {
-        // Response dari server
         console.error("Data:", error.response.data);
       } else if (error.request) {
-        // Request dikirim tapi tidak ada response
         console.error("No response received:", error.request);
       } else {
-        // Error lain
         console.error("Error message:", error.message);
       }
     }
@@ -342,18 +333,15 @@ export default function TripOverviewScreen() {
                       };
 
                       setRooms((prev) => {
-                        // cari posisi terakhir dari roomType yang sama
                         const lastIndex = [...prev]
-                          .map((r) => r.roomId) // misalnya roomType ada id
+                          .map((r) => r.roomId)
                           .lastIndexOf(selectedType.id);
 
                         const newRooms = [...prev];
 
                         if (lastIndex === -1) {
-                          // kalau belum ada tipe ini, taruh di akhir
                           newRooms.push(newRoom);
                         } else {
-                          // insert setelah index terakhir tipe ini
                           newRooms.splice(lastIndex + 1, 0, newRoom);
                         }
 
@@ -514,16 +502,16 @@ export default function TripOverviewScreen() {
                       <Text style={styles.roomTitle}>{room.roomName}</Text>
                       <Text style={styles.roomSequence}>Room #{index + 1}</Text>
                       {room.adult > 0 && (
-                        <Text style={styles.roomPricing}>{room.adult} Adult = SGD {room.priceAdult.toFixed(2)}</Text>
+                        <Text style={styles.roomPricing}>{room.adult} Adult = IDR {formatCurrency(room.priceAdult)}</Text>
                       )}
                       {room.child > 0 && (
-                        <Text style={styles.roomPricing}>{room.child} Child = SGD {room.priceChild.toFixed(2)}</Text>
+                        <Text style={styles.roomPricing}>{room.child} Child = IDR {formatCurrency(room.priceChild)}</Text>
                       )}
                       {room.infant > 0 && (
-                        <Text style={styles.roomPricing}>{room.infant} Infant = SGD {room.priceInfant.toFixed(2)}</Text>
+                        <Text style={styles.roomPricing}>{room.infant} Infant = IDR {formatCurrency(room.priceInfant)}</Text>
                       )}
                       {room.senior > 0 && (
-                        <Text style={styles.roomPricing}>{room.senior} Senior = SGD {room.priceSenior.toFixed(2)}</Text>
+                        <Text style={styles.roomPricing}>{room.senior} Senior = IDR {formatCurrency(room.priceSenior)}</Text>
                       )}
                     </View>
                   ))}
@@ -541,7 +529,7 @@ export default function TripOverviewScreen() {
               </Text>
 
               <Text style={styles.totalPriceValue}>
-                SGD {totalPrice.toFixed(2)}
+                IDR {formatCurrency(totalPrice)}
               </Text>
             </View>
 

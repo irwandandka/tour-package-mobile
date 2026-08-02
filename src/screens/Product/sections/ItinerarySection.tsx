@@ -1,64 +1,101 @@
 import React from "react";
-import { View, ScrollView, Text, TouchableOpacity, Modal } from "react-native";
-import styles from "../ProductScreen.styles";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  LayoutAnimation,
+  UIManager,
+  Platform,
+} from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import MapView, { Marker } from "react-native-maps";
 import { Itinerary } from "../../../types/api";
+import styles from "../ProductScreen.styles";
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 interface ItinerarySectionProps {
   itineraries: Itinerary[];
   selectedItineraryForMap: Itinerary | null;
   setSelectedItineraryForMap: (itinerary: Itinerary | null) => void;
+  activeDay: number;
+  setActiveDay: (day: number) => void;
 }
 
 export default function ItinerarySection({
-    itineraries,
-    selectedItineraryForMap,
-    setSelectedItineraryForMap,
-}:
-ItinerarySectionProps) {
+  itineraries,
+  selectedItineraryForMap,
+  setSelectedItineraryForMap,
+  activeDay,
+  setActiveDay,
+}: ItinerarySectionProps) {
+  const toggleItinerary = (day: number) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setActiveDay(activeDay === day ? 0 : day);
+  };
+
   return (
     <View>
-      {itineraries.map((itinerary) => (
-        <View style={styles.itinerarySection} key={itinerary.id}>
-          <TouchableOpacity style={styles.itineraryCardHeader}>
-            <Text style={styles.itineraryCardTitle}>Day {itinerary.day}</Text>
-            <FeatherIcon name="chevron-right" size={29} color={"#000000"} />
-          </TouchableOpacity>
-          <View style={styles.itineraryContentWrapper}>
-            <View style={styles.itineraryContentPathSymbol}>
-              <IonIcon name="radio-button-on" size={23} color={"#000000"} />
-              <View style={styles.itineraryContentPathLine} />
-            </View>
-            <View style={styles.itineraryContentPathWrapper}>
-              <Text style={styles.itineraryContentPathTitle}>
-                {itinerary.title}
-              </Text>
-              <ScrollView
-                horizontal={false}
-                showsVerticalScrollIndicator={false}
+      <View style={styles.itineraryContainer}>
+        {itineraries.map((itinerary) => {
+          const isOpen = activeDay === itinerary.day;
+          return (
+            <View key={itinerary.id} style={styles.itineraryCard}>
+              <TouchableOpacity
+                style={styles.itineraryHeader}
+                onPress={() => toggleItinerary(itinerary.day)}
               >
-                <Text style={styles.itineraryContentPathDescription}>
-                  {itinerary.description}
+                <Text style={styles.itineraryDayTitle}>
+                  Day {itinerary.day}
                 </Text>
-              </ScrollView>
-              <View style={styles.itineraryContentPathTimeAndMap}>
-                <Text style={styles.itineraryContentPathTime}>
-                  {itinerary.schedule_time}
-                </Text>
-                <TouchableOpacity onPress={() => setSelectedItineraryForMap(itinerary)}>
-                  <Text style={styles.itineraryContentPathTextShowMap}>
-                    Show on Map
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      ))}
+                <FeatherIcon
+                  name={isOpen ? "chevron-up" : "chevron-down"}
+                  size={24}
+                  color={"#333333"}
+                />
+              </TouchableOpacity>
 
-      {/* Modal hanya 1, berdasarkan itinerary yang dipilih */}
+              {isOpen && (
+                <View style={styles.itineraryContentWrapper}>
+                  <View style={styles.timeline}>
+                    <IonIcon
+                      name="radio-button-on"
+                      size={20}
+                      color={"#3A5694"}
+                      style={styles.timelineDot}
+                    />
+                    <View style={styles.timelineLine} />
+                  </View>
+                  <View style={styles.timelineContent}>
+                    <Text style={styles.timelineTitle}>{itinerary.title}</Text>
+                    <Text style={styles.timelineDescription}>
+                      {itinerary.description}
+                    </Text>
+                    <View style={styles.timelineFooter}>
+                      <Text style={styles.timelineTime}>
+                        {itinerary.schedule_time}
+                      </Text>
+                      {/* <TouchableOpacity
+                        onPress={() => setSelectedItineraryForMap(itinerary)}
+                      >
+                        <Text style={styles.showMapText}>Show on Map</Text>
+                      </TouchableOpacity> */}
+                    </View>
+                  </View>
+                </View>
+              )}
+            </View>
+          );
+        })}
+      </View>
+
       {selectedItineraryForMap && (
         <Modal visible={true} transparent animationType="slide">
           <View style={styles.modalContainer}>
@@ -83,7 +120,7 @@ ItinerarySectionProps) {
                 onPress={() => setSelectedItineraryForMap(null)}
                 style={styles.closeButton}
               >
-                <Text style={{ color: 'white' }}>Close</Text>
+                <Text style={{ color: "white" }}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>

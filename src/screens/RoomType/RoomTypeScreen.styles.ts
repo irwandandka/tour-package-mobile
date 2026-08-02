@@ -7,7 +7,7 @@ export default StyleSheet.create({
         padding: 20,
     },
     tripOverViewSection: {
-        // flexDirection: "column"
+        //
     },
     roomTypeSection: {
 
