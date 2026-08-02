@@ -20,26 +20,23 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../contexts/AuthContext";
-import * as Location from 'expo-location';
-import type { LocationObject } from 'expo-location';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from "expo-location";
+import type { LocationObject } from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { UserLogin, SearchGlobalResponse } from "../../types/api";
 import { CommonActions } from "@react-navigation/native";
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 const screenWidth = Dimensions.get("window").width;
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Home"
->;
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export default function HomeScreen() {
   const { t } = useTranslation();
-  
+
   const [token, setToken] = useState<string | null>(null);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -53,7 +50,7 @@ export default function HomeScreen() {
   type Region = {
     id: string;
     name: string;
-  }
+  };
   const [regions, setRegion] = useState<Region[]>([]);
 
   type TopDestination = {
@@ -71,7 +68,7 @@ export default function HomeScreen() {
     price: number;
     slug: string;
     rating: number;
-  }
+  };
   const [destinations, setDestination] = useState<Destination[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -98,7 +95,7 @@ export default function HomeScreen() {
           CommonActions.reset({
             index: 0,
             routes: [{ name: "Home" }],
-          })
+          }),
         );
       }, 1000);
     } catch (error: any) {
@@ -110,7 +107,7 @@ export default function HomeScreen() {
         console.error("Error message:", error.message);
       }
     }
-  }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -118,7 +115,7 @@ export default function HomeScreen() {
 
       (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
+        if (status !== "granted") {
           if (isActive) setLocationName("Permission Denied");
           return;
         }
@@ -137,7 +134,7 @@ export default function HomeScreen() {
         }
 
         try {
-          const storedToken = await AsyncStorage.getItem('token');
+          const storedToken = await AsyncStorage.getItem("token");
           if (storedToken && isActive) {
             setToken(storedToken);
           }
@@ -152,7 +149,7 @@ export default function HomeScreen() {
               params: { lang: "EN" },
             }),
             apiService.get("v1/product/popular-destination", {
-              params: { lang: 'EN', currency: 'IDR' },
+              params: { lang: "EN", currency: "IDR" },
             }),
           ]);
 
@@ -171,24 +168,23 @@ export default function HomeScreen() {
           }
         }
 
-        const token = await AsyncStorage.getItem('token');
-        const userinfo = await AsyncStorage.getItem('user');
+        const token = await AsyncStorage.getItem("token");
+        const userinfo = await AsyncStorage.getItem("user");
         if (isActive) {
           setUserLogin(userinfo ? JSON.parse(userinfo) : null);
         }
 
-        const lang = await AsyncStorage.getItem('lang');
+        const lang = await AsyncStorage.getItem("lang");
         if (!lang && isActive) {
-          await AsyncStorage.setItem('lang', 'en');
+          await AsyncStorage.setItem("lang", "en");
         }
       })();
 
       return () => {
         isActive = false;
       };
-    }, [])
+    }, []),
   );
-
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchGlobalResponse[]>([]);
@@ -277,12 +273,14 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       {/* Menu Popup */}
       {menuVisible && (
-        <Animated.View style={[
-          styles.menuContainer,
-          {
-            transform: [{ translateX: slideAnim }],
-          },
-        ]}>
+        <Animated.View
+          style={[
+            styles.menuContainer,
+            {
+              transform: [{ translateX: slideAnim }],
+            },
+          ]}
+        >
           <FeatherIcon
             name="x"
             style={styles.menuBarClose}
@@ -312,10 +310,13 @@ export default function HomeScreen() {
                   <FeatherIcon name="home" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.home")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                  handleMenuClose();
-                  navigation.navigate("Profile", { userId: userLogin?.id });
-                }} style={styles.menuItem}>
+                <TouchableOpacity
+                  onPress={() => {
+                    handleMenuClose();
+                    navigation.navigate("Profile", { userId: userLogin?.id });
+                  }}
+                  style={styles.menuItem}
+                >
                   <FeatherIcon name="user" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.profile")}</Text>
                 </TouchableOpacity>
@@ -355,7 +356,8 @@ export default function HomeScreen() {
 
                 <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => navigation.navigate("TermCondition")}>
+                  onPress={() => navigation.navigate("TermCondition")}
+                >
                   <FeatherIcon name="file-text" size={24} color={"black"} />
                   <Text style={styles.menuText}>{t("HomeScreen.navbar.termCondition")}</Text>
                 </TouchableOpacity>
@@ -370,16 +372,17 @@ export default function HomeScreen() {
                   <FeatherIcon name="home" size={24} color={"black"} />
                   <Text style={styles.menuText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => {
                     handleMenuClose();
                     navigation.navigate("Auth", { screen: "Login" });
-                  }}>
+                  }}
+                >
                   <FeatherIcon name="log-in" size={24} color={"black"} />
                   <Text style={styles.menuText}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => {
                     handleMenuClose();
@@ -394,11 +397,11 @@ export default function HomeScreen() {
 
             {userLogin && (
               <View style={styles.menuItemParent}>
-                <TouchableOpacity 
-                  style={styles.menuItem}
-                  onPress={handleLogout}>
+                <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
                   <FeatherIcon name="log-out" size={24} color={"red"} />
-                  <Text style={[styles.menuText, { color: "red" }]}>{t("HomeScreen.navbar.logout")}</Text>
+                  <Text style={[styles.menuText, { color: "red" }]}>
+                    {t("HomeScreen.navbar.logout")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -432,10 +435,7 @@ export default function HomeScreen() {
                 onPress={() => navigation.navigate("Profile", { userId: userLogin?.id })}
                 style={styles.avatarSection}
               >
-                <Image
-                  source={{ uri: userLogin.profile_picture_url }}
-                  style={styles.avatar}
-                />
+                <Image source={{ uri: userLogin.profile_picture_url }} style={styles.avatar} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -448,7 +448,9 @@ export default function HomeScreen() {
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
           {userLogin ? (
-            <Text style={styles.welcomeTitle}>{t("HomeScreen.greet")} {userLogin.username}</Text>
+            <Text style={styles.welcomeTitle}>
+              {t("HomeScreen.greet")} {userLogin.username}
+            </Text>
           ) : (
             <Text style={styles.welcomeTitle}>Hi! are you ready to explore?</Text>
           )}
@@ -460,12 +462,7 @@ export default function HomeScreen() {
           {/* Search bar */}
           <View style={styles.searchSection}>
             <View style={styles.searchInput}>
-              <FeatherIcon
-                name="search"
-                size={20}
-                color="#888"
-                style={styles.searchIcon}
-              />
+              <FeatherIcon name="search" size={20} color="#888" style={styles.searchIcon} />
               <TextInput
                 style={styles.textInput}
                 placeholder={t("HomeScreen.placeHolderSearch")}
@@ -475,21 +472,12 @@ export default function HomeScreen() {
                 keyboardType="default"
               />
             </View>
-            <FeatherIcon
-              name="filter"
-              size={20}
-              color="#444"
-              style={styles.filterIcon}
-            />
+            <FeatherIcon name="filter" size={20} color="#444" style={styles.filterIcon} />
           </View>
 
           {/* Loading */}
           {loadingSearch && (
-            <ActivityIndicator
-              size="small"
-              color="#FF8000"
-              style={{ marginTop: 10 }}
-            />
+            <ActivityIndicator size="small" color="#FF8000" style={{ marginTop: 10 }} />
           )}
 
           {/* Search results */}
@@ -528,8 +516,7 @@ export default function HomeScreen() {
                 <Text
                   style={[
                     styles.topDestinationButtonText,
-                    activeButton === index &&
-                      styles.topDestinationButtonTextSelected,
+                    activeButton === index && styles.topDestinationButtonTextSelected,
                   ]}
                 >
                   {region.name}
@@ -545,13 +532,13 @@ export default function HomeScreen() {
               contentContainerStyle={styles.topDestinationCardGroup}
             >
               {[...Array(3)].map((_, index) => (
-                <SkeletonBox 
-                  key={index} 
+                <SkeletonBox
+                  key={index}
                   width={180}
                   height={220}
                   borderRadius={15}
                   marginRight={5}
-                  />
+                />
               ))}
             </ScrollView>
           ) : (
@@ -561,19 +548,13 @@ export default function HomeScreen() {
               contentContainerStyle={styles.topDestinationCardGroup}
             >
               {topDestinations.map((destination, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.topDestinationCard}
-                  onPress={() => {}}
-                >
+                <TouchableOpacity key={index} style={styles.topDestinationCard} onPress={() => {}}>
                   <Image
                     source={{ uri: destination.image }}
                     style={styles.topDestinationCardImage}
                   />
                   <View style={styles.topDestinationCardOverlay} />
-                  <Text style={styles.topDestinationCardTitle}>
-                    {destination.name}
-                  </Text>
+                  <Text style={styles.topDestinationCardTitle}>{destination.name}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -604,23 +585,15 @@ export default function HomeScreen() {
                   </View>
                 </View>
                 <View style={styles.recommendedCardParent}>
-                  <Text style={styles.recommendedCardTitle}>
-                    {destination.name}
-                  </Text>
+                  <Text style={styles.recommendedCardTitle}>{destination.name}</Text>
                   <View style={styles.recommendedCardLocationParent}>
                     <FeatherIcon name="map-pin" size={17} color="#FF8000" />
-                    <Text style={styles.recommendedCardLocation}>
-                      {destination.location}
-                    </Text>
+                    <Text style={styles.recommendedCardLocation}>{destination.location}</Text>
                   </View>
                   <View style={styles.recommendedCardBottomParent}>
-                    <Text style={styles.recommendedCardPrice}>
-                      {destination.price}
-                    </Text>
+                    <Text style={styles.recommendedCardPrice}>{destination.price}</Text>
                     <View style={styles.recommendedCardRatingParent}>
-                      <Text style={styles.recommendedCardRating}>
-                        {destination.rating}
-                      </Text>
+                      <Text style={styles.recommendedCardRating}>{destination.rating}</Text>
                       <FeatherIcon name="star" size={19} color="#FF8000" />
                     </View>
                   </View>

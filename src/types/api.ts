@@ -67,7 +67,7 @@ export interface Room {
   child: number;
   infant: number;
   senior: number;
-};
+}
 
 export interface Pricing {
   adult: number;
@@ -75,7 +75,7 @@ export interface Pricing {
   infant: number;
   senior: number;
   level: number;
-};
+}
 
 export interface RoomType {
   id: string;
@@ -86,7 +86,7 @@ export interface RoomType {
   max_pax: number;
   allotment: number;
   pricing: Pricing[];
-};
+}
 
 export interface RoomPriceBreakdown {
   adult: number;
@@ -94,7 +94,7 @@ export interface RoomPriceBreakdown {
   infant: number;
   senior: number;
   total: number;
-};
+}
 
 export interface RoomOrder {
   adult: number;
@@ -121,33 +121,33 @@ export interface BodySaveProductDetail {
 }
 
 export interface Country {
-    id: string;
-    name: string;
-    iso_code: string;
-    phone_code: string;
+  id: string;
+  name: string;
+  iso_code: string;
+  phone_code: string;
 }
 
 export interface City {
-    id: string;
-    name: string;
-    country: string;
-    region: string;
+  id: string;
+  name: string;
+  country: string;
+  region: string;
 }
 
 export interface Passenger {
-    title: string;
-    first_name: string;
-    last_name: string;
-    gender?: string;
-    type?: "Adult" | "Child" | "Infant" | "Senior";
-    roomName?: string;
-    birth_date?: string;
-    birth_place?: string;
-    natinality?: string;
-    passport_number?: string;
-    passport_expiry_date?: string;
-    passport_issue_country?: string;
-    passport_issue_date?: string;
+  title: string;
+  first_name: string;
+  last_name: string;
+  gender?: string;
+  type?: "Adult" | "Child" | "Infant" | "Senior";
+  roomName?: string;
+  birth_date?: string;
+  birth_place?: string;
+  natinality?: string;
+  passport_number?: string;
+  passport_expiry_date?: string;
+  passport_issue_country?: string;
+  passport_issue_date?: string;
 }
 
 export interface Transaction {

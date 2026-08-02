@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  View,
-  ScrollView,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, ScrollView, TextInput, Text, TouchableOpacity, Image } from "react-native";
 
 import IonIcon from "react-native-vector-icons/Ionicons";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -21,17 +14,22 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 
 import apiService from "../../services/apiService";
 
-import { ProductDetail, Room, RoomType, RoomOrder, BodySaveBooking, BodySaveProductDetail, RoomPriceBreakdown } from "../../types/api";
+import {
+  ProductDetail,
+  Room,
+  RoomType,
+  RoomOrder,
+  BodySaveBooking,
+  BodySaveProductDetail,
+  RoomPriceBreakdown,
+} from "../../types/api";
 
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 import { format } from "date-fns";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 
-type TripOverviewNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "TripOverview"
->;
+type TripOverviewNavigationProp = NativeStackNavigationProp<RootStackParamList, "TripOverview">;
 
 type RoomFieldKey = "adult" | "child" | "senior" | "infant";
 
@@ -65,10 +63,10 @@ export default function TripOverviewScreen() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const formatCurrency = (value: number) => {
-    if (typeof value !== 'number') {
-      return '0.00';
+    if (typeof value !== "number") {
+      return "0.00";
     }
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
@@ -90,13 +88,12 @@ export default function TripOverviewScreen() {
 
         const responseProduct = await apiService.get(`v1/product/${slug}`, {
           params: {
-            lang: 'EN',
-            currency: 'IDR',
-          }
+            lang: "EN",
+            currency: "IDR",
+          },
         });
 
         setProduct(responseProduct.data);
-
       } catch (error: any) {
         console.error("Error fetching trip overview:");
       }
@@ -106,8 +103,8 @@ export default function TripOverviewScreen() {
   }, []);
 
   const roomsWithPrice = useMemo(() => {
-    return rooms.map(room => {
-      const roomType = roomTypes.find(rt => rt.id === room.roomId);
+    return rooms.map((room) => {
+      const roomType = roomTypes.find((rt) => rt.id === room.roomId);
       if (!roomType) {
         return {
           ...room,
@@ -138,22 +135,12 @@ export default function TripOverviewScreen() {
   }, [roomsWithPrice]);
 
   const incrementField = (roomId: string, field: RoomFieldKey) => {
-    setRooms(prev =>
-      prev.map(r =>
-        r.id === roomId
-          ? { ...r, [field]: r[field] + 1 }
-          : r
-      )
-    );
+    setRooms((prev) => prev.map((r) => (r.id === roomId ? { ...r, [field]: r[field] + 1 } : r)));
   };
 
   const decrementField = (roomId: string, field: RoomFieldKey) => {
-    setRooms(prev =>
-      prev.map(r =>
-        r.id === roomId
-          ? { ...r, [field]: Math.max(0, r[field] - 1) }
-          : r
-      )
+    setRooms((prev) =>
+      prev.map((r) => (r.id === roomId ? { ...r, [field]: Math.max(0, r[field] - 1) } : r)),
     );
   };
 
@@ -167,13 +154,18 @@ export default function TripOverviewScreen() {
   function calculateRoomPriceBreakdown(roomType: RoomType, order: RoomOrder) {
     const categories: (keyof RoomOrder)[] = ["adult", "child", "infant", "senior"];
     let total = 0;
-    const breakdown: { [k in keyof RoomOrder]?: number } = { adult: 0, child: 0, infant: 0, senior: 0 };
+    const breakdown: { [k in keyof RoomOrder]?: number } = {
+      adult: 0,
+      child: 0,
+      infant: 0,
+      senior: 0,
+    };
 
     let level = 1;
     for (const category of categories) {
       const count = order[category] || 0;
       for (let i = 0; i < count; i++) {
-        const pricing = roomType.pricing.find(p => p.level === level);
+        const pricing = roomType.pricing.find((p) => p.level === level);
         if (!pricing) continue;
         breakdown[category]! += pricing[category]!;
         total += pricing[category]!;
@@ -184,16 +176,16 @@ export default function TripOverviewScreen() {
     return { ...breakdown, total };
   }
 
-  const handleBooking = async () =>{
+  const handleBooking = async () => {
     try {
-      AsyncStorage.setItem('rooms', JSON.stringify(roomsWithPrice));
+      AsyncStorage.setItem("rooms", JSON.stringify(roomsWithPrice));
 
       const bodySave: BodySaveBooking = {
-        product_id: product?.id ?? '',
+        product_id: product?.id ?? "",
         date_from: dateFrom,
         date_to: dateTo,
-        currency: 'IDR',
-        product_details: rooms.map(room => ({
+        currency: "IDR",
+        product_details: rooms.map((room) => ({
           product_detail: room.roomId,
           quantity: 1,
           quantity_adult: room.adult,
@@ -228,7 +220,7 @@ export default function TripOverviewScreen() {
         console.error("Error message:", error.message);
       }
     }
-  }
+  };
 
   let roomIndex = 0;
 
@@ -237,10 +229,7 @@ export default function TripOverviewScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           {/* Back Button */}
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
           </TouchableOpacity>
           {/* End Back Button */}
@@ -261,40 +250,20 @@ export default function TripOverviewScreen() {
                 <View style={styles.cardTitleWrapper}>
                   <Text style={styles.cardTitle}>{product?.name}</Text>
                   <View style={styles.cardRatingWrapper}>
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
                     <IonIcon
                       name="star-half"
                       style={styles.cardStarIcon}
                       size={21}
                       color={"#F29D38"}
                     />
-                    <Text style={styles.cardStarRating}>{ product?.rating }</Text>
+                    <Text style={styles.cardStarRating}>{product?.rating}</Text>
                   </View>
 
-                  <Text style={styles.textNights}>{ product?.duration }</Text>
+                  <Text style={styles.textNights}>{product?.duration}</Text>
                 </View>
               </View>
             </View>
@@ -353,19 +322,14 @@ export default function TripOverviewScreen() {
                   </TouchableOpacity>
                   {/* End Button Add Room */}
 
-                  <Text style={styles.roomCardHeaderTitle}>
-                    {roomType.name}
-                  </Text>
+                  <Text style={styles.roomCardHeaderTitle}>{roomType.name}</Text>
 
                   <Text style={styles.roomCardHeaderAllotment}>
                     {" "}
                     {roomType.allotment} Rooms Left
                   </Text>
                 </View>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View>
                     {rooms
                       .filter((room) => room.roomId === roomType.id)
@@ -385,14 +349,8 @@ export default function TripOverviewScreen() {
                                   {room.roomName} #{index + 1}
                                 </Text>
 
-                                <TouchableOpacity
-                                  onPress={() => onDeleteRoom(currentIndex)}
-                                >
-                                  <FeatherIcon
-                                    name="trash-2"
-                                    size={20}
-                                    color="red"
-                                  />
+                                <TouchableOpacity onPress={() => onDeleteRoom(currentIndex)}>
+                                  <FeatherIcon name="trash-2" size={20} color="red" />
                                 </TouchableOpacity>
                               </View>
                             </View>
@@ -400,26 +358,15 @@ export default function TripOverviewScreen() {
                             <View style={styles.roomCardInputGrouping}>
                               {roomFields.map((field) => {
                                 return (
-                                  <View
-                                    key={field.key}
-                                    style={styles.roomCardBodyInputWrapper}
-                                  >
-                                    <Text style={styles.roomCardBodyInputTitle}>
-                                      {field.label}
-                                    </Text>
+                                  <View key={field.key} style={styles.roomCardBodyInputWrapper}>
+                                    <Text style={styles.roomCardBodyInputTitle}>{field.label}</Text>
                                     <View style={styles.roomInputGroup}>
                                       <TouchableOpacity
                                         disabled={room[field.key] <= 0}
-                                        onPress={() =>
-                                          decrementField(room.id, field.key)
-                                        }
+                                        onPress={() => decrementField(room.id, field.key)}
                                         style={styles.roomInputButtonDecrement}
                                       >
-                                        <Text
-                                          style={styles.roomInputTextDecrement}
-                                        >
-                                          −
-                                        </Text>
+                                        <Text style={styles.roomInputTextDecrement}>−</Text>
                                       </TouchableOpacity>
 
                                       <TextInput
@@ -430,10 +377,8 @@ export default function TripOverviewScreen() {
                                           if (!isNaN(num)) {
                                             setRooms((prev) =>
                                               prev.map((r) =>
-                                                r.id === room.id
-                                                  ? { ...r, [field.key]: num }
-                                                  : r
-                                              )
+                                                r.id === room.id ? { ...r, [field.key]: num } : r,
+                                              ),
                                             );
                                           }
                                         }}
@@ -441,16 +386,10 @@ export default function TripOverviewScreen() {
                                       />
 
                                       <TouchableOpacity
-                                        onPress={() =>
-                                          incrementField(room.id, field.key)
-                                         }
+                                        onPress={() => incrementField(room.id, field.key)}
                                         style={styles.roomInputButtonIncrement}
                                       >
-                                        <Text
-                                          style={styles.roomInputTextIncrement}
-                                        >
-                                          +
-                                        </Text>
+                                        <Text style={styles.roomInputTextIncrement}>+</Text>
                                       </TouchableOpacity>
                                     </View>
                                   </View>
@@ -502,16 +441,24 @@ export default function TripOverviewScreen() {
                       <Text style={styles.roomTitle}>{room.roomName}</Text>
                       <Text style={styles.roomSequence}>Room #{index + 1}</Text>
                       {room.adult > 0 && (
-                        <Text style={styles.roomPricing}>{room.adult} Adult = IDR {formatCurrency(room.priceAdult)}</Text>
+                        <Text style={styles.roomPricing}>
+                          {room.adult} Adult = IDR {formatCurrency(room.priceAdult)}
+                        </Text>
                       )}
                       {room.child > 0 && (
-                        <Text style={styles.roomPricing}>{room.child} Child = IDR {formatCurrency(room.priceChild)}</Text>
+                        <Text style={styles.roomPricing}>
+                          {room.child} Child = IDR {formatCurrency(room.priceChild)}
+                        </Text>
                       )}
                       {room.infant > 0 && (
-                        <Text style={styles.roomPricing}>{room.infant} Infant = IDR {formatCurrency(room.priceInfant)}</Text>
+                        <Text style={styles.roomPricing}>
+                          {room.infant} Infant = IDR {formatCurrency(room.priceInfant)}
+                        </Text>
                       )}
                       {room.senior > 0 && (
-                        <Text style={styles.roomPricing}>{room.senior} Senior = IDR {formatCurrency(room.priceSenior)}</Text>
+                        <Text style={styles.roomPricing}>
+                          {room.senior} Senior = IDR {formatCurrency(room.priceSenior)}
+                        </Text>
                       )}
                     </View>
                   ))}
@@ -520,26 +467,26 @@ export default function TripOverviewScreen() {
             </View>
 
             {/* Divider */}
-            <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 10 }} />
+            <View style={{ height: 1, backgroundColor: "#eee", marginVertical: 10 }} />
 
             {/* Total Price */}
             <View style={styles.groupTotalPrice}>
-              <Text style={styles.totalPriceText}>
-                Total
-              </Text>
+              <Text style={styles.totalPriceText}>Total</Text>
 
-              <Text style={styles.totalPriceValue}>
-                IDR {formatCurrency(totalPrice)}
-              </Text>
+              <Text style={styles.totalPriceValue}>IDR {formatCurrency(totalPrice)}</Text>
             </View>
 
             {/* Button Continue Passenger Detail */}
-            <TouchableOpacity 
-              disabled={rooms.length == 0} 
+            <TouchableOpacity
+              disabled={rooms.length == 0}
               style={rooms.length > 0 ? styles.continueButton : styles.disabledButton}
               onPress={handleBooking}
             >
-              <Text style={rooms.length > 0 ? styles.continueButtonText : styles.disabledButtonText}>Continue to Passenger Details</Text>
+              <Text
+                style={rooms.length > 0 ? styles.continueButtonText : styles.disabledButtonText}
+              >
+                Continue to Passenger Details
+              </Text>
             </TouchableOpacity>
 
             <Text style={styles.travelSummaryDisclaimer}>

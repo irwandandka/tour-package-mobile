@@ -41,10 +41,7 @@ type PassengerDetailNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "PassengerDetail"
 >;
-type PassengerDetailRouteProp = RouteProp<
-  RootStackParamList,
-  "PassengerDetail"
->;
+type PassengerDetailRouteProp = RouteProp<RootStackParamList, "PassengerDetail">;
 
 export default function PassengerDetailScreen() {
   const navigation = useNavigation<PassengerDetailNavigationProp>();
@@ -91,15 +88,12 @@ export default function PassengerDetailScreen() {
 
     const fetchTransaction = async () => {
       try {
-        const responseTransaction = await apiService.get(
-          `v1/booking/${transactionId}`,
-          {
-            params: {
-              lang: "EN",
-              currency: "IDR",
-            },
-          }
-        );
+        const responseTransaction = await apiService.get(`v1/booking/${transactionId}`, {
+          params: {
+            lang: "EN",
+            currency: "IDR",
+          },
+        });
 
         setTransaction(responseTransaction.data);
 
@@ -208,11 +202,7 @@ export default function PassengerDetailScreen() {
     { title: "", first_name: "", last_name: "" },
   ]);
 
-  const handleInputChange = (
-    index: number,
-    field: keyof Passenger,
-    value: string
-  ) => {
+  const handleInputChange = (index: number, field: keyof Passenger, value: string) => {
     setPassengers((prev) => {
       const updated = [...prev];
       updated[index] = {
@@ -236,10 +226,7 @@ export default function PassengerDetailScreen() {
         passengers: passengers,
       };
 
-      const response = await apiService.post(
-        `v1/booking/${transactionId}/update`,
-        body
-      );
+      const response = await apiService.post(`v1/booking/${transactionId}/update`, body);
 
       Toast.show({
         type: "success",
@@ -263,10 +250,7 @@ export default function PassengerDetailScreen() {
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.headerSection}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => navigation.goBack()}
-            >
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
               <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Passenger Detail</Text>
@@ -283,30 +267,10 @@ export default function PassengerDetailScreen() {
                 <View style={styles.cardTitleWrapper}>
                   <Text style={styles.cardTitle}>{product?.name}</Text>
                   <View style={styles.cardRatingWrapper}>
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
-                    <IonIcon
-                      name="star"
-                      style={styles.cardStarIcon}
-                      size={21}
-                      color={"#F29D38"}
-                    />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
+                    <IonIcon name="star" style={styles.cardStarIcon} size={21} color={"#F29D38"} />
                     <IonIcon
                       name="star-half"
                       style={styles.cardStarIcon}
@@ -395,13 +359,7 @@ export default function PassengerDetailScreen() {
                 </View>
               </TouchableOpacity>
 
-              {loading && (
-                <ActivityIndicator
-                  size="small"
-                  color="gray"
-                  style={{ marginTop: 10 }}
-                />
-              )}
+              {loading && <ActivityIndicator size="small" color="gray" style={{ marginTop: 10 }} />}
 
               {showCountryDropdown && (
                 <ScrollView
@@ -450,13 +408,7 @@ export default function PassengerDetailScreen() {
                 </View>
               </TouchableOpacity>
 
-              {loading && (
-                <ActivityIndicator
-                  size="small"
-                  color="gray"
-                  style={{ marginTop: 10 }}
-                />
-              )}
+              {loading && <ActivityIndicator size="small" color="gray" style={{ marginTop: 10 }} />}
 
               {showCityDropdown && (
                 <ScrollView
@@ -515,107 +467,82 @@ export default function PassengerDetailScreen() {
           {/* Passenger Detail */}
           {/* Passenger Detail */}
           <View style={styles.groupParentPassenger}>
-            {[...new Set(passengers.map((p) => p.roomName))].map(
-              (room, rIndex) => (
-                <View key={rIndex} style={{ marginBottom: 30 }}>
-                  {/* Room Name */}
-                  <Text style={styles.roomDetailName}>{room}</Text>
+            {[...new Set(passengers.map((p) => p.roomName))].map((room, rIndex) => (
+              <View key={rIndex} style={{ marginBottom: 30 }}>
+                {/* Room Name */}
+                <Text style={styles.roomDetailName}>{room}</Text>
 
-                  {passengers
-                    .filter((p) => p.roomName === room)
-                    .map((p, index) => {
-                      const globalIndex = passengers.findIndex(
-                        (passenger) => passenger === p
-                      );
+                {passengers
+                  .filter((p) => p.roomName === room)
+                  .map((p, index) => {
+                    const globalIndex = passengers.findIndex((passenger) => passenger === p);
 
-                      return (
-                        <View key={globalIndex} style={{ marginBottom: 10 }}>
-                          {/* Gunakan globalIndex untuk key */}
-                          <Text style={styles.passengerTitleCount}>
-                            Passenger {index + 1} ({p.type})
-                          </Text>
-                          <View style={styles.groupInputPassenger}>
-                            {/* Title */}
-                            <View style={styles.contactInformationWrapper}>
-                              <Text style={styles.inputLabel}>Title</Text>
-                              <DropDownPicker
-                                open={open === globalIndex}
-                                value={p.title}
-                                items={items}
-                                setOpen={() =>
-                                  setOpen(
-                                    open === globalIndex ? null : globalIndex
-                                  )
-                                }
-                                setValue={(callback) => {
-                                  const newValue = callback(p.title);
-                                  handleInputChange(
-                                    globalIndex,
-                                    "title",
-                                    newValue
-                                  );
-                                }}
-                                setItems={setItems}
-                                placeholder="Select Title"
-                                style={styles.inputText}
-                                listMode="SCROLLVIEW"
-                                dropDownContainerStyle={{ borderColor: "#ccc" }}
-                                zIndex={3000}
-                                zIndexInverse={1000}
-                              />
-                            </View>
+                    return (
+                      <View key={globalIndex} style={{ marginBottom: 10 }}>
+                        {/* Gunakan globalIndex untuk key */}
+                        <Text style={styles.passengerTitleCount}>
+                          Passenger {index + 1} ({p.type})
+                        </Text>
+                        <View style={styles.groupInputPassenger}>
+                          {/* Title */}
+                          <View style={styles.contactInformationWrapper}>
+                            <Text style={styles.inputLabel}>Title</Text>
+                            <DropDownPicker
+                              open={open === globalIndex}
+                              value={p.title}
+                              items={items}
+                              setOpen={() => setOpen(open === globalIndex ? null : globalIndex)}
+                              setValue={(callback) => {
+                                const newValue = callback(p.title);
+                                handleInputChange(globalIndex, "title", newValue);
+                              }}
+                              setItems={setItems}
+                              placeholder="Select Title"
+                              style={styles.inputText}
+                              listMode="SCROLLVIEW"
+                              dropDownContainerStyle={{ borderColor: "#ccc" }}
+                              zIndex={3000}
+                              zIndexInverse={1000}
+                            />
+                          </View>
 
-                            {/* First Name */}
-                            <View style={styles.contactInformationWrapper}>
-                              <Text style={styles.inputLabel}>First Name</Text>
-                              <TextInput
-                                style={styles.inputText}
-                                placeholder="Enter your first name"
-                                value={p.first_name}
-                                onChangeText={(text) =>
-                                  handleInputChange(
-                                    globalIndex,
-                                    "first_name",
-                                    text
-                                  )
-                                }
-                              />
-                            </View>
+                          {/* First Name */}
+                          <View style={styles.contactInformationWrapper}>
+                            <Text style={styles.inputLabel}>First Name</Text>
+                            <TextInput
+                              style={styles.inputText}
+                              placeholder="Enter your first name"
+                              value={p.first_name}
+                              onChangeText={(text) =>
+                                handleInputChange(globalIndex, "first_name", text)
+                              }
+                            />
+                          </View>
 
-                            {/* Last Name */}
-                            <View style={styles.contactInformationWrapper}>
-                              <Text style={styles.inputLabel}>Last Name</Text>
-                              <TextInput
-                                style={styles.inputText}
-                                placeholder="Enter your last name"
-                                value={p.last_name}
-                                onChangeText={(text) =>
-                                  handleInputChange(
-                                    globalIndex,
-                                    "last_name",
-                                    text
-                                  )
-                                }
-                              />
-                            </View>
+                          {/* Last Name */}
+                          <View style={styles.contactInformationWrapper}>
+                            <Text style={styles.inputLabel}>Last Name</Text>
+                            <TextInput
+                              style={styles.inputText}
+                              placeholder="Enter your last name"
+                              value={p.last_name}
+                              onChangeText={(text) =>
+                                handleInputChange(globalIndex, "last_name", text)
+                              }
+                            />
                           </View>
                         </View>
-                      );
-                    })}
-                </View>
-              )
-            )}
+                      </View>
+                    );
+                  })}
+              </View>
+            ))}
           </View>
           {/* End Passenger Detail */}
 
           <View>
-            <TouchableOpacity
-              onPress={savePassengerDetails}
-              style={styles.continueButton}
-            >
-              <Text style={styles.continueButtonText}>
-                Continue Passenger Detail
-              </Text>
+            <TouchableOpacity onPress={savePassengerDetails} style={styles.continueButton}>
+              <Text style={styles.continueButtonText}>Continue Passenger Detail</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -29,7 +29,7 @@ const SkeletonBox: React.FC<SkeletonBoxProps> = ({
           duration: 700,
           useNativeDriver: true,
         }),
-      ])
+      ]),
     ).start();
   }, [opacity]);
 

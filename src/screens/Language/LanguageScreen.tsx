@@ -18,10 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import i18n from "i18next";
 
-type LanguageNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Language"
->;
+type LanguageNavigationProp = NativeStackNavigationProp<RootStackParamList, "Language">;
 
 export default function LanguageScreen() {
   const navigation = useNavigation<LanguageNavigationProp>();
@@ -86,10 +83,7 @@ export default function LanguageScreen() {
                 <View style={styles.listItem}>
                   <View style={styles.groupFlag}>
                     <View style={styles.wrapperFlag}>
-                      <Image
-                        source={{ uri: language.logo }}
-                        style={styles.flagLogo}
-                      />
+                      <Image source={{ uri: language.logo }} style={styles.flagLogo} />
                     </View>
                     <Text style={styles.listTitle}>{language.name}</Text>
                   </View>
@@ -98,12 +92,7 @@ export default function LanguageScreen() {
                     style={styles.listToggleSelect}
                     onPress={() => handleSelectedLanguage(language.code)}
                   >
-                    <View
-                      style={[
-                        styles.outerCircle,
-                        isSelected && styles.outerCircleSelected,
-                      ]}
-                    >
+                    <View style={[styles.outerCircle, isSelected && styles.outerCircleSelected]}>
                       {isSelected && <View style={styles.innerCircle} />}
                     </View>
                   </TouchableOpacity>

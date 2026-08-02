@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigations/RootNavigator";
 import "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 import { navigationRef } from "./src/services/api";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";

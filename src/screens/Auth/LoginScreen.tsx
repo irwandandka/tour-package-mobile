@@ -24,10 +24,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Login"
->;
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 
 export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
@@ -70,15 +67,15 @@ export default function LoginScreen() {
 
       const { access_token, user } = response;
 
-      await AsyncStorage.setItem('token', access_token);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
+      await AsyncStorage.setItem("token", access_token);
+      await AsyncStorage.setItem("user", JSON.stringify(user));
 
       Toast.show({
         type: "success",
         text1: "Login Successful",
         text2: "Welcome back!",
       });
-      
+
       setTimeout(() => {
         navigation.navigate("Home");
       }, 2000);
@@ -104,10 +101,7 @@ export default function LoginScreen() {
 
       const authUrl = response.url;
 
-      const result = await WebBrowser.openAuthSessionAsync(
-        authUrl,
-        redirectUri
-      );
+      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
       console.log("WebBrowser result:", result);
 
@@ -138,10 +132,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
         </TouchableOpacity>
         <View style={styles.content}>
@@ -166,11 +157,7 @@ export default function LoginScreen() {
                 { borderWidth: 1, borderColor: errorEmail ? "red" : "#F5F6FA" },
               ]}
             >
-              <FeatherIcon
-                name="mail"
-                size={23}
-                color={errorEmail ? "red" : "#B3B3B3"}
-              />
+              <FeatherIcon name="mail" size={23} color={errorEmail ? "red" : "#B3B3B3"} />
               <TextInput
                 placeholder="Enter email"
                 placeholderTextColor={"#B3B3B3"}
@@ -180,9 +167,7 @@ export default function LoginScreen() {
                 autoCapitalize="none"
               />
             </View>
-            {errorEmail ? (
-              <Text style={{ color: "red" }}>{errorEmail}</Text>
-            ) : null}
+            {errorEmail ? <Text style={{ color: "red" }}>{errorEmail}</Text> : null}
           </View>
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Password</Text>
@@ -195,14 +180,8 @@ export default function LoginScreen() {
                 },
               ]}
             >
-              <View
-                style={{ flexDirection: "row", alignItems: "center", gap: 11 }}
-              >
-                <FeatherIcon
-                  name="lock"
-                  size={23}
-                  color={errorPassword ? "red" : "#B3B3B3"}
-                />
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 11 }}>
+                <FeatherIcon name="lock" size={23} color={errorPassword ? "red" : "#B3B3B3"} />
                 <TextInput
                   placeholder="Enter password"
                   value={password}
@@ -219,18 +198,12 @@ export default function LoginScreen() {
                 />
               </TouchableOpacity>
             </View>
-            {errorPassword ? (
-              <Text style={{ color: "red" }}>{errorPassword}</Text>
-            ) : null}
+            {errorPassword ? <Text style={{ color: "red" }}>{errorPassword}</Text> : null}
           </View>
 
           {/* Sign in Button */}
           <TouchableOpacity
-            style={
-              !errorEmail && !errorPassword
-                ? styles.loginButtonActive
-                : styles.loginButton
-            }
+            style={!errorEmail && !errorPassword ? styles.loginButtonActive : styles.loginButton}
             onPress={handleLogin}
             disabled={!!errorEmail || !!errorPassword}
           >
@@ -249,9 +222,7 @@ export default function LoginScreen() {
           <View style={styles.signUpWrapper}>
             <Text style={styles.signUpText}>{t("loginScreen.register")}</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-              <Text style={styles.signUpLink}>
-                {t("loginScreen.registerButton")}
-              </Text>
+              <Text style={styles.signUpLink}>{t("loginScreen.registerButton")}</Text>
             </TouchableOpacity>
           </View>
         </View>

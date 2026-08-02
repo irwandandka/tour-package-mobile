@@ -14,10 +14,7 @@ import MapView, { Marker } from "react-native-maps";
 import { Itinerary } from "../../../types/api";
 import styles from "../ProductScreen.styles";
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -52,9 +49,7 @@ export default function ItinerarySection({
                 style={styles.itineraryHeader}
                 onPress={() => toggleItinerary(itinerary.day)}
               >
-                <Text style={styles.itineraryDayTitle}>
-                  Day {itinerary.day}
-                </Text>
+                <Text style={styles.itineraryDayTitle}>Day {itinerary.day}</Text>
                 <FeatherIcon
                   name={isOpen ? "chevron-up" : "chevron-down"}
                   size={24}
@@ -75,13 +70,9 @@ export default function ItinerarySection({
                   </View>
                   <View style={styles.timelineContent}>
                     <Text style={styles.timelineTitle}>{itinerary.title}</Text>
-                    <Text style={styles.timelineDescription}>
-                      {itinerary.description}
-                    </Text>
+                    <Text style={styles.timelineDescription}>{itinerary.description}</Text>
                     <View style={styles.timelineFooter}>
-                      <Text style={styles.timelineTime}>
-                        {itinerary.schedule_time}
-                      </Text>
+                      <Text style={styles.timelineTime}>{itinerary.schedule_time}</Text>
                       {/* <TouchableOpacity
                         onPress={() => setSelectedItineraryForMap(itinerary)}
                       >

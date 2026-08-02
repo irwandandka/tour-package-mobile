@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./OrderHistoryScreen.styles";
 
@@ -21,10 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 
-type OrderHistoryNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "OrderHistory"
->;
+type OrderHistoryNavigationProp = NativeStackNavigationProp<RootStackParamList, "OrderHistory">;
 
 export default function OrderHistoryScreen() {
   const navigation = useNavigation<OrderHistoryNavigationProp>();
@@ -95,9 +85,7 @@ export default function OrderHistoryScreen() {
     <View style={styles.emptyContainer}>
       <IonIcon name="document-text-outline" size={60} color="#BDBDBD" />
       <Text style={styles.emptyText}>Tidak ada riwayat pesanan</Text>
-      <Text style={styles.emptySubtext}>
-        Coba ganti filter atau buat pesanan baru.
-      </Text>
+      <Text style={styles.emptySubtext}>Coba ganti filter atau buat pesanan baru.</Text>
     </View>
   );
 
@@ -123,18 +111,14 @@ export default function OrderHistoryScreen() {
             key={filter.value}
             style={[
               styles.itemTabStatus,
-              statusActive === filter.value
-                ? styles.activeTab
-                : styles.inactiveTab,
+              statusActive === filter.value ? styles.activeTab : styles.inactiveTab,
             ]}
             onPress={() => setStatusActive(filter.value)}
           >
             <Text
               style={[
                 styles.textTabStatus,
-                statusActive === filter.value
-                  ? styles.activeTextTab
-                  : styles.inactiveTextTab,
+                statusActive === filter.value ? styles.activeTextTab : styles.inactiveTextTab,
               ]}
             >
               {filter.label}
@@ -144,27 +128,18 @@ export default function OrderHistoryScreen() {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          color="#FF8000"
-          style={{ marginTop: 50 }}
-        />
+        <ActivityIndicator size="large" color="#FF8000" style={{ marginTop: 50 }} />
       ) : orderHistories.length === 0 ? (
         <EmptyState />
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.listContainer}
-        >
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.listContainer}>
           {orderHistories.map((order) => {
             const statusStyle = getStatusStyle(order.status);
             return (
               <TouchableOpacity
                 key={order.id}
                 style={styles.card}
-                onPress={() =>
-                  navigation.navigate("OrderDetail", { orderId: order.id })
-                }
+                onPress={() => navigation.navigate("OrderDetail", { orderId: order.id })}
               >
                 <View style={styles.cardHeader}>
                   <Text style={styles.productTitle} numberOfLines={1}>
@@ -172,38 +147,28 @@ export default function OrderHistoryScreen() {
                   </Text>
                   <View style={[styles.statusBadge, statusStyle.badge]}>
                     <Text style={[styles.statusText, statusStyle.text]}>
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </Text>
                   </View>
                 </View>
 
                 <View style={styles.dateContainer}>
-                  <IonIcon
-                    name="calendar-outline"
-                    style={styles.iconCalendar}
-                  />
+                  <IonIcon name="calendar-outline" style={styles.iconCalendar} />
                   <Text style={styles.orderDate}>{order.booking_date}</Text>
                 </View>
 
-                <Text style={styles.orderPrice}>
-                  {formatCurrency(order.total_amount)}
-                </Text>
+                <Text style={styles.orderPrice}>{formatCurrency(order.total_amount)}</Text>
 
                 <View style={styles.buttonGroup}>
                   <TouchableOpacity
                     style={styles.secondaryButton}
-                    onPress={() =>
-                      navigation.navigate("Product", { slug: order.slug })
-                    }
+                    onPress={() => navigation.navigate("Product", { slug: order.slug })}
                   >
                     <Text style={styles.secondaryButtonText}>Book Again</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.primaryButton}
-                    onPress={() =>
-                      navigation.navigate("OrderDetail", { orderId: order.id })
-                    }
+                    onPress={() => navigation.navigate("OrderDetail", { orderId: order.id })}
                   >
                     <Text style={styles.primaryButtonText}>View Details</Text>
                   </TouchableOpacity>

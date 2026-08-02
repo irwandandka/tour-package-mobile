@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import styles from './ReviewModal.styles';
-import apiService from '../../services/apiService';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import styles from "./ReviewModal.styles";
+import apiService from "../../services/apiService";
 
 type ReviewModalProps = {
   visible: boolean;
@@ -13,14 +21,14 @@ type ReviewModalProps = {
 
 export default function ReviewModal({ visible, onClose, onSubmit, orderId }: ReviewModalProps) {
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const renderStars = () => {
     return [1, 2, 3, 4, 5].map((star) => (
       <TouchableOpacity key={star} onPress={() => setRating(star)}>
         <IonIcon
-          name={star <= rating ? 'star' : 'star-outline'}
+          name={star <= rating ? "star" : "star-outline"}
           size={35}
           color="#FFC107"
           style={styles.star}
@@ -34,7 +42,7 @@ export default function ReviewModal({ visible, onClose, onSubmit, orderId }: Rev
       Alert.alert("Peringatan", "Mohon berikan rating bintang terlebih dahulu.");
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       const body = { rating, comment };
@@ -49,17 +57,12 @@ export default function ReviewModal({ visible, onClose, onSubmit, orderId }: Rev
   };
 
   return (
-    <Modal
-      transparent={true}
-      visible={visible}
-      animationType="fade"
-      onRequestClose={onClose}
-    >
+    <Modal transparent={true} visible={visible} animationType="fade" onRequestClose={onClose}>
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
           <Text style={styles.title}>Bagaimana pengalaman Anda?</Text>
           <Text style={styles.subtitle}>Beri ulasan untuk tur ini</Text>
-          
+
           <View style={styles.starsContainer}>{renderStars()}</View>
 
           <TextInput
@@ -74,10 +77,10 @@ export default function ReviewModal({ visible, onClose, onSubmit, orderId }: Rev
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-                <Text style={styles.cancelButtonText}>Batal</Text>
+              <Text style={styles.cancelButtonText}>Batal</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.submitButton, (rating === 0 || isSubmitting) && styles.disabledButton]} 
+            <TouchableOpacity
+              style={[styles.submitButton, (rating === 0 || isSubmitting) && styles.disabledButton]}
               onPress={handleSubmit}
               disabled={rating === 0 || isSubmitting}
             >

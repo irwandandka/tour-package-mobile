@@ -17,7 +17,9 @@ export default function LandingScreen({ navigation }: any) {
       {/* Image Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: 'https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/landing-screen-image.png' }} // ubah dari .avif ke .jpg
+          source={{
+            uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/landing-screen-image.png",
+          }} // ubah dari .avif ke .jpg
           style={styles.image}
           resizeMode="cover"
         />
@@ -25,26 +27,18 @@ export default function LandingScreen({ navigation }: any) {
 
       {/* Text Section */}
       <View style={styles.textContainer}>
-        <Text style={styles.title}>
-            Explore Unforgettable Journey With Us
-        </Text>
+        <Text style={styles.title}>Explore Unforgettable Journey With Us</Text>
 
         <Text style={styles.subtitle}>
-            Discover the beauty of the world with our travel app. Find your next adventure and create unforgettable memories.
+          Discover the beauty of the world with our travel app. Find your next adventure and create
+          unforgettable memories.
         </Text>
       </View>
 
-        {/* Button Section */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Home")}
-        >
-            <Text
-                style={styles.buttonText}>
-                Explore Now
-            </Text>
-        </TouchableOpacity>
-
+      {/* Button Section */}
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Home")}>
+        <Text style={styles.buttonText}>Explore Now</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -94,5 +88,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 21,
     textAlign: "center",
-  }
+  },
 });

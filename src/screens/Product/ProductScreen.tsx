@@ -13,21 +13,19 @@ import GeneralSection from "./sections/GeneralSection";
 import ItinerarySection from "./sections/ItinerarySection";
 import ReviewSection from "./sections/ReviewSection";
 
-
 type ProductScreenProps = NativeStackScreenProps<RootStackParamList, "Product">;
 
 export default function ProductScreen({ navigation, route }: ProductScreenProps) {
-
   const { slug } = route.params;
 
   const [activePanel, setActivePanel] = useState("general");
-  
+
   const maxLength = 200;
   const [isReadMore, setIsReadMore] = useState(false);
 
   const descriptionReadMore = () => {
     setIsReadMore((prev) => !prev);
-  }
+  };
 
   const [productDetail, setProductDetail] = useState<ProductDetail | null>(null);
 
@@ -43,27 +41,27 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
       try {
         const productDetail = await apiService.get(`v1/product/${slug}`, {
           params: {
-            lang: 'EN',
-            currency: 'IDR',
-          }
+            lang: "EN",
+            currency: "IDR",
+          },
         });
 
         setProductDetail(productDetail.data);
         setItineraries(productDetail.data.itineraries);
         setReviews(productDetail.data.reviews);
-      } catch(error) {
+      } catch (error) {
         console.error("Error Fetching");
       }
-    }
+    };
 
     fetchProductDetail();
   }, []);
 
   const formatCurrency = (value: number) => {
-    if (typeof value !== 'number') {
-      return '0.00';
+    if (typeof value !== "number") {
+      return "0.00";
     }
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
@@ -81,36 +79,26 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
             style={styles.image}
           />
 
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
           </TouchableOpacity>
         </View>
 
         {/* Title & Location */}
         <View style={styles.container}>
-          <Text style={styles.title}>
-            {productDetail?.name || "Product Name Not Available"}
-          </Text>
+          <Text style={styles.title}>{productDetail?.name || "Product Name Not Available"}</Text>
           <View style={styles.locationParent}>
             <View style={styles.locationParent}>
               <FeatherIcon name="map-pin" size={17} color="#FF8000" />
-              <Text style={styles.locationTitle}>
-                {productDetail?.location || "Not Available"}
-              </Text>
+              <Text style={styles.locationTitle}>{productDetail?.location || "Not Available"}</Text>
             </View>
           </View>
 
           {/* Panel Section */}
-          <PanelSection
-            activePanel={activePanel}
-            setActivePanel={setActivePanel}
-          />
+          <PanelSection activePanel={activePanel} setActivePanel={setActivePanel} />
 
           {/* Section Generalsss */}
-          {activePanel === 'general' && (
+          {activePanel === "general" && (
             <GeneralSection
               productDetail={productDetail}
               isReadMore={isReadMore}
@@ -132,11 +120,7 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
           )}
 
           {/* Section Reviews */}
-          {activePanel === "reviews" && (
-            <ReviewSection
-              reviews={reviews}
-            />
-          )}
+          {activePanel === "reviews" && <ReviewSection reviews={reviews} />}
         </View>
       </ScrollView>
 
@@ -145,7 +129,7 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
           <Text style={styles.priceLabel}>Start from</Text>
           <Text style={styles.priceText}>
             {/* Format harga Anda di sini */}
-              {productDetail?.price}
+            {productDetail?.price}
           </Text>
         </View>
         <TouchableOpacity

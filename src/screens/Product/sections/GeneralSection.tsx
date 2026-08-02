@@ -6,74 +6,69 @@ import { ProductDetail } from "../../../types/api";
 import apiService from "../../../services/apiService";
 
 interface GeneralSectionProps {
-    productDetail: ProductDetail | null;
-    isReadMore: boolean;
-    maxLength: number;
-    navigation: any;
-    descriptionReadMore: () => void;
+  productDetail: ProductDetail | null;
+  isReadMore: boolean;
+  maxLength: number;
+  navigation: any;
+  descriptionReadMore: () => void;
 }
 
-export default function GeneralSection({ 
-    productDetail,
-    isReadMore,
-    maxLength,
-    navigation,
-    descriptionReadMore
+export default function GeneralSection({
+  productDetail,
+  isReadMore,
+  maxLength,
+  navigation,
+  descriptionReadMore,
 }: GeneralSectionProps) {
-    const fullDescription = productDetail?.description ?? "";
-    
-    const shortDescription =
+  const fullDescription = productDetail?.description ?? "";
+
+  const shortDescription =
     fullDescription.length > maxLength
-        ? fullDescription.substring(0, maxLength).trim() + "..."
-        : fullDescription;
+      ? fullDescription.substring(0, maxLength).trim() + "..."
+      : fullDescription;
 
-    const handleBookNow = async () => {
-        navigation.navigate("AvailableDate", {
-            slug: productDetail?.slug || "",
-        })
-    }
-        
-    return (
-        <View style={styles.generalSection}>
-            <View style={styles.ratingDurationContainer}>
-                {/* Rating */}
-                <View style={styles.generalSubSection}>
-                    <View style={styles.generalSubSectionIcon}>
-                        <IonIcon name="star" color={"#FBBC04"} size={27} />
-                        <Text style={styles.generalSubSectionText}>
-                            {productDetail?.rating}
-                        </Text>
-                    </View>
-                    <Text style={styles.generalSectionText}>Rating</Text>
-                </View>
+  const handleBookNow = async () => {
+    navigation.navigate("AvailableDate", {
+      slug: productDetail?.slug || "",
+    });
+  };
 
-                {/* Duration */}
-                <View style={styles.generalSubSectionDuration}>
-                    <View style={styles.generalSubSectionIcon}>
-                        <IonIcon name="time" color={"#FBBC04"} size={27} />
-                        <Text style={styles.generalDurationText}>
-                            {productDetail?.duration}
-                        </Text>
-                    </View>
-                    <Text style={styles.generalSectionText}>Duration</Text>
-                </View>
-            </View>
-
-            {/* Description */}
-            <View style={styles.generalDescriptionSection}>
-                <Text style={styles.generalDescriptionTitle}>Description</Text>
-                <Text style={styles.generalDescriptionText}>
-                    {isReadMore ? fullDescription : shortDescription}
-                </Text>
-                {fullDescription.length > maxLength && (
-                    <TouchableOpacity
-                        onPress={descriptionReadMore}>
-                        <Text style={styles.generalDescriptionReadMore}>
-                            {isReadMore ? "Read Less" : "Read More"}
-                        </Text>
-                    </TouchableOpacity>
-                )}
-            </View>
+  return (
+    <View style={styles.generalSection}>
+      <View style={styles.ratingDurationContainer}>
+        {/* Rating */}
+        <View style={styles.generalSubSection}>
+          <View style={styles.generalSubSectionIcon}>
+            <IonIcon name="star" color={"#FBBC04"} size={27} />
+            <Text style={styles.generalSubSectionText}>{productDetail?.rating}</Text>
+          </View>
+          <Text style={styles.generalSectionText}>Rating</Text>
         </View>
-    );
+
+        {/* Duration */}
+        <View style={styles.generalSubSectionDuration}>
+          <View style={styles.generalSubSectionIcon}>
+            <IonIcon name="time" color={"#FBBC04"} size={27} />
+            <Text style={styles.generalDurationText}>{productDetail?.duration}</Text>
+          </View>
+          <Text style={styles.generalSectionText}>Duration</Text>
+        </View>
+      </View>
+
+      {/* Description */}
+      <View style={styles.generalDescriptionSection}>
+        <Text style={styles.generalDescriptionTitle}>Description</Text>
+        <Text style={styles.generalDescriptionText}>
+          {isReadMore ? fullDescription : shortDescription}
+        </Text>
+        {fullDescription.length > maxLength && (
+          <TouchableOpacity onPress={descriptionReadMore}>
+            <Text style={styles.generalDescriptionReadMore}>
+              {isReadMore ? "Read Less" : "Read More"}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
 }

@@ -22,7 +22,7 @@ export default StyleSheet.create({
     height: screenHeight,
   },
   menuBarClose: {
-    position: 'absolute',
+    position: "absolute",
     top: 40,
     right: 20,
     zIndex: 1000,
@@ -338,7 +338,7 @@ export default StyleSheet.create({
     marginTop: 10,
     flex: 1,
     flexDirection: "column",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   recommendedCardTitle: {
     fontSize: 18,
@@ -382,5 +382,5 @@ export default StyleSheet.create({
     height: 40,
     borderRadius: 10,
     marginRight: 10,
-  }
+  },
 });

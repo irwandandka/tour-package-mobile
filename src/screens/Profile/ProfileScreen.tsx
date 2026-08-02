@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
 import styles from "./ProfileScreen.styles";
 
@@ -19,12 +19,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
-import {
-  UserProfile,
-  UserProfileRequest,
-  City,
-  Country,
-} from "../../types/api";
+import { UserProfile, UserProfileRequest, City, Country } from "../../types/api";
 
 import apiService from "../../services/apiService";
 
@@ -35,10 +30,7 @@ import { Picker } from "@react-native-picker/picker";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import DropDownPicker from "react-native-dropdown-picker";
 
-type ProfileNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Profile"
->;
+type ProfileNavigationProp = NativeStackNavigationProp<RootStackParamList, "Profile">;
 
 type ProfileRouteProp = RouteProp<RootStackParamList, "Profile">;
 
@@ -91,53 +83,54 @@ export default function ProfileScreen() {
   };
 
   const handlePickImage = async () => {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      if (permissionResult.granted === false) {
-          alert("Anda menolak izin untuk mengakses galeri foto!");
-          return;
+    if (permissionResult.granted === false) {
+      alert("Anda menolak izin untuk mengakses galeri foto!");
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    });
+
+    if (!pickerResult.canceled) {
+      const image = pickerResult.assets[0];
+
+      setUserProfile((prev) => (prev ? { ...prev, profile_picture_url: image.uri } : null));
+
+      setIsUploading(true);
+      const formData = new FormData();
+
+      formData.append("image", {
+        uri: image.uri,
+        name: image.fileName || `photo-${Date.now()}.jpg`,
+        type: image.mimeType,
+      } as any);
+
+      try {
+        const response = await apiService.post("v1/user/upload-profile-picture", formData);
+
+        setUserProfile((prev) =>
+          prev ? { ...prev, profile_picture_url: response.data.url } : null,
+        );
+        Toast.show({ type: "success", text1: "Success", text2: "Profile picture updated." });
+      } catch (error: any) {
+        if (error.response) {
+          console.error("Data:", error.response.data);
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+        } else {
+          console.error("Error message:", error.message);
+        }
+        Toast.show({ type: "error", text1: "Error", text2: "Failed to upload image." });
+      } finally {
+        setIsUploading(false);
       }
-
-      const pickerResult = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 0.5,
-      });
-
-      if (!pickerResult.canceled) {
-          const image = pickerResult.assets[0];
-          
-          setUserProfile(prev => prev ? { ...prev, profile_picture_url: image.uri } : null);
-          
-          setIsUploading(true);
-          const formData = new FormData();
-
-          formData.append('image', {
-            uri: image.uri,
-            name: image.fileName || `photo-${Date.now()}.jpg`,
-            type: image.mimeType,
-          } as any);
-
-          try {
-              const response = await apiService.post('v1/user/upload-profile-picture', formData);
-
-              setUserProfile(prev => prev ? { ...prev, profile_picture_url: response.data.url } : null);
-              Toast.show({ type: 'success', text1: 'Success', text2: 'Profile picture updated.' });
-
-          } catch (error: any) {
-              if (error.response) {
-                console.error("Data:", error.response.data);
-              } else if (error.request) {
-                console.error("No response received:", error.request);
-              } else {
-                console.error("Error message:", error.message);
-              }
-              Toast.show({ type: 'error', text1: 'Error', text2: 'Failed to upload image.' });
-          } finally {
-              setIsUploading(false);
-          }
-      }
+    }
   };
 
   const [countries, setCountries] = useState<Country[]>([]);
@@ -251,19 +244,13 @@ export default function ProfileScreen() {
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.groupHeader}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.backButton}
-            >
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
               <IonIcon name="arrow-back" size={24} color="#000" />
             </TouchableOpacity>
 
             <Text style={styles.title}>Profile</Text>
 
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSaveProfile}
-            >
+            <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile}>
               <IonIcon name="checkmark" size={24} color="#42CE6D" />
             </TouchableOpacity>
           </View>
@@ -276,9 +263,9 @@ export default function ProfileScreen() {
               />
 
               {isUploading && (
-                  <View style={styles.uploadingOverlay}>
-                      <ActivityIndicator size="large" color="#FFFFFF" />
-                  </View>
+                <View style={styles.uploadingOverlay}>
+                  <ActivityIndicator size="large" color="#FFFFFF" />
+                </View>
               )}
             </View>
           </View>
@@ -293,9 +280,7 @@ export default function ProfileScreen() {
                 style={styles.inputField}
                 placeholder="Full Name"
                 value={formData.name}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, name: text }))
-                }
+                onChangeText={(text) => setFormData((prev) => ({ ...prev, name: text }))}
               />
             </View>
 
@@ -306,9 +291,7 @@ export default function ProfileScreen() {
                 style={styles.inputField}
                 placeholder="Username"
                 value={formData.username}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, username: text }))
-                }
+                onChangeText={(text) => setFormData((prev) => ({ ...prev, username: text }))}
               />
             </View>
 
@@ -319,9 +302,7 @@ export default function ProfileScreen() {
                 style={styles.inputField}
                 placeholder="johndoe@example.com"
                 value={formData.email}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, email: text }))
-                }
+                onChangeText={(text) => setFormData((prev) => ({ ...prev, email: text }))}
               />
             </View>
 
@@ -329,10 +310,7 @@ export default function ProfileScreen() {
             <View>
               <Text style={styles.inputLabel}>Birth Date</Text>
 
-              <TouchableOpacity
-                style={styles.inputField}
-                onPress={showDatePicker}
-              >
+              <TouchableOpacity style={styles.inputField} onPress={showDatePicker}>
                 <Text style={{ color: formData.birth_date ? "#000" : "#999" }}>
                   {formatDate(formData.birth_date)}
                 </Text>
@@ -342,11 +320,7 @@ export default function ProfileScreen() {
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
-                date={
-                  formData.birth_date
-                    ? new Date(formData.birth_date)
-                    : new Date()
-                }
+                date={formData.birth_date ? new Date(formData.birth_date) : new Date()}
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
@@ -359,9 +333,7 @@ export default function ProfileScreen() {
                 style={styles.inputField}
                 placeholder="+1 (555) 123-4567"
                 value={formData.phone}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, phone: text }))
-                }
+                onChangeText={(text) => setFormData((prev) => ({ ...prev, phone: text }))}
               />
             </View>
 
@@ -393,9 +365,7 @@ export default function ProfileScreen() {
                 style={styles.inputField}
                 placeholder="123 Main St, City, Country"
                 value={formData.address}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, address: text }))
-                }
+                onChangeText={(text) => setFormData((prev) => ({ ...prev, address: text }))}
               />
             </View>
 
@@ -415,13 +385,7 @@ export default function ProfileScreen() {
                 </View>
               </TouchableOpacity>
 
-              {loading && (
-                <ActivityIndicator
-                  size="small"
-                  color="gray"
-                  style={{ marginTop: 10 }}
-                />
-              )}
+              {loading && <ActivityIndicator size="small" color="gray" style={{ marginTop: 10 }} />}
 
               {showCountryDropdown && (
                 <ScrollView
@@ -469,13 +433,7 @@ export default function ProfileScreen() {
                 </View>
               </TouchableOpacity>
 
-              {loading && (
-                <ActivityIndicator
-                  size="small"
-                  color="gray"
-                  style={{ marginTop: 10 }}
-                />
-              )}
+              {loading && <ActivityIndicator size="small" color="gray" style={{ marginTop: 10 }} />}
 
               {showCityDropdown && (
                 <ScrollView

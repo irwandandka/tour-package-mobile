@@ -18,10 +18,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
 
-type RegisterScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Register"
->;
+type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Register">;
 
 export default function RegisterScreen() {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
@@ -85,10 +82,7 @@ export default function RegisterScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
         </TouchableOpacity>
         <View style={styles.content}>
@@ -113,11 +107,7 @@ export default function RegisterScreen() {
                 { borderWidth: 1, borderColor: errorName ? "red" : "#F5F6FA" },
               ]}
             >
-              <FeatherIcon
-                name="user"
-                size={23}
-                color={errorName ? "red" : "#B3B3B3"}
-              />
+              <FeatherIcon name="user" size={23} color={errorName ? "red" : "#B3B3B3"} />
               <TextInput
                 placeholder="John Doe"
                 placeholderTextColor={"#B3B3B3"}
@@ -127,9 +117,7 @@ export default function RegisterScreen() {
                 autoCapitalize="none"
               />
             </View>
-            {errorName ? (
-              <Text style={{ color: "red" }}>{errorName}</Text>
-            ) : null}
+            {errorName ? <Text style={{ color: "red" }}>{errorName}</Text> : null}
           </View>
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Email</Text>
@@ -139,11 +127,7 @@ export default function RegisterScreen() {
                 { borderWidth: 1, borderColor: errorEmail ? "red" : "#F5F6FA" },
               ]}
             >
-              <FeatherIcon
-                name="mail"
-                size={23}
-                color={errorEmail ? "red" : "#B3B3B3"}
-              />
+              <FeatherIcon name="mail" size={23} color={errorEmail ? "red" : "#B3B3B3"} />
               <TextInput
                 placeholder="example@gmail.com"
                 placeholderTextColor={"#B3B3B3"}
@@ -153,9 +137,7 @@ export default function RegisterScreen() {
                 autoCapitalize="none"
               />
             </View>
-            {errorEmail ? (
-              <Text style={{ color: "red" }}>{errorEmail}</Text>
-            ) : null}
+            {errorEmail ? <Text style={{ color: "red" }}>{errorEmail}</Text> : null}
           </View>
           <View style={styles.inputFieldWrapper}>
             <Text style={styles.inputLabel}>Password</Text>
@@ -168,14 +150,8 @@ export default function RegisterScreen() {
                 },
               ]}
             >
-              <View
-                style={{ flexDirection: "row", alignItems: "center", gap: 11 }}
-              >
-                <FeatherIcon
-                  name="lock"
-                  size={23}
-                  color={errorPassword ? "red" : "#B3B3B3"}
-                />
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 11 }}>
+                <FeatherIcon name="lock" size={23} color={errorPassword ? "red" : "#B3B3B3"} />
                 <TextInput
                   placeholder="Enter password"
                   value={password}
@@ -192,9 +168,7 @@ export default function RegisterScreen() {
                 />
               </TouchableOpacity>
             </View>
-            {errorPassword ? (
-              <Text style={{ color: "red" }}>{errorPassword}</Text>
-            ) : null}
+            {errorPassword ? <Text style={{ color: "red" }}>{errorPassword}</Text> : null}
           </View>
 
           {/* Sign in Button */}
@@ -252,9 +226,7 @@ export default function RegisterScreen() {
           <View style={styles.signUpWrapper}>
             <Text style={styles.signUpText}>{t("registerScreen.login")}</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={styles.signUpLink}>
-                {t("registerScreen.loginButton")}
-              </Text>
+              <Text style={styles.signUpLink}>{t("registerScreen.loginButton")}</Text>
             </TouchableOpacity>
           </View>
         </View>

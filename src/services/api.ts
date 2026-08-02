@@ -1,19 +1,19 @@
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 import { createNavigationContainerRef } from "@react-navigation/native";
 export const navigationRef = createNavigationContainerRef<any>();
 
 const config = Constants.expoConfig?.extra ?? {};
 
 const api = axios.create({
-    baseURL: config.API_URL,
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'x-api-key': config.API_KEY
-    }
+  baseURL: config.API_URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    "x-api-key": config.API_KEY,
+  },
 });
 
 api.interceptors.request.use(
@@ -39,7 +39,7 @@ api.interceptors.request.use(
 
     return requestConfig;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -53,13 +53,13 @@ api.interceptors.response.use(
         await AsyncStorage.removeItem("user");
 
         if (navigationRef.isReady()) {
-            navigationRef.navigate("Auth", { screen: "Login" });
+          navigationRef.navigate("Auth", { screen: "Login" });
         }
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
