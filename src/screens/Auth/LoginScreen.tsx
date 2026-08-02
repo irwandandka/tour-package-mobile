@@ -16,8 +16,7 @@ import { validateInput } from "../../utils/validation";
 import styles from "./LoginScreen.styles";
 import apiService from "../../services/apiService";
 import Constants from "expo-constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuthStore } from "@features/auth/store/authStore";
 import { makeRedirectUri } from "expo-auth-session";
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -30,7 +29,7 @@ export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const { t } = useTranslation();
 
-  const { login } = useAuth();
+  const login = useAuthStore((state) => state.login);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -67,8 +66,7 @@ export default function LoginScreen() {
 
       const { access_token, user } = response;
 
-      await AsyncStorage.setItem("token", access_token);
-      await AsyncStorage.setItem("user", JSON.stringify(user));
+      await login(access_token, user);
 
       Toast.show({
         type: "success",
@@ -113,8 +111,6 @@ export default function LoginScreen() {
         if (token && userJson) {
           const user = JSON.parse(decodeURIComponent(userJson));
           await login(token, user);
-          await AsyncStorage.setItem("token", token);
-          await AsyncStorage.setItem("user", JSON.stringify(user));
 
           console.log("Token saved!");
           navigation.navigate("Home");

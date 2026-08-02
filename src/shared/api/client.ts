@@ -1,17 +1,10 @@
 import axios, { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
 import { createNavigationContainerRef } from "@react-navigation/native";
 import { ApiErrorBody } from "./types";
 
-/**
- * Token storage still goes through AsyncStorage here, matching
- * contexts/AuthContext.tsx's read/write side. Migrating to
- * expo-secure-store happens in Phase 3 alongside the auth store rewrite, so
- * both sides move together instead of this file reading from SecureStore
- * while login still writes to AsyncStorage (which would silently break
- * every authenticated request).
- */
 export const navigationRef = createNavigationContainerRef<any>();
 
 const config = Constants.expoConfig?.extra ?? {};
@@ -29,7 +22,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   async (requestConfig) => {
     try {
-      const token = await AsyncStorage.getItem("token");
+      const token = await SecureStore.getItemAsync("token");
       if (token) {
         requestConfig.headers.Authorization = `Bearer ${token}`;
       }
@@ -57,7 +50,7 @@ apiClient.interceptors.response.use(
     const code = error.response?.data?.code;
 
     if (code === "token_expired" || code === "token_invalid" || code === "token_missing") {
-      await AsyncStorage.removeItem("token");
+      await SecureStore.deleteItemAsync("token");
       await AsyncStorage.removeItem("user");
 
       if (navigationRef.isReady()) {

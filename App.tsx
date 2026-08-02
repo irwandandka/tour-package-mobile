@@ -1,10 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigations/RootNavigator";
 import i18n from "./i18n";
-import { AuthProvider } from "./contexts/AuthContext";
 import Toast from "react-native-toast-message";
 import { navigationRef } from "@shared/api";
 import { AppProviders } from "@app/providers/AppProviders";
+import { useAuthStore } from "@features/auth/store/authStore";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,17 +20,15 @@ export default function App() {
       }
     };
     initLang();
+    useAuthStore.getState().hydrate();
   }, []);
 
   return (
     <AppProviders>
-      <AuthProvider>
-        {/* The AuthProvider wraps the entire app to provide authentication context */}
-        <NavigationContainer ref={navigationRef}>
-          <RootNavigator />
-          <Toast />
-        </NavigationContainer>
-      </AuthProvider>
+      <NavigationContainer ref={navigationRef}>
+        <RootNavigator />
+        <Toast />
+      </NavigationContainer>
     </AppProviders>
   );
 }

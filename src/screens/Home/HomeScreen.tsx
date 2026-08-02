@@ -19,10 +19,11 @@ import styles from "./HomeScreen.styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/param";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuthStore } from "@features/auth/store/authStore";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
 import { UserLogin, SearchGlobalResponse } from "../../types/api";
 import { CommonActions } from "@react-navigation/native";
@@ -45,7 +46,7 @@ export default function HomeScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(-screenWidth * 0.8)).current;
 
-  const { isAuthorized, user, logout } = useAuth();
+  const { isAuthorized, user, logout } = useAuthStore();
 
   type Region = {
     id: string;
@@ -134,7 +135,7 @@ export default function HomeScreen() {
         }
 
         try {
-          const storedToken = await AsyncStorage.getItem("token");
+          const storedToken = await SecureStore.getItemAsync("token");
           if (storedToken && isActive) {
             setToken(storedToken);
           }
@@ -168,7 +169,6 @@ export default function HomeScreen() {
           }
         }
 
-        const token = await AsyncStorage.getItem("token");
         const userinfo = await AsyncStorage.getItem("user");
         if (isActive) {
           setUserLogin(userinfo ? JSON.parse(userinfo) : null);
