@@ -1,23 +1,22 @@
-import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./BottomTabNavigator";
-import AuthStack from "./AuthStack";
-import AuthStackNavigator from "./AuthStack";
+import AuthStackNavigator from "./AuthStackNavigator";
 import LandingScreen from "../screens/Landing/LandingScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
 import ProductScreen from "../screens/Product/ProductScreen";
 import AvailableDateScreen from "../screens/AvailableDate/AvailableDateScreen";
 import TripOverviewScreen from "../screens/TripOverview/TripOverviewScreen";
-import { RootStackParamList } from "../types/param";
 import PassengerDetailScreen from "../screens/PassengerDetail/PassengerDetailScreen";
 import PaymentMethodScreen from "../screens/PaymentMethod/PaymentMethodScreen";
 import PaymentSummaryScreen from "../screens/PaymentSummary/PaymentSummaryScreen";
+import PaymentQrScreen from "../screens/PaymentQR/PaymentQRScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 import LanguageScreen from "../screens/Language/LanguageScreen";
 import OrderHistoryScreen from "../screens/OrderHistory/OrderHistoryScreen";
 import OrderStatusScreen from "../screens/OrderStatus/OrderStatusScreen";
 import OrderDetailScreen from "../screens/OrderDetail/OrderDetailScreen";
 import TermsAndConditions from "../screens/TermCondition/TermConditionScreen";
+import { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -37,10 +36,11 @@ export default function RootNavigator() {
       <Stack.Screen name="PassengerDetail" component={PassengerDetailScreen} />
       <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
       <Stack.Screen name="PaymentSummary" component={PaymentSummaryScreen} />
+      <Stack.Screen name="PaymentQr" component={PaymentQrScreen} />
       <Stack.Screen name="OrderStatus" component={OrderStatusScreen} />
-      {/* Jika user belum login, arahkan ke stack auth (Login/Register) */}
+      {/* Unauthenticated users land here (Login/Register) */}
       <Stack.Screen name="Auth" component={AuthStackNavigator} />
-      {/* Jika user sudah login, arahkan ke tab utama */}
+      {/* Registered but not currently entered from anywhere — see Phase 12 */}
       <Stack.Screen name="Main" component={BottomTabNavigator} />
     </Stack.Navigator>
   );

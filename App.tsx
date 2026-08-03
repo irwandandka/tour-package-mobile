@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import RootNavigator from "./src/navigations/RootNavigator";
+import RootNavigator from "@navigation/RootNavigator";
 import i18n from "./i18n";
 import Toast from "react-native-toast-message";
 import { navigationRef } from "@shared/api";

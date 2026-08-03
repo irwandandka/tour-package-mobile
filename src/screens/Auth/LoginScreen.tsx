@@ -20,10 +20,13 @@ import { useAuthStore } from "@features/auth/store/authStore";
 import { makeRedirectUri } from "expo-auth-session";
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/param";
-import { useNavigation } from "@react-navigation/native";
+import { AuthStackParamList, RootStackParamList } from "@navigation/types";
+import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;
+type LoginScreenNavigationProp = CompositeNavigationProp<
+  NativeStackNavigationProp<AuthStackParamList, "Login">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
 
 export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();

@@ -15,10 +15,10 @@ import styles from "./RegisterScreen.styles";
 import apiService from "../../services/apiService";
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/param";
+import { AuthStackParamList } from "@navigation/types";
 import { useNavigation } from "@react-navigation/native";
 
-type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Register">;
+type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, "Register">;
 
 export default function RegisterScreen() {
   const navigation = useNavigation<RegisterScreenNavigationProp>();

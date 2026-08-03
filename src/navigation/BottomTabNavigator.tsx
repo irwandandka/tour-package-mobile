@@ -1,13 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
-import HomeScreen from "../screens/Home/HomeScreen";
-import ProductScreen from "../screens/Product/ProductScreen";
 import { Ionicons } from "@expo/vector-icons";
+import HomeScreen from "../screens/Home/HomeScreen";
 import CartScreen from "../screens/Cart/CartScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
+import { MainTabParamList } from "./types";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<MainTabParamList>();
 
+/** Not currently entered from anywhere in the app — see Phase 12. */
 export default function BottomTabNavigator() {
   return (
     <Tab.Navigator>
