@@ -23,17 +23,24 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   isHydrated: false,
 
   hydrate: async () => {
-    const [language, currency] = await Promise.all([
+    const [storedLanguage, currency] = await Promise.all([
       AsyncStorage.getItem("lang"),
       AsyncStorage.getItem("currency"),
     ]);
 
-    if (!language) {
-      await AsyncStorage.setItem("lang", "en");
+    const language = storedLanguage || "en";
+
+    if (!storedLanguage) {
+      await AsyncStorage.setItem("lang", language);
     }
 
+    // i18next's own init defaults to "en" regardless of what was
+    // previously selected — without this, a returning user's saved
+    // language never actually takes effect until they reopen LanguageScreen.
+    await i18n.changeLanguage(language);
+
     set({
-      language: language || "en",
+      language,
       currency: currency || "IDR",
       isHydrated: true,
     });

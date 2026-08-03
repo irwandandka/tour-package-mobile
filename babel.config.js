@@ -13,6 +13,8 @@ module.exports = function (api) {
             "@features": "./src/features",
             "@navigation": "./src/navigation",
             "@shared": "./src/shared",
+            "@i18n": "./src/i18n",
+            "@store": "./src/store",
           },
           extensions: [
             ".ios.ts",

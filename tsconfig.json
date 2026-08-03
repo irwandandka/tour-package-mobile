@@ -7,7 +7,9 @@
       "@app/*": ["src/app/*"],
       "@features/*": ["src/features/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@shared/*": ["src/shared/*"]
+      "@shared/*": ["src/shared/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@store/*": ["src/store/*"]
     }
   },
   "include": ["src", "App.tsx", "index.ts"]
