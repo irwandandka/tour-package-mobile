@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./BottomTabNavigator";
 import AuthStackNavigator from "./AuthStackNavigator";
-import LandingScreen from "../screens/Landing/LandingScreen";
+import LandingScreen from "@features/auth/screens/LandingScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
 import ProductScreen from "../screens/Product/ProductScreen";
 import AvailableDateScreen from "../screens/AvailableDate/AvailableDateScreen";

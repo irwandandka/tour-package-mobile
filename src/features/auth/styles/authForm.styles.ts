@@ -1,9 +1,20 @@
 import { StyleSheet } from "react-native";
+import { theme } from "@shared/constants/theme";
 
+/**
+ * Was two byte-for-byte identical files (LoginScreen.styles.ts,
+ * RegisterScreen.styles.ts) — merged into one shared stylesheet since both
+ * screens are visually the same form layout. Colors mapped to theme tokens
+ * per docs/color-audit.md; spacing/radii kept as their original literal
+ * values (19, 22, 15, ...) rather than force-snapped to the spacing/radii
+ * scale, since that would be a visible layout change I can't visually
+ * verify in this environment — only the color consolidation is a pure,
+ * safe token swap.
+ */
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.colors.white,
   },
   content: {
     flexDirection: "column",
@@ -13,22 +24,22 @@ export default StyleSheet.create({
     paddingVertical: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.xxl,
+    fontWeight: theme.typography.fontWeight.bold,
     marginTop: 30,
-    color: "#3A5694",
+    color: theme.colors.secondary,
   },
   subtitle: {
-    fontSize: 16,
-    color: "#666666",
+    fontSize: theme.typography.fontSize.md,
+    color: theme.colors.grey600,
     textAlign: "center",
     marginTop: 10,
     marginBottom: 20,
   },
   inputLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333333",
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.grey700,
   },
   inputFieldWrapper: {
     flexDirection: "column",
@@ -41,7 +52,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 11,
-    backgroundColor: "#F5F6FA",
+    backgroundColor: theme.colors.grey100,
     paddingVertical: 19,
     paddingHorizontal: 22,
     borderRadius: 15,
@@ -51,7 +62,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 11,
-    backgroundColor: "#F5F6FA",
+    backgroundColor: theme.colors.grey100,
     paddingVertical: 19,
     paddingHorizontal: 22,
     borderRadius: 15,
@@ -71,48 +82,49 @@ export default StyleSheet.create({
     gap: 10,
   },
   forgotPassword: {
-    fontSize: 14,
-    color: "#F29D38",
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.primary,
+    fontWeight: theme.typography.fontWeight.bold,
   },
   loginButton: {
-    backgroundColor: "#F5F6FA",
+    backgroundColor: theme.colors.grey100,
     width: "100%",
     borderRadius: 15,
     paddingVertical: 15,
     marginTop: 30,
   },
   loginButtonActive: {
-    backgroundColor: "#3A5694",
+    backgroundColor: theme.colors.secondary,
     width: "100%",
     borderRadius: 15,
     paddingVertical: 15,
     marginTop: 30,
   },
   loginButtonTextActive: {
-    fontSize: 21,
+    fontSize: theme.typography.fontSize.xl,
     textAlign: "center",
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.white,
   },
   orSignInWith: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#666666",
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.grey600,
     textAlign: "center",
     marginVertical: 30,
   },
   loginButtonText: {
-    fontSize: 21,
+    fontSize: theme.typography.fontSize.xl,
     textAlign: "center",
-    fontWeight: "bold",
-    color: "#B3B3B3",
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.grey500,
   },
   loginWithGoogle: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     gap: 10,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: theme.colors.grey200,
     width: "100%",
     paddingVertical: 15,
     borderRadius: 15,
@@ -121,7 +133,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 10,
-    backgroundColor: "#3A5694",
+    backgroundColor: theme.colors.secondary,
     width: "100%",
     paddingVertical: 15,
     borderRadius: 15,
@@ -135,19 +147,19 @@ export default StyleSheet.create({
     gap: 9,
   },
   signUpText: {
-    fontSize: 16,
-    color: "#666666",
+    fontSize: theme.typography.fontSize.md,
+    color: theme.colors.grey600,
   },
   signUpLink: {
-    fontSize: 16,
-    color: "#F29D38",
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.md,
+    color: theme.colors.primary,
+    fontWeight: theme.typography.fontWeight.bold,
   },
   backButton: {
     position: "absolute",
     top: 19,
     left: 15,
-    backgroundColor: "#999999",
+    backgroundColor: theme.colors.grey500,
     opacity: 0.8,
     padding: 5,
     borderRadius: 21,
