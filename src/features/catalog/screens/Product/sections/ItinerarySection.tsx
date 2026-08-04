@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -8,10 +7,12 @@ import {
   UIManager,
   Platform,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import MapView, { Marker } from "react-native-maps";
-import { Itinerary } from "../../../types/api";
+import { theme } from "@shared/constants/theme";
+import { Itinerary } from "@shared/types";
 import styles from "../ProductScreen.styles";
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -33,6 +34,8 @@ export default function ItinerarySection({
   activeDay,
   setActiveDay,
 }: ItinerarySectionProps) {
+  const { t } = useTranslation();
+
   const toggleItinerary = (day: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveDay(activeDay === day ? 0 : day);
@@ -49,11 +52,13 @@ export default function ItinerarySection({
                 style={styles.itineraryHeader}
                 onPress={() => toggleItinerary(itinerary.day)}
               >
-                <Text style={styles.itineraryDayTitle}>Day {itinerary.day}</Text>
+                <Text style={styles.itineraryDayTitle}>
+                  {t("ProductPage.day")} {itinerary.day}
+                </Text>
                 <FeatherIcon
                   name={isOpen ? "chevron-up" : "chevron-down"}
                   size={24}
-                  color={"#333333"}
+                  color={theme.colors.grey700}
                 />
               </TouchableOpacity>
 
@@ -63,7 +68,7 @@ export default function ItinerarySection({
                     <IonIcon
                       name="radio-button-on"
                       size={20}
-                      color={"#3A5694"}
+                      color={theme.colors.secondary}
                       style={styles.timelineDot}
                     />
                     <View style={styles.timelineLine} />
@@ -76,7 +81,7 @@ export default function ItinerarySection({
                       {/* <TouchableOpacity
                         onPress={() => setSelectedItineraryForMap(itinerary)}
                       >
-                        <Text style={styles.showMapText}>Show on Map</Text>
+                        <Text style={styles.showMapText}>{t("ProductPage.showOnMap")}</Text>
                       </TouchableOpacity> */}
                     </View>
                   </View>
@@ -88,7 +93,7 @@ export default function ItinerarySection({
       </View>
 
       {selectedItineraryForMap && (
-        <Modal visible={true} transparent animationType="slide">
+        <Modal visible transparent animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.mapContainer}>
               <MapView
@@ -111,7 +116,7 @@ export default function ItinerarySection({
                 onPress={() => setSelectedItineraryForMap(null)}
                 style={styles.closeButton}
               >
-                <Text style={{ color: "white" }}>Close</Text>
+                <Text style={{ color: theme.colors.white }}>{t("ProductPage.closeMap")}</Text>
               </TouchableOpacity>
             </View>
           </View>

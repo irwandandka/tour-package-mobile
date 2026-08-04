@@ -1,24 +1,28 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity, Modal } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import styles from "./ProductScreen.styles";
-import { RootStackParamList } from "../../types/param";
+import { RootStackParamList } from "@navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import apiService from "../../services/apiService";
+import { apiService, ApiResponse } from "@shared/api";
+import { getApiErrorMessage } from "@shared/utils";
+import { theme } from "@shared/constants/theme";
+import { Itinerary, ProductDetail, Review } from "@shared/types";
 import PanelSection from "./sections/PanelSection";
-import { Itinerary, ProductDetail, Review } from "../../types/api";
 import GeneralSection from "./sections/GeneralSection";
 import ItinerarySection from "./sections/ItinerarySection";
 import ReviewSection from "./sections/ReviewSection";
 
 type ProductScreenProps = NativeStackScreenProps<RootStackParamList, "Product">;
+type PanelKey = "general" | "itineraries" | "reviews";
 
 export default function ProductScreen({ navigation, route }: ProductScreenProps) {
+  const { t } = useTranslation();
   const { slug } = route.params;
 
-  const [activePanel, setActivePanel] = useState("general");
+  const [activePanel, setActivePanel] = useState<PanelKey>("general");
 
   const maxLength = 200;
   const [isReadMore, setIsReadMore] = useState(false);
@@ -28,49 +32,33 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
   };
 
   const [productDetail, setProductDetail] = useState<ProductDetail | null>(null);
-
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-
   const [selectedItineraryForMap, setSelectedItineraryForMap] = useState<Itinerary | null>(null);
-
   const [activeDay, setActiveDay] = useState<number>(1);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
       try {
-        const productDetail = await apiService.get(`v1/product/${slug}`, {
-          params: {
-            lang: "EN",
-            currency: "IDR",
-          },
+        const response = await apiService.get<ApiResponse<ProductDetail>>(`v1/product/${slug}`, {
+          lang: "EN",
+          currency: "IDR",
         });
 
-        setProductDetail(productDetail.data);
-        setItineraries(productDetail.data.itineraries);
-        setReviews(productDetail.data.reviews);
+        setProductDetail(response.data);
+        setItineraries(response.data.itineraries);
+        setReviews(response.data.reviews);
       } catch (error) {
-        console.error("Error Fetching");
+        console.error("Failed to load product detail:", getApiErrorMessage(error));
       }
     };
 
     fetchProductDetail();
-  }, []);
-
-  const formatCurrency = (value: number) => {
-    if (typeof value !== "number") {
-      return "0.00";
-    }
-    return new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
+  }, [slug]);
 
   return (
     <SafeAreaView>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
-        {/* Image Section */}
         <View style={styles.imageContainer}>
           <Image
             source={{
@@ -80,35 +68,30 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
           />
 
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+            <FeatherIcon name="chevron-left" size={27} color={theme.colors.white} />
           </TouchableOpacity>
         </View>
 
-        {/* Title & Location */}
         <View style={styles.container}>
           <Text style={styles.title}>{productDetail?.name || "Product Name Not Available"}</Text>
           <View style={styles.locationParent}>
             <View style={styles.locationParent}>
-              <FeatherIcon name="map-pin" size={17} color="#FF8000" />
+              <FeatherIcon name="map-pin" size={17} color={theme.colors.primary} />
               <Text style={styles.locationTitle}>{productDetail?.location || "Not Available"}</Text>
             </View>
           </View>
 
-          {/* Panel Section */}
           <PanelSection activePanel={activePanel} setActivePanel={setActivePanel} />
 
-          {/* Section Generalsss */}
           {activePanel === "general" && (
             <GeneralSection
               productDetail={productDetail}
               isReadMore={isReadMore}
               maxLength={maxLength}
-              navigation={navigation}
               descriptionReadMore={descriptionReadMore}
             />
           )}
 
-          {/* Section Itineraries */}
           {activePanel === "itineraries" && (
             <ItinerarySection
               itineraries={itineraries}
@@ -119,24 +102,20 @@ export default function ProductScreen({ navigation, route }: ProductScreenProps)
             />
           )}
 
-          {/* Section Reviews */}
           {activePanel === "reviews" && <ReviewSection reviews={reviews} />}
         </View>
       </ScrollView>
 
       <View style={styles.floatingBar}>
         <View>
-          <Text style={styles.priceLabel}>Start from</Text>
-          <Text style={styles.priceText}>
-            {/* Format harga Anda di sini */}
-            {productDetail?.price}
-          </Text>
+          <Text style={styles.priceLabel}>{t("ProductPage.price")}</Text>
+          <Text style={styles.priceText}>{productDetail?.price}</Text>
         </View>
         <TouchableOpacity
           style={styles.bookNowButton}
           onPress={() => navigation.navigate("AvailableDate", { slug: productDetail?.slug || "" })}
         >
-          <Text style={styles.bookNowButtonText}>Book Now</Text>
+          <Text style={styles.bookNowButtonText}>{t("ProductPage.button")}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
