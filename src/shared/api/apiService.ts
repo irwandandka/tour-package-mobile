@@ -16,16 +16,16 @@ export const apiService = {
     return response.data;
   },
 
-  post: async <T>(
+  post: async <T, D = unknown>(
     url: string,
-    data?: Record<string, unknown>,
+    data?: D,
     params?: Record<string, unknown>,
   ): Promise<T> => {
     const response = await apiClient.post<T>(url, data, { params });
     return response.data;
   },
 
-  put: async <T>(url: string, data?: Record<string, unknown>): Promise<T> => {
+  put: async <T, D = unknown>(url: string, data?: D): Promise<T> => {
     const response = await apiClient.put<T>(url, data);
     return response.data;
   },

@@ -5,7 +5,7 @@ import LandingScreen from "@features/auth/screens/LandingScreen";
 import HomeScreen from "@features/discovery/screens/HomeScreen/HomeScreen";
 import ProductScreen from "@features/catalog/screens/Product/ProductScreen";
 import AvailableDateScreen from "@features/catalog/screens/AvailableDate/AvailableDateScreen";
-import TripOverviewScreen from "../screens/TripOverview/TripOverviewScreen";
+import TripOverviewScreen from "@features/booking/screens/TripOverview/TripOverviewScreen";
 import PassengerDetailScreen from "../screens/PassengerDetail/PassengerDetailScreen";
 import PaymentMethodScreen from "../screens/PaymentMethod/PaymentMethodScreen";
 import PaymentSummaryScreen from "../screens/PaymentSummary/PaymentSummaryScreen";
