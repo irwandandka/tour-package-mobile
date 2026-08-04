@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import styles from "./AvailableDateScreen.styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import DropDownPicker from "react-native-dropdown-picker";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/param";
-import { useNavigation } from "@react-navigation/native";
-import apiService from "../../services/apiService";
-import { RouteProp, useRoute } from "@react-navigation/native";
-
-import { AvailablePeriod, AvailableDate } from "../../types/api";
+import { RootStackParamList } from "@navigation/types";
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
+import { apiService, ApiResponse } from "@shared/api";
+import { getApiErrorMessage } from "@shared/utils";
+import { theme } from "@shared/constants/theme";
+import { AvailablePeriod, AvailableDate, ProductDetail } from "@shared/types";
 
 type AvailableDateNavigationProp = NativeStackNavigationProp<RootStackParamList, "AvailableDate">;
-
 type AvailableDateRouteProp = RouteProp<RootStackParamList, "AvailableDate">;
 
 export default function AvailableDateScreen() {
   const navigation = useNavigation<AvailableDateNavigationProp>();
   const route = useRoute<AvailableDateRouteProp>();
+  const { t } = useTranslation();
 
   const { slug } = route.params;
 
@@ -26,56 +27,64 @@ export default function AvailableDateScreen() {
   const [value, setValue] = useState<string | null>(null);
 
   const [availablePeriods, setAvailablePeriods] = useState<AvailablePeriod[]>([]);
-
   const [availableDates, setAvailableDates] = useState<AvailableDate[]>([]);
+  const [productName, setProductName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProductName = async () => {
+      try {
+        const response = await apiService.get<ApiResponse<ProductDetail>>(`v1/product/${slug}`, {
+          lang: "EN",
+        });
+        setProductName(response.data.name);
+      } catch (error) {
+        console.error("Failed to load product name:", getApiErrorMessage(error));
+      }
+    };
+
+    fetchProductName();
+  }, [slug]);
 
   useEffect(() => {
     const fetchAvailablePeriod = async () => {
       try {
-        const response = await apiService.get(`v1/product/${slug}/available-period`, {
-          params: {
-            lang: "EN",
-            currency: "IDR",
-          },
-        });
+        const response = await apiService.get<ApiResponse<{ id: string; name: string }[]>>(
+          `v1/product/${slug}/available-period`,
+          { lang: "EN", currency: "IDR" },
+        );
 
-        const periods = response?.data ?? [];
-
-        const formattedPeriods: AvailablePeriod[] = periods.map((item: any) => ({
+        const formattedPeriods: AvailablePeriod[] = (response.data ?? []).map((item) => ({
           label: item.name,
           value: item.id,
         }));
 
         setAvailablePeriods(formattedPeriods);
       } catch (error) {
-        console.error("Error fetching available periods:", error);
+        console.error("Failed to load available periods:", getApiErrorMessage(error));
       }
     };
 
     fetchAvailablePeriod();
+  }, [slug]);
+
+  useEffect(() => {
+    if (!value || !slug) return;
 
     const fetchAvailableDates = async () => {
-      if (!value || !slug) return;
-
       try {
-        const response = await apiService.get(`v1/product/${slug}/available-date`, {
-          params: {
-            period: value,
-            lang: "EN",
-            currency: "IDR",
-          },
-        });
+        const response = await apiService.get<ApiResponse<AvailableDate[]>>(
+          `v1/product/${slug}/available-date`,
+          { period: value, lang: "EN", currency: "IDR" },
+        );
 
-        console.log(response.data);
-
-        setAvailableDates(response?.data ?? []);
+        setAvailableDates(response.data ?? []);
       } catch (error) {
-        console.error("Failed to fetch available dates:", error);
+        console.error("Failed to load available dates:", getApiErrorMessage(error));
       }
     };
 
     fetchAvailableDates();
-  }, [value]);
+  }, [slug, value]);
 
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -84,17 +93,17 @@ export default function AvailableDateScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={[styles.container, { backgroundColor: "#fff" }]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.white }}>
+      <View style={styles.container}>
         <View style={styles.titleContainer}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <FeatherIcon name="chevron-left" size={27} color={"#FFFFFF"} />
+            <FeatherIcon name="chevron-left" size={27} color={theme.colors.white} />
           </TouchableOpacity>
-          <Text style={styles.title}>Available Dates</Text>
-          <Text style={styles.subtitle}>2D1N Bangkok Tour</Text>
+          <Text style={styles.title}>{t("AvailableDateScreen.title")}</Text>
+          <Text style={styles.subtitle}>{t("AvailableDateScreen.subtitle")}</Text>
         </View>
         <View style={styles.selectMonthContainer}>
-          <Text style={styles.selectMonthText}>Select Month:</Text>
+          <Text style={styles.selectMonthText}>{t("AvailableDateScreen.selectMonth")}:</Text>
           <View style={{ flex: 1, zIndex: 1000 }}>
             <DropDownPicker
               open={open}
@@ -103,32 +112,32 @@ export default function AvailableDateScreen() {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setAvailablePeriods}
-              placeholder="Please select a month"
+              placeholder={t("AvailableDateScreen.placeholderSelectMonth")}
               style={styles.selectMonthInput}
               dropDownContainerStyle={{ zIndex: 1000 }}
             />
           </View>
         </View>
 
-        <ScrollView
-          nestedScrollEnabled={true}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView nestedScrollEnabled horizontal={false} showsVerticalScrollIndicator={false}>
           <View style={styles.availableDateContainer}>
             <View style={styles.availableDateHeader}>
               <View style={styles.headerCol}>
-                <Text style={styles.availableDateHeaderText}>Departure</Text>
+                <Text style={styles.availableDateHeaderText}>
+                  {t("AvailableDateScreen.departure")}
+                </Text>
               </View>
               <View style={styles.headerCol}>
-                <Text style={styles.availableDateHeaderText}>Return</Text>
+                <Text style={styles.availableDateHeaderText}>
+                  {t("AvailableDateScreen.return")}
+                </Text>
               </View>
               <View style={styles.headerCol}>
-                <Text style={styles.availableDateHeaderText}>Price</Text>
+                <Text style={styles.availableDateHeaderText}>{t("AvailableDateScreen.price")}</Text>
               </View>
             </View>
             {availableDates.map((availableDate, index) => (
-              <View style={styles.availableDateList} key={index}>
+              <View style={styles.availableDateList} key={availableDate.id}>
                 <TouchableOpacity onPress={() => toggleExpand(index)}>
                   <View
                     style={
@@ -161,7 +170,7 @@ export default function AvailableDateScreen() {
                         name={expandedIndex === index ? "chevron-up" : "chevron-down"}
                         style={{ right: 13 }}
                         size={23}
-                        color={"#000000"}
+                        color={theme.colors.black}
                       />
                     </View>
                   </View>
@@ -170,8 +179,7 @@ export default function AvailableDateScreen() {
                   <View style={styles.listExpandContainer}>
                     <View style={styles.listExpand}>
                       <View style={styles.listExpandLeftSide}>
-                        <Text style={styles.listExpandText}>2D1N Bangkok Tour</Text>
-                        {/* Date Start */}
+                        <Text style={styles.listExpandText}>{productName ?? "..."}</Text>
                         <View style={styles.groupDate}>
                           <Text style={styles.groupDateText}>Start</Text>
                           <View style={styles.groupDateTextWrapper}>
@@ -181,7 +189,6 @@ export default function AvailableDateScreen() {
                             </Text>
                           </View>
                         </View>
-                        {/* Date End */}
                         <View style={styles.groupDate}>
                           <Text style={styles.groupDateText}>End</Text>
                           <View style={styles.groupDateTextWrapper}>
@@ -205,7 +212,7 @@ export default function AvailableDateScreen() {
                             style={styles.buttonBookNow}
                             onPress={() =>
                               navigation.navigate("TripOverview", {
-                                slug: slug,
+                                slug,
                                 dateFrom: availableDate.date_start_iso,
                                 dateTo: availableDate.date_end_iso,
                               })
