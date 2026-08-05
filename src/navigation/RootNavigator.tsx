@@ -9,11 +9,11 @@ import TripOverviewScreen from "@features/booking/screens/TripOverview/TripOverv
 import PassengerDetailScreen from "@features/booking/screens/PassengerDetail/PassengerDetailScreen";
 import PaymentMethodScreen from "@features/booking/screens/PaymentMethod/PaymentMethodScreen";
 import PaymentSummaryScreen from "@features/booking/screens/PaymentSummary/PaymentSummaryScreen";
-import PaymentQrScreen from "../screens/PaymentQR/PaymentQRScreen";
+import PaymentQrScreen from "@features/booking/screens/PaymentQR/PaymentQRScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 import LanguageScreen from "../screens/Language/LanguageScreen";
 import OrderHistoryScreen from "../screens/OrderHistory/OrderHistoryScreen";
-import OrderStatusScreen from "../screens/OrderStatus/OrderStatusScreen";
+import OrderStatusScreen from "@features/booking/screens/OrderStatus/OrderStatusScreen";
 import OrderDetailScreen from "../screens/OrderDetail/OrderDetailScreen";
 import TermsAndConditions from "../screens/TermCondition/TermConditionScreen";
 import { RootStackParamList } from "./types";
