@@ -142,6 +142,17 @@
     "change": "Ubah",
     "pay": "Bayar"
   },
+  "ReviewModal": {
+    "title": "Bagaimana pengalaman Anda?",
+    "subtitle": "Beri ulasan untuk tur ini",
+    "commentPlaceholder": "Tulis komentar Anda di sini...",
+    "cancel": "Batal",
+    "submit": "Kirim Ulasan",
+    "ratingRequiredTitle": "Peringatan",
+    "ratingRequiredMessage": "Mohon berikan rating bintang terlebih dahulu.",
+    "submitErrorTitle": "Gagal",
+    "submitErrorMessage": "Terjadi kesalahan saat mengirim ulasan."
+  },
   "validation": {
     "email_required": "Email wajib diisi",
     "email_invalid": "Format email tidak valid",

@@ -142,6 +142,17 @@
     "change": "更改",
     "pay": "支付"
   },
+  "ReviewModal": {
+    "title": "您的体验如何?",
+    "subtitle": "为这次旅行评分",
+    "commentPlaceholder": "在此处写下您的评论...",
+    "cancel": "取消",
+    "submit": "提交评价",
+    "ratingRequiredTitle": "提示",
+    "ratingRequiredMessage": "请先给出星级评分。",
+    "submitErrorTitle": "失败",
+    "submitErrorMessage": "提交评价时发生错误。"
+  },
   "validation": {
     "email_required": "邮箱为必填项",
     "email_invalid": "邮箱格式无效",

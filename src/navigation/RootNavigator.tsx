@@ -12,9 +12,9 @@ import PaymentSummaryScreen from "@features/booking/screens/PaymentSummary/Payme
 import PaymentQrScreen from "@features/booking/screens/PaymentQR/PaymentQRScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 import LanguageScreen from "../screens/Language/LanguageScreen";
-import OrderHistoryScreen from "../screens/OrderHistory/OrderHistoryScreen";
+import OrderHistoryScreen from "@features/orders/screens/OrderHistory/OrderHistoryScreen";
 import OrderStatusScreen from "@features/booking/screens/OrderStatus/OrderStatusScreen";
-import OrderDetailScreen from "../screens/OrderDetail/OrderDetailScreen";
+import OrderDetailScreen from "@features/orders/screens/OrderDetail/OrderDetailScreen";
 import TermsAndConditions from "../screens/TermCondition/TermConditionScreen";
 import { RootStackParamList } from "./types";
 

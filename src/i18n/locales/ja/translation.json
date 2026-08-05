@@ -142,6 +142,17 @@
     "change": "変更",
     "pay": "支払う"
   },
+  "ReviewModal": {
+    "title": "ご体験はいかがでしたか?",
+    "subtitle": "このツアーを評価してください",
+    "commentPlaceholder": "こちらにコメントを入力してください...",
+    "cancel": "キャンセル",
+    "submit": "レビューを送信",
+    "ratingRequiredTitle": "注意",
+    "ratingRequiredMessage": "まず星の評価を入力してください。",
+    "submitErrorTitle": "失敗",
+    "submitErrorMessage": "レビューの送信中にエラーが発生しました。"
+  },
   "validation": {
     "email_required": "メールアドレスは必須です",
     "email_invalid": "無効なメール形式です",

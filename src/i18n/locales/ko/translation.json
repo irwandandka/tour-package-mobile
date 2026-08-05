@@ -142,6 +142,17 @@
     "change": "변경",
     "pay": "결제"
   },
+  "ReviewModal": {
+    "title": "경험은 어떠셨나요?",
+    "subtitle": "이 투어를 평가해 주세요",
+    "commentPlaceholder": "여기에 코멘트를 작성해 주세요...",
+    "cancel": "취소",
+    "submit": "리뷰 제출",
+    "ratingRequiredTitle": "알림",
+    "ratingRequiredMessage": "먼저 별점을 선택해 주세요.",
+    "submitErrorTitle": "실패",
+    "submitErrorMessage": "리뷰를 제출하는 중 오류가 발생했습니다."
+  },
   "validation": {
     "email_required": "이메일은 필수입니다",
     "email_invalid": "잘못된 이메일 형식입니다",

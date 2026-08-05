@@ -142,6 +142,17 @@
     "change": "Change",
     "pay": "Pay"
   },
+  "ReviewModal": {
+    "title": "How was your experience?",
+    "subtitle": "Rate this tour",
+    "commentPlaceholder": "Write your comment here...",
+    "cancel": "Cancel",
+    "submit": "Submit Review",
+    "ratingRequiredTitle": "Warning",
+    "ratingRequiredMessage": "Please provide a star rating first.",
+    "submitErrorTitle": "Failed",
+    "submitErrorMessage": "An error occurred while submitting your review."
+  },
   "validation": {
     "email_required": "Email is required",
     "email_invalid": "Invalid email format",

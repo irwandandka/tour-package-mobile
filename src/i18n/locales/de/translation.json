@@ -142,6 +142,17 @@
     "change": "Ändern",
     "pay": "Bezahlen"
   },
+  "ReviewModal": {
+    "title": "Wie war Ihre Erfahrung?",
+    "subtitle": "Bewerten Sie diese Tour",
+    "commentPlaceholder": "Schreiben Sie hier Ihren Kommentar...",
+    "cancel": "Abbrechen",
+    "submit": "Bewertung senden",
+    "ratingRequiredTitle": "Hinweis",
+    "ratingRequiredMessage": "Bitte geben Sie zuerst eine Sternebewertung ab.",
+    "submitErrorTitle": "Fehlgeschlagen",
+    "submitErrorMessage": "Beim Senden Ihrer Bewertung ist ein Fehler aufgetreten."
+  },
   "validation": {
     "email_required": "E-Mail ist erforderlich",
     "email_invalid": "Ungültiges E-Mail-Format",

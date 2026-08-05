@@ -142,6 +142,17 @@
     "change": "เปลี่ยน",
     "pay": "ชำระเงิน"
   },
+  "ReviewModal": {
+    "title": "ประสบการณ์ของคุณเป็นอย่างไรบ้าง?",
+    "subtitle": "ให้คะแนนทัวร์นี้",
+    "commentPlaceholder": "เขียนความคิดเห็นของคุณที่นี่...",
+    "cancel": "ยกเลิก",
+    "submit": "ส่งรีวิว",
+    "ratingRequiredTitle": "คำเตือน",
+    "ratingRequiredMessage": "กรุณาให้คะแนนดาวก่อน",
+    "submitErrorTitle": "ล้มเหลว",
+    "submitErrorMessage": "เกิดข้อผิดพลาดขณะส่งรีวิวของคุณ"
+  },
   "validation": {
     "email_required": "กรุณากรอกอีเมล",
     "email_invalid": "รูปแบบอีเมลไม่ถูกต้อง",
