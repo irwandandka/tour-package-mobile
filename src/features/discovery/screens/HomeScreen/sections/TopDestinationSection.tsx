@@ -1,4 +1,5 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { LoadingSkeleton } from "@shared/components";
 import styles from "./TopDestinationSection.styles";
@@ -77,19 +78,20 @@ export function TopDestinationSection({
           ))}
         </ScrollView>
       ) : (
-        <ScrollView
+        <FlatList
+          data={topDestinations}
+          keyExtractor={(destination) => destination.id}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.topDestinationCardGroup}
-        >
-          {topDestinations.map((destination) => (
-            <TouchableOpacity key={destination.id} style={styles.topDestinationCard}>
+          renderItem={({ item: destination }) => (
+            <TouchableOpacity style={styles.topDestinationCard}>
               <Image source={{ uri: destination.image }} style={styles.topDestinationCardImage} />
               <View style={styles.topDestinationCardOverlay} />
               <Text style={styles.topDestinationCardTitle}>{destination.name}</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          )}
+        />
       )}
     </View>
   );

@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import * as WebBrowser from "expo-web-browser";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";

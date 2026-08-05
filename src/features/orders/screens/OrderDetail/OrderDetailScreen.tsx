@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
@@ -10,6 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
 import styles from "./OrderDetailScreen.styles";
 

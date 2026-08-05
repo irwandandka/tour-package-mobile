@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, Image, View, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import styles from "./LanguageScreen.styles";

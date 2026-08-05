@@ -5,10 +5,10 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Image,
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import styles from "./PaymentMethodScreen.styles";

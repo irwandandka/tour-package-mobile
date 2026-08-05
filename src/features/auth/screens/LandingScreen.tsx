@@ -1,4 +1,6 @@
-import { SafeAreaView, Image, View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@navigation/types";
@@ -17,7 +19,7 @@ export default function LandingScreen() {
             uri: "https://pub-cfc04ba1c45649688f85c3bdd738f319.r2.dev/landing-screen-image.png",
           }}
           style={styles.image}
-          resizeMode="cover"
+          contentFit="cover"
         />
       </View>
 

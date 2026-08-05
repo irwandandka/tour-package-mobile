@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";

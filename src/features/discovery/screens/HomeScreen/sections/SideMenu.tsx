@@ -1,4 +1,5 @@
-import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { useTranslation } from "react-i18next";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

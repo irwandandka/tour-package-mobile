@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./OrderHistoryScreen.styles";
 
@@ -96,10 +96,13 @@ export default function OrderHistoryScreen() {
           description="Try changing the filter or create a new booking."
         />
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.listContainer}>
-          {orderHistories.map((order) => (
+        <FlatList
+          data={orderHistories}
+          keyExtractor={(order) => order.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+          renderItem={({ item: order }) => (
             <TouchableOpacity
-              key={order.id}
               style={styles.card}
               onPress={() => navigation.navigate("OrderDetail", { orderId: order.id })}
             >
@@ -132,8 +135,8 @@ export default function OrderHistoryScreen() {
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          )}
+        />
       )}
     </SafeAreaView>
   );

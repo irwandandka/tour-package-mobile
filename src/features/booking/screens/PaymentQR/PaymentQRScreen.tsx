@@ -1,5 +1,6 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import FeatherIcon from "react-native-vector-icons/Feather";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -41,7 +42,7 @@ export default function PaymentQrScreen({ route, navigation }: PaymentQrScreenPr
 
         <View style={styles.qrContainer}>
           {qrData ? (
-            <Image style={styles.qrImage} source={{ uri: qrData }} resizeMode="contain" />
+            <Image style={styles.qrImage} source={{ uri: qrData }} contentFit="contain" />
           ) : (
             <Text style={styles.loadingText}>Loading QR Code...</Text>
           )}

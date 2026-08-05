@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-  Linking,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, ActivityIndicator, Linking } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import styles from "./PaymentSummaryScreen.styles";

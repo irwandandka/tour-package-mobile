@@ -1,4 +1,5 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { theme } from "@shared/constants/theme";
@@ -26,14 +27,14 @@ export function RecommendedSection({ destinations, onOpenDestination }: Recommen
     <View style={styles.recommendedSection}>
       <Text style={styles.recommendedTitle}>{t("HomeScreen.titleRecommendedDestination")}</Text>
 
-      <ScrollView
+      <FlatList
+        data={destinations}
+        keyExtractor={(destination) => destination.id}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.recommendedCardGroup}
-      >
-        {destinations.map((destination) => (
+        renderItem={({ item: destination }) => (
           <TouchableOpacity
-            key={destination.id}
             style={styles.recommendedCard}
             onPress={() => onOpenDestination(destination.slug)}
           >
@@ -57,8 +58,8 @@ export function RecommendedSection({ destinations, onOpenDestination }: Recommen
               </View>
             </View>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+        )}
+      />
     </View>
   );
 }

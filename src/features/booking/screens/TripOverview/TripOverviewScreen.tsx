@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, ScrollView, TextInput, Text, TouchableOpacity, Image } from "react-native";
+import { View, ScrollView, TextInput, Text, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import IonIcon from "react-native-vector-icons/Ionicons";

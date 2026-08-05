@@ -1,4 +1,5 @@
-import { View, Text, Image } from "react-native";
+import { View, Text } from "react-native";
+import { Image } from "expo-image";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { EmptyState } from "@shared/components";
 import { Review } from "@shared/types";
