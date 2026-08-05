@@ -12,6 +12,6 @@ export default {
     ios: {
       bundleIdentifier: process.env.IOS_BUNDLE_ID, // samain dengan yang kamu isi di GCP
     },
-    plugins: ["expo-secure-store"],
+    plugins: ["expo-secure-store", "expo-splash-screen"],
   },
 };
