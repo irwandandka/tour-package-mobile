@@ -31,13 +31,15 @@ export function SideMenu({
 
   return (
     <Animated.View style={[styles.menuContainer, { transform: [{ translateX: slideAnim }] }]}>
-      <FeatherIcon
-        name="x"
+      <TouchableOpacity
         style={styles.menuBarClose}
-        size={30}
-        color={theme.colors.black}
         onPress={onClose}
-      />
+        accessibilityRole="button"
+        accessibilityLabel="Close menu"
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <FeatherIcon name="x" size={30} color={theme.colors.black} />
+      </TouchableOpacity>
       {user && (
         <View style={styles.menuProfileParent}>
           <Image source={{ uri: user.profile_picture_url }} style={styles.menuBarAvatar} />

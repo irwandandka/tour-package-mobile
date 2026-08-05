@@ -17,7 +17,12 @@ interface TopBarProps {
 export function TopBar({ locationName, user, navigation, onMenuPress }: TopBarProps) {
   return (
     <View style={styles.topBarSection}>
-      <TouchableOpacity onPress={onMenuPress}>
+      <TouchableOpacity
+        onPress={onMenuPress}
+        accessibilityRole="button"
+        accessibilityLabel="Open menu"
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
         <FeatherIcon name="menu" size={27} color={theme.colors.black} />
       </TouchableOpacity>
 
@@ -31,6 +36,8 @@ export function TopBar({ locationName, user, navigation, onMenuPress }: TopBarPr
           <TouchableOpacity
             onPress={() => navigation.navigate("Profile", { userId: user.id })}
             style={styles.avatarSection}
+            accessibilityRole="button"
+            accessibilityLabel="Open profile"
           >
             <Image source={{ uri: user.profile_picture_url }} style={styles.avatar} />
           </TouchableOpacity>

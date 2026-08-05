@@ -94,7 +94,13 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <FeatherIcon name="chevron-left" size={27} color={theme.colors.white} />
         </TouchableOpacity>
         <View style={styles.content}>
@@ -130,6 +136,9 @@ export default function LoginScreen() {
             <TouchableOpacity
               onPress={() => setPasswordVisible((visible) => !visible)}
               style={{ position: "absolute", right: 22, top: 16 }}
+              accessibilityRole="button"
+              accessibilityLabel={passwordVisible ? "Hide password" : "Show password"}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <FeatherIcon
                 name={passwordVisible ? "eye" : "eye-off"}

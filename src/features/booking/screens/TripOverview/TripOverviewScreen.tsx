@@ -128,7 +128,13 @@ export default function TripOverviewScreen() {
     <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <FeatherIcon name="chevron-left" size={27} color={theme.colors.white} />
           </TouchableOpacity>
 
@@ -204,7 +210,12 @@ export default function TripOverviewScreen() {
                                 {room.roomName} #{index + 1}
                               </Text>
 
-                              <TouchableOpacity onPress={() => deleteRoom(room.id)}>
+                              <TouchableOpacity
+                                onPress={() => deleteRoom(room.id)}
+                                accessibilityRole="button"
+                                accessibilityLabel={`Remove ${room.roomName} #${index + 1}`}
+                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                              >
                                 <FeatherIcon name="trash-2" size={20} color={theme.colors.error} />
                               </TouchableOpacity>
                             </View>
@@ -219,6 +230,8 @@ export default function TripOverviewScreen() {
                                     disabled={room[field.key] <= 0}
                                     onPress={() => decrementField(room.id, field.key)}
                                     style={styles.roomInputButtonDecrement}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={`Decrease ${field.label}`}
                                   >
                                     <Text style={styles.roomInputTextDecrement}>−</Text>
                                   </TouchableOpacity>
@@ -238,6 +251,8 @@ export default function TripOverviewScreen() {
                                   <TouchableOpacity
                                     onPress={() => incrementField(room.id, field.key)}
                                     style={styles.roomInputButtonIncrement}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={`Increase ${field.label}`}
                                   >
                                     <Text style={styles.roomInputTextIncrement}>+</Text>
                                   </TouchableOpacity>
