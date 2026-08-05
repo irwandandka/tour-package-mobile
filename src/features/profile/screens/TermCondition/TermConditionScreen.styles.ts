@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
+import { theme } from "@shared/constants/theme";
 
+/** Dropped the unused `title` key — only `headerTitle` is actually rendered. */
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -12,12 +14,6 @@ export default StyleSheet.create({
     height: 50,
     marginBottom: 21,
   },
-  title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    textAlign: "center",
-    flex: 1,
-  },
   backButton: {
     padding: 6,
     borderRadius: 30,
@@ -25,9 +21,9 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: {
-    fontSize: 20,
-    marginTop: 30,
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.xl,
+    marginTop: theme.spacing.xxxl,
+    fontWeight: theme.typography.fontWeight.bold,
     textAlign: "center",
     flex: 1,
   },
@@ -37,27 +33,27 @@ export default StyleSheet.create({
     padding: 16,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 16,
-    marginBottom: 8,
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
+    marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.sm,
   },
   paragraph: {
     fontSize: 15,
     lineHeight: 22,
-    color: "#333",
+    color: theme.colors.grey700,
   },
 
   agreeButton: {
-    backgroundColor: "#fd7e14",
+    backgroundColor: theme.colors.warning,
     margin: 16,
     paddingVertical: 14,
-    borderRadius: 10,
+    borderRadius: theme.radii.sm,
     alignItems: "center",
   },
   agreeButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.bold,
   },
 });

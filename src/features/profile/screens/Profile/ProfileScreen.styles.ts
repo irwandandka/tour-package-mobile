@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { theme } from "@shared/constants/theme";
 
 export default StyleSheet.create({
   container: {
@@ -12,20 +13,20 @@ export default StyleSheet.create({
     marginBottom: 31,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
   },
   backButton: {
-    padding: 8,
+    padding: theme.spacing.sm,
   },
   saveButton: {
-    padding: 8,
+    padding: theme.spacing.sm,
   },
   groupProfile: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 12,
+    gap: theme.spacing.md,
     marginBottom: 31,
   },
   groupImage: {
@@ -36,30 +37,25 @@ export default StyleSheet.create({
     height: 150,
     borderRadius: 90,
     padding: 7,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
+    shadowColor: theme.colors.black,
+    shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 5,
-
     elevation: 5,
   },
   uploadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: theme.colors.overlay,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 90,
   },
   wrapperIcon: {
-    borderColor: "#888888ff",
+    borderColor: theme.colors.grey600,
     borderWidth: 2,
     borderRadius: 50,
     padding: 6,
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.white,
   },
   iconAddPhoto: {
     position: "absolute",
@@ -70,40 +66,29 @@ export default StyleSheet.create({
   groupInformation: {
     flexDirection: "column",
     gap: 15,
-    marginTop: 21,
+    marginTop: theme.spacing.xl,
   },
   titleInformation: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.bold,
   },
   inputField: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 12,
+    borderColor: theme.colors.grey400,
+    borderRadius: theme.radii.xs,
+    padding: theme.spacing.md,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   inputLabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 8,
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.bold,
+    marginBottom: theme.spacing.sm,
   },
-  phoneContainer: {
-    flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  countryCode: {
-    width: 100,
-    height: 50,
-  },
-  phoneInput: {
-    flex: 1,
-    padding: 12,
+  fieldError: {
+    fontSize: 12,
+    color: theme.colors.error,
+    marginTop: 4,
   },
 });

@@ -1,59 +1,44 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, Image, View, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 
 import styles from "./LanguageScreen.styles";
-import { ScrollView, Text, Image, View } from "react-native";
-import { TouchableOpacity } from "react-native";
 
-import apiService from "../../services/apiService";
+import { apiService, ApiResponse } from "@shared/api";
+import { getApiErrorMessage } from "@shared/utils";
+import { theme } from "@shared/constants/theme";
+import { Language } from "@shared/types";
+import { useSettingsStore } from "@store/settingsStore";
 
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/param";
+import { RootStackParamList } from "@navigation/types";
 
 import IonIcon from "react-native-vector-icons/Ionicons";
-import { Language } from "../../types/api";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import i18n from "i18next";
 
 type LanguageNavigationProp = NativeStackNavigationProp<RootStackParamList, "Language">;
 
 export default function LanguageScreen() {
   const navigation = useNavigation<LanguageNavigationProp>();
+  const { t } = useTranslation();
 
   const [languages, setLanguages] = useState<Language[]>([]);
-
-  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const selectedLanguage = useSettingsStore((state) => state.language);
+  const setLanguage = useSettingsStore((state) => state.setLanguage);
 
   useEffect(() => {
     const fetchLanguage = async () => {
       try {
-        const response = await apiService.get("v1/base/languages");
-
+        const response = await apiService.get<ApiResponse<Language[]>>("v1/base/languages");
         setLanguages(response.data);
-      } catch (error: any) {
-        console.log(error);
+      } catch (error) {
+        console.error("Failed to load languages:", getApiErrorMessage(error));
       }
     };
 
     fetchLanguage();
-
-    const getLanguage = async () => {
-      const language = await AsyncStorage.getItem("lang");
-      setSelectedLanguage(language);
-    };
-
-    getLanguage();
   }, []);
-
-  const handleSelectedLanguage = (code: string) => {
-    setSelectedLanguage(code);
-
-    AsyncStorage.setItem("lang", code);
-    i18n.changeLanguage(code);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,10 +49,10 @@ export default function LanguageScreen() {
             style={styles.backButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <IonIcon name="arrow-back" size={24} color="#000" />
+            <IonIcon name="arrow-back" size={24} color={theme.colors.black} />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Booking History</Text>
+          <Text style={styles.title}>{t("HomeScreen.navbar.language")}</Text>
 
           <View style={{ width: 40 }} />
         </View>
@@ -79,7 +64,7 @@ export default function LanguageScreen() {
             const isSelected = selectedLanguage === language.code;
 
             return (
-              <View id={language.code}>
+              <View key={language.code}>
                 <View style={styles.listItem}>
                   <View style={styles.groupFlag}>
                     <View style={styles.wrapperFlag}>
@@ -90,7 +75,7 @@ export default function LanguageScreen() {
 
                   <TouchableOpacity
                     style={styles.listToggleSelect}
-                    onPress={() => handleSelectedLanguage(language.code)}
+                    onPress={() => setLanguage(language.code)}
                   >
                     <View style={[styles.outerCircle, isSelected && styles.outerCircleSelected]}>
                       {isSelected && <View style={styles.innerCircle} />}

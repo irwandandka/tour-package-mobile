@@ -142,6 +142,26 @@
     "change": "Change",
     "pay": "Pay"
   },
+  "TermConditionScreen": {
+    "headerTitle": "Terms & Conditions",
+    "section1Title": "1. General Terms",
+    "section1Body": "By booking a tour package with us, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. These terms apply to all users of our services.",
+    "section2Title": "2. Booking Policy",
+    "section2Body": "All bookings are subject to availability and confirmation. A booking will only be considered valid once payment has been received and a confirmation email has been sent. Customers must provide accurate and complete personal information during the booking process.",
+    "section3Title": "3. Payment Terms",
+    "section3Body": "Full payment must be made at the time of booking unless otherwise stated. We accept payments through authorized methods listed on our platform. Prices are subject to change without prior notice.",
+    "section4Title": "4. Cancellation & Refunds",
+    "section4Body": "Cancellation requests must be submitted in writing. Refund eligibility depends on the timing of the cancellation:\n- More than 30 days before departure: 80% refund\n- 15–30 days before departure: 50% refund\n- Less than 15 days: Non-refundable",
+    "section5Title": "5. Traveler Responsibility",
+    "section5Body": "Travelers are responsible for obtaining valid passports, visas, and complying with local laws. We are not liable for issues arising due to incomplete travel documents or violations of local regulations.",
+    "section6Title": "6. Liability",
+    "section6Body": "We are not liable for delays, cancellations, accidents, or losses caused by third parties, natural disasters, or unforeseen circumstances beyond our control. Customers are strongly advised to purchase travel insurance.",
+    "section7Title": "7. Governing Law",
+    "section7Body": "These Terms & Conditions shall be governed by and construed in accordance with the laws of the Republic of Indonesia. Any disputes shall be resolved under the exclusive jurisdiction of the courts in Indonesia.",
+    "acknowledgement": "By clicking \"I Agree\", you acknowledge that you have read and accepted all the terms outlined above.",
+    "agreeButton": "I Agree",
+    "agreedMessage": "You agreed to the Terms & Conditions"
+  },
   "ReviewModal": {
     "title": "How was your experience?",
     "subtitle": "Rate this tour",

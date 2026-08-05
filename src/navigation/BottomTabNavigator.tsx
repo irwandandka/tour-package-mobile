@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "@features/discovery/screens/HomeScreen/HomeScreen";
 import CartScreen from "../screens/Cart/CartScreen";
-import ProfileScreen from "../screens/Profile/ProfileScreen";
+import ProfileScreen from "@features/profile/screens/Profile/ProfileScreen";
 import { MainTabParamList } from "./types";
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
