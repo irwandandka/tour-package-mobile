@@ -5,6 +5,7 @@ import RootNavigator from "@navigation/RootNavigator";
 import Toast from "react-native-toast-message";
 import { navigationRef } from "@shared/api";
 import { AppProviders } from "@app/providers/AppProviders";
+import { OfflineBanner } from "@shared/components";
 import { useAuthStore } from "@features/auth/store/authStore";
 import { useSettingsStore } from "@store/settingsStore";
 import { useEffect } from "react";
@@ -28,6 +29,7 @@ export default function App() {
 
   return (
     <AppProviders>
+      <OfflineBanner />
       <NavigationContainer ref={navigationRef}>
         <RootNavigator />
         <Toast />
