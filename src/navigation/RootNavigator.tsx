@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BottomTabNavigator from "./BottomTabNavigator";
 import AuthStackNavigator from "./AuthStackNavigator";
 import LandingScreen from "@features/auth/screens/LandingScreen";
 import HomeScreen from "@features/discovery/screens/HomeScreen/HomeScreen";
@@ -40,8 +39,6 @@ export default function RootNavigator() {
       <Stack.Screen name="OrderStatus" component={OrderStatusScreen} />
       {/* Unauthenticated users land here (Login/Register) */}
       <Stack.Screen name="Auth" component={AuthStackNavigator} />
-      {/* Registered but not currently entered from anywhere — see Phase 12 */}
-      <Stack.Screen name="Main" component={BottomTabNavigator} />
     </Stack.Navigator>
   );
 }

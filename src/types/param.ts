@@ -4,4 +4,4 @@
  * src/navigation/types.ts. Delete this file once nothing imports from
  * "../../types/param" anymore (tracked in the Phase 14 dead-code sweep).
  */
-export type { RootStackParamList, AuthStackParamList, MainTabParamList } from "@navigation/types";
+export type { RootStackParamList, AuthStackParamList } from "@navigation/types";

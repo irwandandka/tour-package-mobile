@@ -1,8 +1,8 @@
 /**
  * Consolidates src/types/param.ts (still a compatibility shim re-exporting
  * from here — see below) into per-area param lists composed into one
- * RootStackParamList, and finally types AuthStackParamList/MainTabParamList
- * (both navigators used bare createXNavigator() with no generic before).
+ * RootStackParamList, and finally types AuthStackParamList (the auth
+ * navigator used a bare createXNavigator() with no generic before).
  *
  * Deliberately still a FLAT root stack, not nested per-feature navigators
  * (e.g. a BookingStackParamList for TripOverview -> ... -> OrderStatus).
@@ -16,12 +16,6 @@
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
-};
-
-export type MainTabParamList = {
-  Home: undefined;
-  Cart: undefined;
-  Profile: { userId: string };
 };
 
 export type RootStackParamList = {
@@ -56,9 +50,7 @@ export type RootStackParamList = {
   Profile: { userId: string };
   Language: undefined;
   TermCondition: undefined;
-  Favorite: undefined;
   Auth: {
     screen: keyof AuthStackParamList;
   };
-  Main: undefined;
 };
