@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiService, ApiResponse } from "@shared/api";
+import { getApiErrorMessage } from "@shared/utils";
 import { SearchGlobalResponse } from "@shared/types";
 
 interface UseLiveSearchResult {
@@ -32,7 +33,7 @@ export function useLiveSearch(): UseLiveSearchResult {
         });
         setResults(response.data);
       } catch (error) {
-        console.error("Live search failed:", error);
+        console.error("Live search failed:", getApiErrorMessage(error));
       } finally {
         setIsSearching(false);
       }

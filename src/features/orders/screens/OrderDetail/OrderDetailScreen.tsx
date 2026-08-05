@@ -10,6 +10,7 @@ import {
   Linking,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import styles from "./OrderDetailScreen.styles";
 
 import { apiService, ApiResponse } from "@shared/api";
@@ -87,10 +88,13 @@ export default function OrderDetailScreen() {
                 prevDetails ? { ...prevDetails, status: "cancelled" } : null,
               );
 
-              Alert.alert("Success", "Your booking has been successfully cancelled.");
+              Toast.show({
+                type: "success",
+                text1: "Success",
+                text2: "Your booking has been successfully cancelled.",
+              });
             } catch (error) {
-              console.error("Failed to cancel order:", getApiErrorMessage(error));
-              Alert.alert("Failed", "An error occurred while trying to cancel the booking.");
+              Toast.show({ type: "error", text1: "Failed", text2: getApiErrorMessage(error) });
             } finally {
               setIsCancelling(false);
             }
@@ -103,7 +107,11 @@ export default function OrderDetailScreen() {
 
   const handleReviewSubmitted = () => {
     setReviewModalVisible(false);
-    Alert.alert("Thank You!", "Your review has been successfully submitted.");
+    Toast.show({
+      type: "success",
+      text1: "Thank You!",
+      text2: "Your review has been successfully submitted.",
+    });
   };
 
   if (isLoading) {
@@ -222,10 +230,14 @@ export default function OrderDetailScreen() {
                   if (supported) {
                     await Linking.openURL(eticketUrl);
                   } else {
-                    Alert.alert("Error", `Unable to open this URL: ${eticketUrl}`);
+                    Toast.show({
+                      type: "error",
+                      text1: "Error",
+                      text2: `Unable to open this URL: ${eticketUrl}`,
+                    });
                   }
                 } catch {
-                  Alert.alert("Error", "Failed to open E-Voucher.");
+                  Toast.show({ type: "error", text1: "Error", text2: "Failed to open E-Voucher." });
                 }
               }
             }}
