@@ -1,8 +1,7 @@
 /**
- * Consolidates src/types/param.ts (still a compatibility shim re-exporting
- * from here — see below) into per-area param lists composed into one
- * RootStackParamList, and finally types AuthStackParamList (the auth
- * navigator used a bare createXNavigator() with no generic before).
+ * Per-area param lists composed into one RootStackParamList, and typed
+ * AuthStackParamList (the auth navigator used a bare createXNavigator()
+ * with no generic before).
  *
  * Deliberately still a FLAT root stack, not nested per-feature navigators
  * (e.g. a BookingStackParamList for TripOverview -> ... -> OrderStatus).
